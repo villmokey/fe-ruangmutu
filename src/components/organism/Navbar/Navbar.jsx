@@ -19,22 +19,22 @@ export const Navbar = () => {
     },
     {
       key: 'profile',
-      title: 'PROFIL',
+      title: 'Profil',
       url: paths.PROFILE
     },
     {
       key: 'employee',
-      title: 'PEGAWAI',
+      title: 'Pegawai',
       url: paths.EMPLOYEE
     },
     {
       key: 'activity',
-      title: 'KEGIATAN',
+      title: 'Kegiatan',
       url: paths.ACTIVITY
     },
     {
       key: 'login',
-      title: 'LOGIN',
+      title: 'Login',
       url: paths.LOGIN
     },
   ]
