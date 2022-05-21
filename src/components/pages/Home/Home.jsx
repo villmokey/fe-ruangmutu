@@ -4,9 +4,8 @@ import { paths } from "../../../routing/paths";
 import { Navbar } from "../../organism/Navbar/Navbar"
 import { Activity } from "../Activity/Activity";
 import { Employee } from "../Employee/Employee";
-import { Login } from "../Login/Login";
 import { Profile } from "../Profile/Profile";
-import './Home.css';
+import './Home.less';
 
 const { Content } = Layout;
 
@@ -19,7 +18,6 @@ export const Home = () => {
           <Route path={paths.PROFILE} element={<Profile />} />
           <Route path={paths.EMPLOYEE} element={<Employee />} />
           <Route path={paths.ACTIVITY} element={<Activity />} />
-          <Route path={paths.LOGIN} element={<Login />} />
         </Routes>
       </Content>
     </Layout>

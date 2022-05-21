@@ -6,7 +6,8 @@ const { Item } = Form;
 const propTypes = {
   label: PropTypes.string,
   name: PropTypes.string,
-  rules: PropTypes.array
+  rules: PropTypes.array,
+  className: PropTypes.string
 }
 
 export const InputText = ({
@@ -19,7 +20,10 @@ export const InputText = ({
   disabled,
   prefix,
   value,
-  onChange
+  onChange,
+  type,
+  className,
+  style
 }) => {
   return (
     <Item
@@ -35,6 +39,9 @@ export const InputText = ({
         prefix={prefix}
         value={value}
         onChange={onChange}
+        type={type}
+        className={className}
+        style={style}
       />
     </Item>
   )
