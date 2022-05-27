@@ -5,12 +5,15 @@ import './Login.less';
 import { InputText } from "../../atoms/InputText/InputText";
 import { SubmitButton } from "../../atoms/SubmitButton/SubmitButton";
 
-
 const { Item } = AntdForm;
 
 export const Login = () => {
 
   const [form] = AntdForm.useForm();
+
+  const handleSubmit = (value) => {
+    console.log(value);
+  }
 
   return (
     <section className="container">
@@ -19,43 +22,45 @@ export const Login = () => {
           <Col span={14}>
             <span>Welcome back</span>
             <h1 className="form-title">Login to your account</h1>
+
             <Form
               layout="vertical"
               form={form}
               requiredMark={false}
               size="large"
               className="form"
+              onFinish={handleSubmit}
             >
-            <InputText
-              label="Email"
-              name="email"
-              type="email"
-              requiredMark={false}
-              rules={[
-                { required: true, message: 'Email tidak boleh kosong!' }
-              ]}
-            />
+              <InputText
+                label="Email"
+                name="email"
+                type="email"
+                requiredMark={false}
+                rules={[
+                  { required: true, message: 'Email tidak boleh kosong!' }
+                ]}
+              />
 
-            <InputText
-              label="Password"
-              name="password"
-              type="password"
-              requiredMark={false}
-              rules={[
-                { required: true, message: 'Password tidak boleh kosong!' }
-              ]}
-            />
+              <InputText
+                label="Password"
+                name="password"
+                type="password"
+                requiredMark={false}
+                rules={[
+                  { required: true, message: 'Password tidak boleh kosong!' }
+                ]}
+              />
 
-            <Item>
-              <a href="/" style={{ color: '#2C5282' }}>Forgot Password</a>
-            </Item>
+              <Item>
+                <a href="/" style={{ color: '#2C5282' }}>Forgot Password</a>
+              </Item>
 
-            <SubmitButton 
-              text="Login now"
-              type="primary"
-              block={true}
-              className="button"
-            />
+              <SubmitButton 
+                text="Login now"
+                type="primary"
+                block={true}
+                className="button"
+              />
 
             </Form>
           </Col>
