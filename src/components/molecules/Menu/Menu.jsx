@@ -32,11 +32,6 @@ export const Menu = ({
       mode={mode}
       className={className}
       style={style}
-      // inlineCollapsed={inlineCollapsed}
-      // style={{
-      //   height: '100%',
-      //   borderRight: 0
-      // }}
     >
       {
         menuItems &&
@@ -44,11 +39,11 @@ export const Menu = ({
           let splitKey = item.key.split('_');
           if (splitKey.length > 1) {
             return (
-              <SubMenu key={item.key} title={item.title} icon={item?.icon}>
+              <SubMenu key={item.key} title={item.title ?? ''} icon={item?.icon}>
                 {
                   item.children &&
                   item.children.map(child => (
-                    <AntdMenu.Item key={child.key} icon={child?.icon}>
+                    <AntdMenu.Item key={child.key} icon={child?.icon} style={child.style ?? {}}>
                       <Link to={child.url}>
                         { child.content ? child.content : child.title }
                       </Link>
@@ -59,7 +54,7 @@ export const Menu = ({
             )
           } else {
             return (
-              <AntdMenu.Item key={item.key} icon={item?.icon}>
+              <AntdMenu.Item key={item.key} icon={item?.icon} style={item.style ?? {}}>
                 <Link to={item.url}>
                   { item.content ? item.content : item.title }
                 </Link>

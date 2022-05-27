@@ -1,7 +1,7 @@
 import { Image, Layout, Typography } from 'antd';
 import { paths } from '../../../routing/paths';
 import { Menu } from '../../molecules/Menu/Menu';
-import './Navbar.css';
+import './Navbar.less';
 import Logo from '../../../assets/images/logo_gambir.png';
 
 const { Header } = Layout;
