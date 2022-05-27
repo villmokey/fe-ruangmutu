@@ -10,10 +10,11 @@ const propTypes = {
 export const Title = ({
   children,
   level,
-  className
+  className,
+  type
 }) => {
   return (
-    <AntdTitle level={level} className={className}>{ children }</AntdTitle>
+    <AntdTitle level={level} className={className} type={type}>{ children }</AntdTitle>
   )
 }
 
