@@ -20,15 +20,15 @@ export const Home = () => {
 
   const { getIsAuth } = useAuthToken();
 
-  useEffect(() => {
-    if (!getIsAuth()) {
-      navigate(paths.LOGIN);
-      return;
-    }
-    navigate(paths.QUALITY_INDICATOR);
+  // useEffect(() => {
+  //   if (!getIsAuth()) {
+  //     navigate(paths.LOGIN);
+  //     return;
+  //   }
+  //   navigate(paths.QUALITY_INDICATOR);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [navigate])
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [navigate])
 
   const handleLogout = () => {
     dispatch(removeAccessToken());
