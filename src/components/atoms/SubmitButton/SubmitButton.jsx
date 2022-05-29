@@ -10,7 +10,8 @@ export const SubmitButton = ({
   block,
   style,
   className,
-  size
+  size,
+  loading
 }) => {
   return (
     <Item
@@ -27,6 +28,7 @@ export const SubmitButton = ({
         }}
         className={className}
         size={size}
+        loading={loading}
       >
         { text }
       </Button>
