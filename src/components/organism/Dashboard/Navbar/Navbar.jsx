@@ -72,7 +72,7 @@ export const Navbar = ({
       </div>
       <div className="user-icon">
         <Dropdown overlay={userMenu}>
-          <UserOutlined style={{ fontSize: '28px', color: 'white' }}/>
+          <UserOutlined style={{ fontSize: '28px', color: 'white', cursor: 'pointer' }}/>
         </Dropdown>
       </div>
       <Menu

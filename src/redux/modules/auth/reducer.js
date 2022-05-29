@@ -6,6 +6,7 @@ const initialState = {
 	error: null,
 	response: null,
 	captchaResponse: null,
+	email: null,
 	token: null,
 	isAuth: false,
 	role: null
@@ -23,6 +24,7 @@ export const authReducer = (state = initialState, action) => {
 		state.called = (action.payload === null) ? false : true;
 		state.error = action.payload;
 		state.response = action.payload;
+		state.loading = false;
 		return { ...state };
 
 	case authActionType.SET_LOGIN_SUCCESS:
@@ -31,6 +33,8 @@ export const authReducer = (state = initialState, action) => {
 		state.token = action.payload.token;
 		state.isAuth = action.payload.isAuth;
 		state.role = action.payload.role;
+		state.email = action.payload.email
+		state.loading = false;
 		return { ...state };
 
 	case authActionType.VERIFY_CAPTCHA_SUCCESS:

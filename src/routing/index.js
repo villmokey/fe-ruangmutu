@@ -7,8 +7,8 @@ import { Home as DashboardHome } from '../components/pages/Dashboard/Home/Home';
 export const Routing = () => {
   return (
     <Routes>
-      <Route path={paths.DASHBOARD} element={<DashboardHome />} />
       <Route path={paths.HOME} element={<Home />} />
+      <Route path={paths.DASHBOARD} element={<DashboardHome />} />
       <Route path={paths.LOGIN} element={<Login />} />
 
       <Route path='*' element={

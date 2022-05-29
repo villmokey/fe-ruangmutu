@@ -15,14 +15,15 @@ export const authActionType = {
 export const removeAccessToken = () => {
 	localStorage.removeItem(localStorageKey.ACCESS_TOKEN);
 	localStorage.removeItem(localStorageKey.ROLE);
-	localStorage.removeItem(localStorageKey.USER_NAME);
+	localStorage.removeItem(localStorageKey.EMAIL);
 	localStorage.setItem(localStorageKey.IS_AUTH, false);
 	return {
 		type: authActionType.REMOVE_ACCESS_TOKEN,
 		payload: {
 			isAuth: false,
 			token: null,
-			role: null
+			role: null,
+			email: null
 		}
 	};
 };
@@ -45,13 +46,14 @@ const verifyCaptchaSuccess = (response) => ({
 });
 
 const setLoginSuccess = (data, response) => {
-	const accessToken = data ? data[localStorageKey.ACCESS_TOKEN] : null;
+	let resultData = data;
+	const accessToken = resultData ? resultData[localStorageKey.ACCESS_TOKEN] : null;
 	localStorage.setItem(localStorageKey.IS_AUTH, !!accessToken);
 
 	if (!!accessToken) {
 		localStorage.setItem(localStorageKey.ACCESS_TOKEN, accessToken);
-		localStorage.setItem(localStorageKey.ROLE, data.userRole);
-		localStorage.setItem(localStorageKey.USER_NAME, data.userName)
+		localStorage.setItem(localStorageKey.ROLE, resultData.user.role);
+		localStorage.setItem(localStorageKey.EMAIL, resultData.user.email)
 	}
 
 	return {
@@ -60,13 +62,13 @@ const setLoginSuccess = (data, response) => {
 			response,
 			isAuth: !!accessToken,
 			token: accessToken,
-			role: data.userLevel
+			role: resultData.user.role,
+			email: resultData.user.email
 		},
 	}
 };
 
 export const loginApi = (params) => {
-
 	return {
 		type: API,
 		payload: {
@@ -75,22 +77,21 @@ export const loginApi = (params) => {
 				method: apiMethod.POST,
 				data: params,
 				headers: {
-					RequestID: Date.now()
+					"Content-Type": "application/json",
 				}
 			},
-			startNetwork: () => {
-				return setAuthFetching(true)
-			},
-			endNetwork: () => {
-				return setAuthFetching(false)
-			},
-			success: (data, response) => {
-				return setLoginSuccess(data, response);
-			},
-			error: (err) => {
-				const error = err.errorCode ? err.errorCode : err.message;
-				return setAuthError(error);
-			},
+		},
+		startNetwork: () => {
+			return setAuthFetching(true)
+		},
+		endNetwork: () => {
+			return setAuthFetching(false)
+		},
+		success: (data, response) => {
+			return setLoginSuccess(data.data, response);
+		},
+		error: (err) => {
+			return setAuthError(err);
 		},
 	};
 };
@@ -130,5 +131,6 @@ export const authSelector = ({ auth }) => {
 		data: auth.token, // Use specific field data to retrieve
 		response: auth.response,
 		captchaResponse: auth.captchaResponse,
+		isAuth: auth.isAuth
 	}
 };

@@ -4,10 +4,10 @@ import { URL_CONFIG } from '../../globals/urlConfig';
 export const api = ({ dispatch, getState }) => (next) => {
   
   return (action) => {
-    
+
     if (action.type !== 'API') return next(action);
-    const { startNetwork, endNetwork, success, error } = action
-    const { url, requestParams } = action.payload
+    const { startNetwork, endNetwork, success, error } = action;
+    const { url, requestParams } = action.payload;
 
     if (startNetwork) {
       dispatch(startNetwork());
@@ -19,8 +19,9 @@ export const api = ({ dispatch, getState }) => (next) => {
       ...requestParams 
     })
     .then(res => {
+      console.log(res);
       if (res.status === 200) {
-
+        
         if (success) {
           dispatch(success(res.data, res));
         }

@@ -1,10 +1,10 @@
 export const localStorageKey = {
-  ACCESS_TOKEN: "token",
+  ACCESS_TOKEN: "access_token",
   IS_AUTH: "isAuth",
-  ROLE: "userRole",
-  USER_ID: "userId",
+  ROLE: "role",
+  USER_ID: "id",
   NAME: "name",
-  USER_NAME: "userName",
+  EMAIL: "email",
   RESET_PASSWORD_TOKEN: "resetPasswordToken",
   VERIFY_EMAIL_TOKEN: "verifyEmailToken",
 };
