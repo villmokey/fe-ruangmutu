@@ -1,5 +1,5 @@
 import { Layout } from "antd";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { useAuthToken } from "../../../../globals/useAuthToken";
@@ -8,6 +8,8 @@ import { paths } from "../../../../routing/paths";
 import { Navbar } from "../../../organism/Dashboard/Navbar/Navbar";
 import { Calender } from "../Calender/Calender";
 import { QualityIndicator } from "../QualityIndicator/QualityIndicator";
+
+import { Add as AddQualityIndicator } from '../QualityIndicator/Add/Add';
 
 import './Home.less';
 
@@ -41,6 +43,7 @@ export const Home = () => {
         <Content className="dashboard-content">
           <Routes>
             <Route path={paths.QUALITY_INDICATOR} element={<QualityIndicator />} />
+            <Route path={`${paths.QUALITY_INDICATOR}${paths.ADD}`} element={<AddQualityIndicator />} />
             <Route path={paths.CALENDER} element={<Calender />} />
             <Route path={paths.QUALITY_CUPBOARD} element={<QualityIndicator />} />
             <Route path="*" element={

@@ -1,12 +1,17 @@
 export const paths = {
-  HOME: '/*',
+  HOME: '/',
   LOGIN: '/login',
   PROFILE: 'profile',
   ACTIVITY: 'activity',
   EMPLOYEE: 'employee',
 
+  ADD: 'add',
+  EDIT: 'edit',
+  MANAGE: 'manage',
+  VIEW: 'view',
+
   DASHBOARD: '/dashboard/*',
-  QUALITY_INDICATOR: 'quality-indicator',
-  CALENDER: 'calender',
-  QUALITY_CUPBOARD: 'quality-cupboard'
+  QUALITY_INDICATOR: 'quality-indicator/',
+  CALENDER: 'calender/',
+  QUALITY_CUPBOARD: 'quality-cupboard/'
 }

@@ -5,30 +5,24 @@ import { Title } from "../../../atoms/Title/Title";
 
 import './QualityIndicator.less';
 import { InputSearch } from "../../../atoms/InputSearch/InputSearch";
-import { FileTextOutlined, PlusOutlined } from "@ant-design/icons";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title as ChartTitle,
-  Tooltip,
-  Legend,
-} from 'chart.js';
-import { Bar } from 'react-chartjs-2';
+import { FileTextOutlined, PlusOutlined, BarChartOutlined } from "@ant-design/icons";
+
+import { BarChart } from "../../../molecules/Chart/Bar/BarChart";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { paths } from "../../../../routing/paths";
 
 const { Content } = Layout;
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  ChartTitle,
-  Tooltip,
-  Legend
-);
 
 export const QualityIndicator = () => {
+
+  const [ viewType, setViewType ] = useState(1);
+
+  const handleChangeViewType = () => {
+    setViewType(viewType === 1 ? 2 : 1);
+  }
+
 
   const labels = ['JAN', 'FEB', 'MAR', 'APR', 'MEI', 'JUNI', 'JULI', 'AGU', 'SEP', 'OKT', 'NOV', 'DES'];
 
@@ -85,12 +79,14 @@ export const QualityIndicator = () => {
             <InputSearch size="large" />
           </Col>
           <Col>
-            <Button 
-              type="primary" 
-              icon={<PlusOutlined />} 
-              size="large" 
-              style={{ borderRadius: 8 }}
-            />
+            <Link to={`${paths.ADD}`}>
+              <Button 
+                type="primary" 
+                icon={<PlusOutlined />} 
+                size="large" 
+                style={{ borderRadius: 8 }}
+              />
+            </Link>
           </Col>
         </Row>
         <Row style={{ marginTop: 40 }}>
@@ -104,19 +100,57 @@ export const QualityIndicator = () => {
           <Col style={{ marginLeft: 'auto' }}>
             <Button 
               type="primary" 
-              icon={<FileTextOutlined />} 
+              icon={viewType === 1 ? <FileTextOutlined /> : <BarChartOutlined />} 
               size="large" 
               style={{ borderRadius: 8 }}
+              onClick={handleChangeViewType}
             />
           </Col>
         </Row>
         <div className="indikator-mutu-container">
-          <Card className="indikator-mutu">
-            <Bar options={chartOptions} data={chartData} className="chart"/>
-          </Card>
-          <Card className="indikator-mutu">
-            <Bar options={chartOptions} data={chartData} className="chart"/>
-          </Card>
+          {
+            viewType === 2 ?
+            <Row align="center" gutter={[8,8]}>
+              <Col>
+                <Card>
+                  <div className="indikator-mutu-thumbnail">
+
+                  </div>
+                </Card>
+              </Col>
+              <Col>
+                <Card>
+                  <div className="indikator-mutu-thumbnail">
+                    
+                  </div>
+                </Card>
+              </Col>
+              <Col>
+                <Card>
+                  <div className="indikator-mutu-thumbnail">
+                    
+                  </div>
+                </Card>
+              </Col>
+              <Col>
+                <Card>
+                  <div className="indikator-mutu-thumbnail">
+                    
+                  </div>
+                </Card>
+              </Col>
+            </Row>
+            :
+            <>
+              <Card className="indikator-mutu">
+                <BarChart options={chartOptions} data={chartData} className="chart"/>
+              </Card>
+              <Card className="indikator-mutu">
+                <BarChart options={chartOptions} data={chartData} className="chart"/>
+              </Card>
+            </>
+          }
+          
         </div>
       </Content>
     </Layout>
