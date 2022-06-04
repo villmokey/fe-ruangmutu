@@ -9,10 +9,31 @@ const { Item } = AntdForm;
 const { Dragger } = Upload;
 
 export const SecondStep = ({
-  onFinish
+  form,
+  onFinish,
+  programMutuChange,
+  subProgramMutuChange,
+  judulIndikatorChange,
+  dasarPemilihanIndikatorChange,
+  dimensiMutuChange,
+  tujuanChange,
+  definisiOperasionalChange,
+  tipeIndikatorChange,
+  statusPengukuranChange,
+  numeratorChange,
+  denominatorChange,
+  targetCapaianChange,
+  kriteriaInklusiEkslusiChange,
+  formulaPengukuranChange,
+  pengumpulanDataChange,
+  sumberDataChange,
+  populasiAtauSampelChange,
+  frekuensiPengumpulanDataChange,
+  periodeWatkuPelaporanChange,
+  periodeAnalisisChange,
+  penyajianDataChange,
+  penanggungJawabIndikatorChange
 }) => {
-
-  const [form] = AntdForm.useForm();
 
   const programMutuOptions = [
     { value: 'admen', title: 'ADMEN' },
@@ -125,12 +146,12 @@ export const SecondStep = ({
         layout="vertical"
       >
         <Row gutter={[24]}>
-          <Col span={8}>
+          <Col md={8} sm={24} xs={24}>
             <Item
               label="Program Mutu"
               name="programMutu"
             >
-              <Select placeholder="Pilih program mutu">
+              <Select placeholder="Pilih program mutu" onChange={programMutuChange}>
                 {
                   programMutuOptions.map(( item, index ) => (
                     <Option value={item.value} key={index}>{ item.title }</Option>
@@ -142,7 +163,7 @@ export const SecondStep = ({
               label="Sub Program Mutu"
               name="subProgramMutu"
             >
-              <Select placeholder="Pilih Sub program mutu">
+              <Select placeholder="Pilih Sub program mutu" onChange={subProgramMutuChange}>
                 {
                   programMutuOptions.map(( item, index ) => (
                     <Option value={item.value} key={index}>{ item.title }</Option>
@@ -153,33 +174,37 @@ export const SecondStep = ({
             <InputText 
               label="Judul Indikator"
               name="judulIndikator"
+              onChange={judulIndikatorChange}
             />
             <InputText 
               label="Dasar Pemilihan Indikator"
               name="dasarPemilihanIndikator"
+              onChange={dasarPemilihanIndikatorChange}
             />
 
             <Item
               label="Dimensi Mutu"
               name="dimensiMutu"
             >
-              <Checkbox.Group options={dimensiMutuOptions}></Checkbox.Group>
+              <Checkbox.Group options={dimensiMutuOptions} onChange={dimensiMutuChange}></Checkbox.Group>
             </Item>
 
             <InputText 
               label="Tujuan"
               name="tujuan"
+              onChange={tujuanChange}
             />
 
             <InputText 
               label="Definisi Operasional"
               name="definisiOperasional"
+              onChange={definisiOperasionalChange}
             />
              <Item
               label="Tipe Indikator"
               name="tipeIndikator"
             >
-              <Radio.Group>
+              <Radio.Group onChange={tipeIndikatorChange}>
                 {
                   tipeIndikatorOptions.map((item, index) => {
                     return (
@@ -190,50 +215,59 @@ export const SecondStep = ({
               </Radio.Group>
             </Item>
           </Col>
-          <Col span={8}>
+          <Col md={8} sm={24} xs={24}>
             <InputText 
               label="Status Pengukuran"
               name="statusPengukuran"
+              onChange={statusPengukuranChange}
             />
             <InputText 
               label="Numerator"
               name="numerator"
+              onChange={numeratorChange}
             />
             <InputText 
               label="Denominator"
               name="denominator"
+              onChange={denominatorChange}
             />
             <InputText 
               label="Target Capaian"
               name="targetCapaian"
+              onChange={targetCapaianChange}
             />
             <InputText 
               label="Kriteria Inklusi & Ekslusi"
               name="kriteriaInklusiEkslusi"
+              onChange={kriteriaInklusiEkslusiChange}
             />
             <InputText 
               label="Formula Pengukuran"
               name="formulaPengukuran"
+              onChange={formulaPengukuranChange}
             />
             <InputText 
               label="Pengumpulan Data"
               name="pengumpulanData"
+              onChange={pengumpulanDataChange}
             />
             <InputText 
               label="Sumber Data"
               name="sumberData"
+              onChange={sumberDataChange}
             />
           </Col>
-          <Col span={8}>
+          <Col md={8} sm={24} xs={24}>
             <InputText 
               label="Populasi Atau Sampel"
               name="populasiAtauSampel"
+              onChange={populasiAtauSampelChange}
             />
             <Item
               label="Frekuensi Pengumpulan Data"
               name="frekuensiPengumpulanData"
             >
-              <Radio.Group>
+              <Radio.Group onChange={frekuensiPengumpulanDataChange}>
                 {
                   frekuensiPengumpulanDataOptions.map((item, index) => {
                     return (
@@ -247,7 +281,7 @@ export const SecondStep = ({
               label="Periode Waktu Pelaporan"
               name="periodeWaktuPelaporan"
             >
-              <Radio.Group>
+              <Radio.Group onChange={periodeWatkuPelaporanChange}>
                 {
                   periodeWaktuPelaporanOptions.map((item, index) => {
                     return (
@@ -261,7 +295,7 @@ export const SecondStep = ({
               label="Periode Analisis"
               name="periodeAnalisis"
             >
-              <Radio.Group>
+              <Radio.Group onChange={periodeAnalisisChange}>
                 {
                   periodeWaktuPelaporanOptions.map((item, index) => {
                     return (
@@ -274,10 +308,12 @@ export const SecondStep = ({
             <InputText 
               label="Penyajian Data"
               name="penyajianData"
+              onChange={penyajianDataChange}
             />
             <InputText 
               label="Penanggung Jawab Indikator"
               name="penanggungJawabIndikator"
+              onChange={penanggungJawabIndikatorChange}
             />
             <Item
               label="Dokumen Telusur"

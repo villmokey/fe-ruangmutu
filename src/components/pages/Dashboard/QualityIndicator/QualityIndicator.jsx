@@ -11,6 +11,7 @@ import { BarChart } from "../../../molecules/Chart/Bar/BarChart";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { paths } from "../../../../routing/paths";
+import { QualityIndicatorCard } from "../../../molecules/QualityIndicatorCard/QualityIndicatorCard";
 
 const { Content } = Layout;
 
@@ -110,34 +111,18 @@ export const QualityIndicator = () => {
         <div className="indikator-mutu-container">
           {
             viewType === 2 ?
-            <Row align="center" gutter={[8,8]}>
+            <Row align="center" gutter={[24,8]}>
               <Col>
-                <Card>
-                  <div className="indikator-mutu-thumbnail">
-
-                  </div>
-                </Card>
+                <QualityIndicatorCard />
               </Col>
               <Col>
-                <Card>
-                  <div className="indikator-mutu-thumbnail">
-                    
-                  </div>
-                </Card>
+                <QualityIndicatorCard />
               </Col>
               <Col>
-                <Card>
-                  <div className="indikator-mutu-thumbnail">
-                    
-                  </div>
-                </Card>
+                <QualityIndicatorCard />
               </Col>
               <Col>
-                <Card>
-                  <div className="indikator-mutu-thumbnail">
-                    
-                  </div>
-                </Card>
+              <QualityIndicatorCard />
               </Col>
             </Row>
             :

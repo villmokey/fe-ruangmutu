@@ -1,4 +1,4 @@
-import { Layout, Select, Row, Col, Space, Typography } from "antd";
+import { Layout, Select, Row, Col, Space } from "antd";
 import { Text } from "../../../atoms/Text/Text";
 import { Title } from "../../../atoms/Title/Title";
 
@@ -40,7 +40,7 @@ export const Sider = ({
                   tahunMutuOptions &&
                   tahunMutuOptions.map((item, index) => {
                     return (
-                      <Option value={item.value} key={index}>{ item.value }</Option>
+                      <Option value={item.value} key={index}>{ item.title }</Option>
                     )
                   })
                 }
@@ -57,7 +57,7 @@ export const Sider = ({
                   jenisDokumenOptions &&
                   jenisDokumenOptions.map((item, index) => {
                     return (
-                      <Option value={item.value} key={index}>{ item.value }</Option>
+                      <Option value={item.value} key={index}>{ item.title }</Option>
                     )
                   })
                 }

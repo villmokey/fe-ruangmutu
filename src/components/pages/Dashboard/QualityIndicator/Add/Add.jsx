@@ -6,28 +6,65 @@ import { Title } from '../../../../atoms/Title/Title';
 import { FirstStep } from '../../../../templates/QualityIndicatorTemplates/Add/FirstStep';
 import { SecondStep } from '../../../../templates/QualityIndicatorTemplates/Add/SecondStep';
 import { ThirdStep } from '../../../../templates/QualityIndicatorTemplates/Add/ThirdStep';
+import { Form } from 'antd';
 
 import './Add.less';
 
 const { Sider, Content } = Layout;
 const { Step } = Steps;
 
-const handleStepOne = (value) => {
-  console.log(value)
-}
-
 export const Add = () => {
 
-  const [current, setCurrent] = useState(0);
+  const [secondStepForm] = Form.useForm();
+  const [thirdStepForm] = Form.useForm();
 
-  const next = (value) => {
-    console.log(value);
+  const [current, setCurrent] = useState(0);
+  // const [ presetData, setPresetData ] = useState(null);
+
+  const handleStepOne = (value) => {
+    // setPresetData(value);
+    thirdStepForm.setFieldsValue({
+      programMutu: value.programMutu,
+      subProgramMutu: value.subProgramMutu,
+      judulIndikator: value.judulIndikator,
+      dasarPemilihanIndikator: value.dasarPemilihanIndikator,
+      dimensiMutu: value.dimensiMutu,
+      tujuan: value.tujuan,
+      definisiOperasional: value.definisiOperasional,
+      tipeIndikator: value.tipeIndikator,
+      statusPengukuran: value.statusPengukuran,
+      numerator: value.numerator,
+      denominator: value.denominator,
+      targetCapaian: value.targetCapaian,
+      kriteriaInklusiEkslusi: value.kriteriaInklusiEkslusi,
+      formulaPengukuran: value.formulaPengukuran,
+      pengumpulanData: value.pengumpulanData,
+      sumberData: value.sumberData,
+      populasiAtauSampel: value.populasiAtauSampel,
+      frekuensiPengumpulanData: value.frekuensiPengumpulanData,
+      periodeWatkuPelaporan: value.periodeWatkuPelaporan,
+      periodeAnalisis: value.periodeAnalisis,
+      penyajianData: value.penyajianData,
+      penanggungJawabIndikator: value.penanggungJawabIndikator
+    });
+  }
+
+  const next = () => {
+
+    if (current === 1) {
+      secondStepForm.submit();
+    }
+
     setCurrent(current + 1);
   };
 
   const prev = () => {
     setCurrent(current - 1);
   };
+
+  // const handleSubmit = () => {
+    
+  // }
 
   const steps = [
     {
@@ -36,16 +73,12 @@ export const Add = () => {
     },
     {
       title: 'Tahap 2',
-      content: <SecondStep onFinish={handleStepOne}/>,
+      content: <SecondStep onFinish={handleStepOne}  form={secondStepForm}/>,
     },
     {
       title: 'Tahap 3',
-      content: <ThirdStep />,
-    },
-    {
-      title: 'Tahap 4',
-      content: 'Last-content',
-    },
+      content: <ThirdStep form={thirdStepForm}/>,
+    }
   ];
 
   return (
@@ -74,7 +107,7 @@ export const Add = () => {
               <Button
                 onClick={() => prev()}
               >
-                Previous
+                Sebelumnya
               </Button>
             )
           }
@@ -83,7 +116,7 @@ export const Add = () => {
           {
             current < steps.length - 1 && (
               <Button type="primary" onClick={() => next()}>
-                Next
+                Selanjutnya
               </Button>
             )
           }
@@ -92,7 +125,7 @@ export const Add = () => {
           {
             current === steps.length - 1 && (
               <Button type="primary" onClick={() => message.success('Processing complete!')}>
-                Done
+                Simpan
               </Button>
             )
           }

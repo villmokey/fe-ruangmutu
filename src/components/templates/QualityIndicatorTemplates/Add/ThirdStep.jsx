@@ -1,6 +1,6 @@
 import { Title } from "../../../atoms/Title/Title";
 import { Form } from "../../../molecules/Form/Form";
-import { Checkbox, Col, Form as AntdForm, Row, Select, Upload } from 'antd';
+import { Checkbox, Col, Form as AntdForm, Radio, Row, Select, Upload } from 'antd';
 import { InputText } from '../../../atoms/InputText/InputText';
 import { Text } from "../../../atoms/Text/Text";
 
@@ -9,10 +9,31 @@ const { Item } = AntdForm;
 const { Dragger } = Upload;
 
 export const ThirdStep = ({
-  onFinish
+  form,
+  onFinish,
+  programMutuChange,
+  subProgramMutuChange,
+  judulIndikatorChange,
+  dasarPemilihanIndikatorChange,
+  dimensiMutuChange,
+  tujuanChange,
+  definisiOperasionalChange,
+  tipeIndikatorChange,
+  statusPengukuranChange,
+  numeratorChange,
+  denominatorChange,
+  targetCapaianChange,
+  kriteriaInklusiEkslusiChange,
+  formulaPengukuranChange,
+  pengumpulanDataChange,
+  sumberDataChange,
+  populasiAtauSampelChange,
+  frekuensiPengumpulanDataChange,
+  periodeWatkuPelaporanChange,
+  periodeAnalisisChange,
+  penyajianDataChange,
+  penanggungJawabIndikatorChange
 }) => {
-
-  const [form] = AntdForm.useForm();
 
   const programMutuOptions = [
     { value: 'admen', title: 'ADMEN' },
@@ -97,6 +118,25 @@ export const ThirdStep = ({
     }
   ];
 
+  let tipeIndikatorOptions = [
+    {
+      label: 'Input',
+      value: 'Input',
+    },
+    {
+      label: 'Proses',
+      value: 'Proses',
+    },
+    {
+      label: 'Output',
+      value: 'Output',
+    },
+    {
+      label: 'Outcome',
+      value: 'Outcome',
+    }
+  ]
+
   return (
     <>
       <Title level={4}>Form Profil Indikator Mutu</Title>
@@ -106,105 +146,199 @@ export const ThirdStep = ({
         layout="vertical"
       >
         <Row gutter={[24]}>
-          <Col span={8}>
+          <Col md={8} sm={24} xs={24}>
             <Item
               label="Program Mutu"
+              name="programMutu"
             >
-              <Select placeholder="Pilih program mutu" disabled>
+              <Select placeholder="Pilih program mutu" onChange={programMutuChange} disabled>
                 {
                   programMutuOptions.map(( item, index ) => (
-                    <Option value={item.value} key={index}>{ item.value }</Option>
+                    <Option value={item.value} key={index}>{ item.title }</Option>
                   ))
                 }
               </Select>
             </Item>
             <Item
               label="Sub Program Mutu"
+              name="subProgramMutu"
             >
-              <Select placeholder="Pilih Sub program mutu" disabled>
+              <Select placeholder="Pilih Sub program mutu" onChange={subProgramMutuChange} disabled>
                 {
                   programMutuOptions.map(( item, index ) => (
-                    <Option value={item.value} key={index}>{ item.value }</Option>
+                    <Option value={item.value} key={index}>{ item.title }</Option>
                   ))
                 }
               </Select>
             </Item>
             <InputText 
               label="Judul Indikator"
+              name="judulIndikator"
+              onChange={judulIndikatorChange}
               disabled
             />
             <InputText 
               label="Dasar Pemilihan Indikator"
+              name="dasarPemilihanIndikator"
+              onChange={dasarPemilihanIndikatorChange}
               disabled
             />
 
             <Item
               label="Dimensi Mutu"
+              name="dimensiMutu"
             >
-              <Checkbox.Group options={dimensiMutuOptions} disabled></Checkbox.Group>
+              <Checkbox.Group options={dimensiMutuOptions} onChange={dimensiMutuChange} disabled></Checkbox.Group>
             </Item>
 
             <InputText 
               label="Tujuan"
+              name="tujuan"
+              onChange={tujuanChange}
               disabled
             />
 
             <InputText 
               label="Definisi Operasional"
+              name="definisiOperasional"
+              onChange={definisiOperasionalChange}
               disabled
             />
-
+             <Item
+              label="Tipe Indikator"
+              name="tipeIndikator"
+            >
+              <Radio.Group onChange={tipeIndikatorChange} disabled>
+                {
+                  tipeIndikatorOptions.map((item, index) => {
+                    return (
+                      <Radio value={item.value} key={index}>{ item.label }</Radio>
+                    )
+                  })
+                }
+              </Radio.Group>
+            </Item>
           </Col>
-          <Col span={8}>
+          <Col md={8} sm={24} xs={24}>
+            <InputText 
+              label="Status Pengukuran"
+              name="statusPengukuran"
+              onChange={statusPengukuranChange}
+              disabled
+            />
+            <InputText 
+              label="Numerator"
+              name="numerator"
+              onChange={numeratorChange}
+              disabled
+            />
+            <InputText 
+              label="Denominator"
+              name="denominator"
+              onChange={denominatorChange}
+              disabled
+            />
+            <InputText 
+              label="Target Capaian"
+              name="targetCapaian"
+              onChange={targetCapaianChange}
+              disabled
+            />
             <InputText 
               label="Kriteria Inklusi & Ekslusi"
+              name="kriteriaInklusiEkslusi"
+              onChange={kriteriaInklusiEkslusiChange}
               disabled
             />
             <InputText 
               label="Formula Pengukuran"
+              name="formulaPengukuran"
+              onChange={formulaPengukuranChange}
               disabled
             />
             <InputText 
               label="Pengumpulan Data"
+              name="pengumpulanData"
+              onChange={pengumpulanDataChange}
               disabled
             />
             <InputText 
               label="Sumber Data"
+              name="sumberData"
+              onChange={sumberDataChange}
               disabled
             />
+          </Col>
+          <Col md={8} sm={24} xs={24}>
             <InputText 
               label="Populasi Atau Sampel"
+              name="populasiAtauSampel"
+              onChange={populasiAtauSampelChange}
               disabled
             />
             <Item
               label="Frekuensi Pengumpulan Data"
+              name="frekuensiPengumpulanData"
             >
-              <Checkbox.Group options={frekuensiPengumpulanDataOptions} disabled></Checkbox.Group>
+              <Radio.Group onChange={frekuensiPengumpulanDataChange} disabled>
+                {
+                  frekuensiPengumpulanDataOptions.map((item, index) => {
+                    return (
+                      <Radio value={item.value} key={index}>{ item.label }</Radio>
+                    )
+                  })
+                }
+              </Radio.Group>
             </Item>
             <Item
               label="Periode Waktu Pelaporan"
+              name="periodeWaktuPelaporan"
             >
-              <Checkbox.Group options={periodeWaktuPelaporanOptions} disabled></Checkbox.Group>
+              <Radio.Group onChange={periodeWatkuPelaporanChange} disabled>
+                {
+                  periodeWaktuPelaporanOptions.map((item, index) => {
+                    return (
+                      <Radio value={item.value} key={index}>{ item.label }</Radio>
+                    )
+                  })
+                }
+              </Radio.Group>
             </Item>
-          </Col>
-          <Col span={8}>
             <Item
               label="Periode Analisis"
+              name="periodeAnalisis"
             >
-              <Checkbox.Group options={periodeWaktuPelaporanOptions} disabled></Checkbox.Group>
+              <Radio.Group onChange={periodeAnalisisChange} disabled>
+                {
+                  periodeWaktuPelaporanOptions.map((item, index) => {
+                    return (
+                      <Radio value={item.value} key={index}>{ item.label }</Radio>
+                    )
+                  })
+                }
+              </Radio.Group>
             </Item>
             <InputText 
               label="Penyajian Data"
+              name="penyajianData"
+              onChange={penyajianDataChange}
               disabled
             />
             <InputText 
               label="Penanggung Jawab Indikator"
+              name="penanggungJawabIndikator"
+              onChange={penanggungJawabIndikatorChange}
               disabled
             />
             <Item
               label="Dokumen Telusur"
+              name="dokumenTelusur"
+              valuePropName="fileList"
             >
-              <Dragger style={{ height: 100 }} disabled>
+              <Dragger 
+                beforeUpload={() => false}
+                disabled
+              >
                 <Text>Drag & Drop</Text>
               </Dragger>
             </Item>
