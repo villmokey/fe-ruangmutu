@@ -1,5 +1,5 @@
-import { Routes, Route } from 'react-router-dom';
-import { Home } from '../components/pages/Home/Home';
+import { Routes, Route, Navigate } from 'react-router-dom';
+// import { Home } from '../components/pages/Home/Home';
 import { Login } from '../components/pages/Login/Login';
 import { paths } from './paths';
 import { Home as DashboardHome } from '../components/pages/Dashboard/Home/Home';
@@ -7,7 +7,7 @@ import { Home as DashboardHome } from '../components/pages/Dashboard/Home/Home';
 export const Routing = () => {
   return (
     <Routes>
-      <Route path={paths.HOME} element={<Home />} />
+      <Route path={paths.HOME}  element={<Navigate to={paths.LOGIN} replace />} />
       <Route path={paths.DASHBOARD} element={<DashboardHome />} />
       <Route path={paths.LOGIN} element={<Login />} />
 

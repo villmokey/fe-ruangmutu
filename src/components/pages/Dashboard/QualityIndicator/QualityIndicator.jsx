@@ -1,16 +1,56 @@
-import { Button, Col, Layout, Row } from "antd";
+import { Button, Col, Layout, Row, Space, Tag } from "antd";
 import { Sider } from "../../../organism/Dashboard/Sider/Sider";
 import { Card } from '../../../atoms/Card/Card';
 import { Title } from "../../../atoms/Title/Title";
 
 import './QualityIndicator.less';
 import { InputSearch } from "../../../atoms/InputSearch/InputSearch";
-import { PlusOutlined } from "@ant-design/icons";
+import { FileTextOutlined, PlusOutlined, BarChartOutlined } from "@ant-design/icons";
 
+import { BarChart } from "../../../molecules/Chart/Bar/BarChart";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { paths } from "../../../../routing/paths";
+import { QualityIndicatorCard } from "../../../molecules/QualityIndicatorCard/QualityIndicatorCard";
 
 const { Content } = Layout;
 
+
 export const QualityIndicator = () => {
+
+  const [ viewType, setViewType ] = useState(1);
+
+  const handleChangeViewType = () => {
+    setViewType(viewType === 1 ? 2 : 1);
+  }
+
+
+  const labels = ['JAN', 'FEB', 'MAR', 'APR', 'MEI', 'JUNI', 'JULI', 'AGU', 'SEP', 'OKT', 'NOV', 'DES'];
+
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top'
+      },
+      title: {
+        display: true,
+        text: 'Kepegawaian - Pegawai dengan atribut lengkap',
+      },
+    },
+  }
+
+  const chartData = {
+    labels,
+    datasets: [
+      {
+        label: 'Jumlah',
+        data: [10, 60, 37, 21, 0, 60, 80, 0, 0, 0, 0, 0],
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      },
+    ],
+  }
+
   return (
     <Layout>
       <Sider />
@@ -40,14 +80,63 @@ export const QualityIndicator = () => {
             <InputSearch size="large" />
           </Col>
           <Col>
+            <Link to={`${paths.ADD}`}>
+              <Button 
+                type="primary" 
+                icon={<PlusOutlined />} 
+                size="large" 
+                style={{ borderRadius: 8 }}
+              />
+            </Link>
+          </Col>
+        </Row>
+        <Row style={{ marginTop: 40 }}>
+          <Col style={{ marginRight: 'auto' }}>
+            <Space>
+              <Tag color="#6A9695">#INDIKATOR MUTU</Tag>
+              <Tag color="#6A9695">#KEPEGAWAIAN</Tag>
+              <Tag color="#6A9695">#MUTU</Tag>
+            </Space>
+          </Col>
+          <Col style={{ marginLeft: 'auto' }}>
             <Button 
               type="primary" 
-              icon={<PlusOutlined />} 
+              icon={viewType === 1 ? <FileTextOutlined /> : <BarChartOutlined />} 
               size="large" 
               style={{ borderRadius: 8 }}
+              onClick={handleChangeViewType}
             />
           </Col>
         </Row>
+        <div className="indikator-mutu-container">
+          {
+            viewType === 2 ?
+            <Row align="center" gutter={[24,8]}>
+              <Col>
+                <QualityIndicatorCard />
+              </Col>
+              <Col>
+                <QualityIndicatorCard />
+              </Col>
+              <Col>
+                <QualityIndicatorCard />
+              </Col>
+              <Col>
+              <QualityIndicatorCard />
+              </Col>
+            </Row>
+            :
+            <>
+              <Card className="indikator-mutu">
+                <BarChart options={chartOptions} data={chartData} className="chart"/>
+              </Card>
+              <Card className="indikator-mutu">
+                <BarChart options={chartOptions} data={chartData} className="chart"/>
+              </Card>
+            </>
+          }
+          
+        </div>
       </Content>
     </Layout>
   )
