@@ -2,11 +2,13 @@ import { Radio, Space } from "antd"
 import { Text } from "../../../atoms/Text/Text"
 import { Title } from "../../../atoms/Title/Title"
 
-export const FirstStep = () => {
+export const FirstStep = ({
+  onChangeForm
+}) => {
   return (
     <>
       <Title level={4}>Pilih jenis dokumen</Title>
-      <Radio.Group>
+      <Radio.Group onChange={onChangeForm}>
         <Space direction="vertical" size="large">
           <Radio value={1}>
             <Title level={3}>PROFIL INDIKATOR MUTU</Title>

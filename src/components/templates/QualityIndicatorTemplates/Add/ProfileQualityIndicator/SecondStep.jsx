@@ -1,14 +1,14 @@
-import { Title } from "../../../atoms/Title/Title";
-import { Form } from "../../../molecules/Form/Form";
 import { Checkbox, Col, Form as AntdForm, Radio, Row, Select, Upload } from 'antd';
-import { InputText } from '../../../atoms/InputText/InputText';
-import { Text } from "../../../atoms/Text/Text";
+import { Title } from '../../../../atoms/Title/Title';
+import { Form } from '../../../../molecules/Form/Form';
+import { InputText } from '../../../../atoms/InputText/InputText';
+import { Text } from '../../../../atoms/Text/Text';
 
 const { Option } = Select;
 const { Item } = AntdForm;
 const { Dragger } = Upload;
 
-export const ThirdStep = ({
+export const SecondStep = ({
   form,
   onFinish,
   programMutuChange,
@@ -32,7 +32,9 @@ export const ThirdStep = ({
   periodeWatkuPelaporanChange,
   periodeAnalisisChange,
   penyajianDataChange,
-  penanggungJawabIndikatorChange
+  penanggungJawabIndikatorChange,
+  pembuatChange,
+  ditugaskanChange
 }) => {
 
   const programMutuOptions = [
@@ -151,7 +153,7 @@ export const ThirdStep = ({
               label="Program Mutu"
               name="programMutu"
             >
-              <Select placeholder="Pilih program mutu" onChange={programMutuChange} disabled>
+              <Select placeholder="Pilih program mutu" onChange={programMutuChange}>
                 {
                   programMutuOptions.map(( item, index ) => (
                     <Option value={item.value} key={index}>{ item.title }</Option>
@@ -163,7 +165,7 @@ export const ThirdStep = ({
               label="Sub Program Mutu"
               name="subProgramMutu"
             >
-              <Select placeholder="Pilih Sub program mutu" onChange={subProgramMutuChange} disabled>
+              <Select placeholder="Pilih Sub program mutu" onChange={subProgramMutuChange}>
                 {
                   programMutuOptions.map(( item, index ) => (
                     <Option value={item.value} key={index}>{ item.title }</Option>
@@ -175,40 +177,36 @@ export const ThirdStep = ({
               label="Judul Indikator"
               name="judulIndikator"
               onChange={judulIndikatorChange}
-              disabled
             />
             <InputText 
               label="Dasar Pemilihan Indikator"
               name="dasarPemilihanIndikator"
               onChange={dasarPemilihanIndikatorChange}
-              disabled
             />
 
             <Item
               label="Dimensi Mutu"
               name="dimensiMutu"
             >
-              <Checkbox.Group options={dimensiMutuOptions} onChange={dimensiMutuChange} disabled></Checkbox.Group>
+              <Checkbox.Group options={dimensiMutuOptions} onChange={dimensiMutuChange}></Checkbox.Group>
             </Item>
 
             <InputText 
               label="Tujuan"
               name="tujuan"
               onChange={tujuanChange}
-              disabled
             />
 
             <InputText 
               label="Definisi Operasional"
               name="definisiOperasional"
               onChange={definisiOperasionalChange}
-              disabled
             />
              <Item
               label="Tipe Indikator"
               name="tipeIndikator"
             >
-              <Radio.Group onChange={tipeIndikatorChange} disabled>
+              <Radio.Group onChange={tipeIndikatorChange}>
                 {
                   tipeIndikatorOptions.map((item, index) => {
                     return (
@@ -224,49 +222,41 @@ export const ThirdStep = ({
               label="Status Pengukuran"
               name="statusPengukuran"
               onChange={statusPengukuranChange}
-              disabled
             />
             <InputText 
               label="Numerator"
               name="numerator"
               onChange={numeratorChange}
-              disabled
             />
             <InputText 
               label="Denominator"
               name="denominator"
               onChange={denominatorChange}
-              disabled
             />
             <InputText 
               label="Target Capaian"
               name="targetCapaian"
               onChange={targetCapaianChange}
-              disabled
             />
             <InputText 
               label="Kriteria Inklusi & Ekslusi"
               name="kriteriaInklusiEkslusi"
               onChange={kriteriaInklusiEkslusiChange}
-              disabled
             />
             <InputText 
               label="Formula Pengukuran"
               name="formulaPengukuran"
               onChange={formulaPengukuranChange}
-              disabled
             />
             <InputText 
               label="Pengumpulan Data"
               name="pengumpulanData"
               onChange={pengumpulanDataChange}
-              disabled
             />
             <InputText 
               label="Sumber Data"
               name="sumberData"
               onChange={sumberDataChange}
-              disabled
             />
           </Col>
           <Col md={8} sm={24} xs={24}>
@@ -274,13 +264,12 @@ export const ThirdStep = ({
               label="Populasi Atau Sampel"
               name="populasiAtauSampel"
               onChange={populasiAtauSampelChange}
-              disabled
             />
             <Item
               label="Frekuensi Pengumpulan Data"
               name="frekuensiPengumpulanData"
             >
-              <Radio.Group onChange={frekuensiPengumpulanDataChange} disabled>
+              <Radio.Group onChange={frekuensiPengumpulanDataChange}>
                 {
                   frekuensiPengumpulanDataOptions.map((item, index) => {
                     return (
@@ -294,7 +283,7 @@ export const ThirdStep = ({
               label="Periode Waktu Pelaporan"
               name="periodeWaktuPelaporan"
             >
-              <Radio.Group onChange={periodeWatkuPelaporanChange} disabled>
+              <Radio.Group onChange={periodeWatkuPelaporanChange}>
                 {
                   periodeWaktuPelaporanOptions.map((item, index) => {
                     return (
@@ -308,7 +297,7 @@ export const ThirdStep = ({
               label="Periode Analisis"
               name="periodeAnalisis"
             >
-              <Radio.Group onChange={periodeAnalisisChange} disabled>
+              <Radio.Group onChange={periodeAnalisisChange}>
                 {
                   periodeWaktuPelaporanOptions.map((item, index) => {
                     return (
@@ -322,22 +311,43 @@ export const ThirdStep = ({
               label="Penyajian Data"
               name="penyajianData"
               onChange={penyajianDataChange}
-              disabled
             />
             <InputText 
               label="Penanggung Jawab Indikator"
               name="penanggungJawabIndikator"
               onChange={penanggungJawabIndikatorChange}
-              disabled
             />
+            <Item
+              label="Dibuat oleh"
+              name="dibuatOleh"
+            >
+              <Select placeholder="Pilih Pembuat" onChange={pembuatChange}>
+                {/* {
+                  programMutuOptions.map(( item, index ) => (
+                    <Option value={item.value} key={index}>{ item.title }</Option>
+                  ))
+                } */}
+              </Select>
+            </Item>
+            <Item
+              label="Ditugaskan oleh"
+              name="ditugaskanOleh"
+            >
+              <Select placeholder="Pilih yang menugaskan" onChange={ditugaskanChange}>
+                {/* {
+                  programMutuOptions.map(( item, index ) => (
+                    <Option value={item.value} key={index}>{ item.title }</Option>
+                  ))
+                } */}
+              </Select>
+            </Item>
             <Item
               label="Dokumen Telusur"
               name="dokumenTelusur"
               valuePropName="fileList"
             >
               <Dragger 
-                beforeUpload={() => false}
-                disabled
+                beforeUpload={() => false} 
               >
                 <Text>Drag & Drop</Text>
               </Dragger>
