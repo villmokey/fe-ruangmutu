@@ -11,10 +11,11 @@ export const Title = ({
   children,
   level,
   className,
-  type
+  type,
+  style
 }) => {
   return (
-    <AntdTitle level={level} className={className} type={type}>{ children }</AntdTitle>
+    <AntdTitle level={level} className={className} type={type} style={style}>{ children }</AntdTitle>
   )
 }
 

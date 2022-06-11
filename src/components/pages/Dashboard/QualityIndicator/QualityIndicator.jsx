@@ -1,5 +1,4 @@
 import { Button, Col, Layout, Row, Space, Tag } from "antd";
-import { Sider } from "../../../organism/Dashboard/Sider/Sider";
 import { Card } from '../../../atoms/Card/Card';
 import { Title } from "../../../atoms/Title/Title";
 
@@ -12,6 +11,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { paths } from "../../../../routing/paths";
 import { QualityIndicatorCard } from "../../../molecules/QualityIndicatorCard/QualityIndicatorCard";
+import { QualityIndicatorSider } from "../../../organism/Dashboard/Sider/QualityIndicatorSider/QualityIndicatorSider";
 
 const { Content } = Layout;
 
@@ -19,9 +19,18 @@ const { Content } = Layout;
 export const QualityIndicator = () => {
 
   const [ viewType, setViewType ] = useState(1);
+  const [ previewVis, setPreviewVis ] = useState(false);
 
   const handleChangeViewType = () => {
     setViewType(viewType === 1 ? 2 : 1);
+  }
+
+  const handleOpenPreview = () => {
+    setPreviewVis(true);
+  }
+
+  const handleClosePreview = () => {
+    setPreviewVis(false);
   }
 
 
@@ -53,7 +62,7 @@ export const QualityIndicator = () => {
 
   return (
     <Layout>
-      <Sider />
+      <QualityIndicatorSider />
       <Content className="main-content">
         <Row justify="center" align="middle" gutter={[ 24,16 ]}>
           <Col>
@@ -113,7 +122,11 @@ export const QualityIndicator = () => {
             viewType === 2 ?
             <Row align="center" gutter={[24,8]}>
               <Col>
-                <QualityIndicatorCard />
+                <QualityIndicatorCard 
+                  previewVisibility={previewVis}
+                  onClosePreviewVisibility={handleClosePreview}
+                  onOpenPreview={handleOpenPreview}
+                />
               </Col>
               <Col>
                 <QualityIndicatorCard />

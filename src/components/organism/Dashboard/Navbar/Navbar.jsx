@@ -42,9 +42,16 @@ export const Navbar = ({
       url: paths.CALENDER
     },
     {
-      key: 'qualitycupboard',
+      key: 'submenu_lemarimutu',
       title: 'LEMARI MUTU',
-      url: paths.CALENDER
+      url: paths.DASHBOARD,
+      children: [
+        {
+          key: 'approval_document',
+          title: 'DOKUMEN APPROVAL',
+          url: paths.APPROVAL_DOCUMENT,
+        }
+      ]
     }
   ];
 
