@@ -1,8 +1,8 @@
 import { Layout } from "antd";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Route, Routes } from "react-router-dom";
-// import { useAuthToken } from "../../../../globals/useAuthToken";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import { useAuthToken } from "../../../../globals/useAuthToken";
 import { removeAccessToken } from "../../../../redux/modules/auth/action";
 import { paths } from "../../../../routing/paths";
 import { Navbar } from "../../../organism/Dashboard/Navbar/Navbar";
@@ -17,10 +17,10 @@ const { Content } = Layout;
 
 export const Home = () => {
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // const { getIsAuth } = useAuthToken();
+  const { getIsAuth } = useAuthToken();
 
   useEffect(() => {
     if (!getIsAuth()) {

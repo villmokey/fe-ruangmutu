@@ -41,7 +41,7 @@ export const Add = () => {
   const [current, setCurrent] = useState(0);
   const [documentFormChoosen, setDocumentFormChoosen] = useState(0);
 
-  const [ programOptions, setProgramOptions ] = useState(null);
+  // const [ programOptions, setProgramOptions ] = useState(null);
 
   useEffect(() => {
     dispatch(getAllProgram());
