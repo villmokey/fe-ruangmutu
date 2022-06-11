@@ -1,5 +1,5 @@
 import { Layout } from "antd";
-// import { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { useAuthToken } from "../../../../globals/useAuthToken";
@@ -22,15 +22,15 @@ export const Home = () => {
 
   const { getIsAuth } = useAuthToken();
 
-  // useEffect(() => {
-  //   if (!getIsAuth()) {
-  //     navigate(paths.LOGIN);
-  //     return;
-  //   }
-  //   navigate(paths.QUALITY_INDICATOR);
+  useEffect(() => {
+    if (!getIsAuth()) {
+      navigate(paths.LOGIN);
+      return;
+    }
+    navigate(paths.QUALITY_INDICATOR);
 
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [navigate])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const handleLogout = () => {
     dispatch(removeAccessToken());
