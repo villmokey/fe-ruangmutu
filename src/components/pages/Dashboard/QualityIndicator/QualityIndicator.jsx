@@ -34,31 +34,56 @@ export const QualityIndicator = () => {
   }
 
 
-  const labels = ['JAN', 'FEB', 'MAR', 'APR', 'MEI', 'JUNI', 'JULI', 'AGU', 'SEP', 'OKT', 'NOV', 'DES'];
-
-  const chartOptions = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: 'top'
-      },
-      title: {
-        display: true,
-        text: 'Kepegawaian - Pegawai dengan atribut lengkap',
-      },
+  const chartData = [
+    {
+      month: 'JAN',
+      value: 52,
     },
-  }
-
-  const chartData = {
-    labels,
-    datasets: [
-      {
-        label: 'Jumlah',
-        data: [10, 60, 37, 21, 0, 60, 80, 0, 0, 0, 0, 0],
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
-      },
-    ],
-  }
+    {
+      month: 'FEB',
+      value: 92,
+    },
+    {
+      month: 'MAR',
+      value: 90,
+    },
+    {
+      month: 'APR',
+      value: 97,
+    },
+    {
+      month: 'MEI',
+      value: 50,
+    },
+    {
+      month: 'JUN',
+      value: 99,
+    },
+    {
+      month: 'JUL',
+      value: 87,
+    },
+    {
+      month: 'AGU',
+      value: 85,
+    },
+    {
+      month: 'SEP',
+      value: 0,
+    },
+    {
+      month: 'OKT',
+      value: 99,
+    },
+    {
+      month: 'NOV',
+      value: 86,
+    },
+    {
+      month: 'DES',
+      value: 100,
+    }
+  ]
 
   return (
     <Layout>
@@ -141,10 +166,26 @@ export const QualityIndicator = () => {
             :
             <>
               <Card className="indikator-mutu">
-                <BarChart options={chartOptions} data={chartData} className="chart"/>
+                <BarChart 
+                  data={chartData} 
+                  className="chart"
+                  XAxisDataKey="month"
+                  barColor="#5DC8BDE5"
+                  barDataKey="value"
+                  width={700}
+                  height={300}
+                />
               </Card>
               <Card className="indikator-mutu">
-                <BarChart options={chartOptions} data={chartData} className="chart"/>
+                <BarChart 
+                  data={chartData} 
+                  className="chart"
+                  XAxisDataKey="month"
+                  barColor="#5DC8BDE5"
+                  barDataKey="value"
+                  width={700}
+                  height={300}
+                />
               </Card>
             </>
           }

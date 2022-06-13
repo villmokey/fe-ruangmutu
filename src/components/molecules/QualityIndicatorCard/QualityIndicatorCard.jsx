@@ -4,7 +4,7 @@ import { Card } from "../../atoms/Card/Card";
 import './QualityIndicatorCard.less';
 import Thumbnail from '../../../assets/images/thumbnail.png';
 import { Text } from "../../atoms/Text/Text";
-import { ProfileQualityIndicatorPreviewCard } from "../ProfileQualityIndicatorPreviewCard/ProfileQualityIndicatorPreviewCard";
+import { QualityIndicatorPreview } from "../../templates/QualityIndicatorTemplates/Preview/QualityIndicatorPreview";
 
 export const QualityIndicatorCard = ({
   previewVisibility,
@@ -31,7 +31,7 @@ export const QualityIndicatorCard = ({
           <p className="info">Senin, 17 Agustus 2021</p>
         </div>
       </Card>
-      <ProfileQualityIndicatorPreviewCard 
+      <QualityIndicatorPreview 
         visibility={previewVisibility}
         onClose={onClosePreviewVisibility}
       />

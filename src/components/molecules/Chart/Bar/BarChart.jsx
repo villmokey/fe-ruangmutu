@@ -1,30 +1,34 @@
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title as ChartTitle,
+import { 
+  BarChart as RechartsBarChart,
+  Bar,
+  XAxis,
+  YAxis,
   Tooltip,
-  Legend,
-} from 'chart.js';
-import { Bar } from 'react-chartjs-2';
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  ChartTitle,
-  Tooltip,
-  Legend
-);
-
+  // Legend
+} from 'recharts';
 
 export const BarChart = ({
-  options,
+  XAxisDataKey,
+  YAxisDataKey,
+  barDataKey,
+  barColor,
   data,
-  className
+  className,
+  width,
+  height
 }) => {
   return (
-    <Bar options={options} data={data} className={className}/>   
+    <RechartsBarChart
+      width={width}
+      height={height}
+      data={data}
+      className={className}
+    >
+      <XAxis dataKey={XAxisDataKey} />
+      <YAxis dataKey={YAxisDataKey}/>
+      <Tooltip />
+      {/* <Legend /> */}
+      <Bar dataKey={barDataKey} fill={barColor} />
+    </RechartsBarChart>
   )
 }
