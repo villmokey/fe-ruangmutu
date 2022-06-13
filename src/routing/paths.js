@@ -13,5 +13,6 @@ export const paths = {
   DASHBOARD: '/dashboard/*',
   QUALITY_INDICATOR: 'quality-indicator/',
   CALENDER: 'calender/',
-  QUALITY_CUPBOARD: 'quality-cupboard/'
+  QUALITY_CUPBOARD: 'quality-cupboard/',
+  APPROVAL_DOCUMENT: 'approval-document/'
 }

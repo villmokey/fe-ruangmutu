@@ -10,9 +10,9 @@ import { Calender } from "../Calender/Calender";
 import { QualityIndicator } from "../QualityIndicator/QualityIndicator";
 
 import { Add as AddQualityIndicator } from '../QualityIndicator/Add/Add';
+import { DocumentApproval } from "../DocumentApproval/DocumentApproval";
 
 import './Home.less';
-
 const { Content } = Layout;
 
 export const Home = () => {
@@ -45,7 +45,8 @@ export const Home = () => {
             <Route path={paths.QUALITY_INDICATOR} element={<QualityIndicator />} />
             <Route path={`${paths.QUALITY_INDICATOR}${paths.ADD}`} element={<AddQualityIndicator />} />
             <Route path={paths.CALENDER} element={<Calender />} />
-            <Route path={paths.QUALITY_CUPBOARD} element={<QualityIndicator />} />
+            {/* <Route path={paths.QUALITY_CUPBOARD} element={<QualityIndicator />} /> */}
+            <Route path={paths.APPROVAL_DOCUMENT} element={<DocumentApproval />} />
             <Route path="*" element={
               <>
                 <h1>404 NOT FOUND!</h1>
