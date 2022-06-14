@@ -151,16 +151,32 @@ export const QualityIndicator = () => {
                   previewVisibility={previewVis}
                   onClosePreviewVisibility={handleClosePreview}
                   onOpenPreview={handleOpenPreview}
+                  key={1}
                 />
               </Col>
               <Col>
-                <QualityIndicatorCard />
+                <QualityIndicatorCard 
+                  previewVisibility={previewVis}
+                  onClosePreviewVisibility={handleClosePreview}
+                  onOpenPreview={handleOpenPreview}
+                  key={2}
+                />
               </Col>
               <Col>
-                <QualityIndicatorCard />
+                <QualityIndicatorCard 
+                  previewVisibility={previewVis}
+                  onClosePreviewVisibility={handleClosePreview}
+                  onOpenPreview={handleOpenPreview}
+                  key={3}
+                />
               </Col>
               <Col>
-              <QualityIndicatorCard />
+                <QualityIndicatorCard 
+                  previewVisibility={previewVis}
+                  onClosePreviewVisibility={handleClosePreview}
+                  onOpenPreview={handleOpenPreview}
+                  key={4}
+                />
               </Col>
             </Row>
             :
