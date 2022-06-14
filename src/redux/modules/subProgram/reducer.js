@@ -1,10 +1,16 @@
-import { programActionType } from "./action";
+import { subProgramActionType } from "./action";
 
 const initialState = {
 	loading: false,
 	called: false,
 	error: null,
 	response: null,
+	success: {
+		add: false,
+		update: false,
+		delete: false,
+		changePassword: false
+	},
 	data: {
 		list: null,
 		single: null,
@@ -12,47 +18,61 @@ const initialState = {
 	}
 }
 
-export const programReducer = (state = initialState, action) => {
+export const subProgramReducer = (state = initialState, action) => {
 	switch (action.type) {
-		case programActionType.FETCHING:
+		case subProgramActionType.FETCHING:
 			state.called = false;
 			state.loading = action.payload.loading;
 			state.error = action.payload.loading ? state.error : null;
-			// state.data.single = null
+			state.data = {
+				// list: null,
+				single: null,
+				// total: null
+			}
+			state.success = {
+				add: false,
+				edit: false,
+				delete: false,
+				changePassword: false
+			};
 			return { ...state };
 
-		case programActionType.ERROR:
+		case subProgramActionType.ERROR:
 			state.called = (action.payload === null) ? false : true;
 			state.loading = false;
 			state.error = action.payload;
 			return { ...state };
 
-		case programActionType.SET_ALL_PROGRAM:
+		case subProgramActionType.SET_ALL_SUB_PROGRAM:
+			console.log(action.payload.data.data);
 			state.called = true;
-			state.data.list = action.payload.data;
+			state.data = {
+				list: action.payload.data.data,
+				total: parseInt(action.payload.data.total)
+			};
 			return { ...state };
 
-		case programActionType.SET_SINGLE_PROGRAM:
+		case subProgramActionType.SET_SINGLE_SUB_PROGRAM:
 			state.called = true;
 			state.data.single = action.payload.data;
 			return { ...state };
 	
-		case programActionType.CREATE_PROGRAM:
+		case subProgramActionType.CREATE_SUB_PROGRAM:
 			state.called = true;
 			state.success.add = true;
 			return { ...state };
 
-		case programActionType.DELETE_PROGRAM:
+		case subProgramActionType.DELETE_SUB_PROGRAM:
 			state.called = true;
 			state.success.delete = true;
 			return { ...state };
 
-		case programActionType.UPDATE_PROGRAM:
+		case subProgramActionType.UPDATE_SUB_PROGRAM:
 			state.called = true;
 			state.success.update = true;
 			return { ...state };
 
-		case programActionType.SUCCESS_CHANGE_PASSWORD:
+		case subProgramActionType.SUCCESS_CHANGE_PASSWORD:
 			state.called = true;
 			state.success.changePassword = true;
 			return { ...state };

@@ -1,21 +1,20 @@
 import { apiMethod } from "../../../globals/apiMethod";
 import { URL_CONFIG } from "../../../globals/urlConfig";
 
-export const programActionType = {
-	FETCHING: "program/FETCH_PROCESS",
-	ERROR: "program/FETCHING_ERROR",
-	SET_ALL_PROGRAM: "program/SET_ALL_PROGRAM",
-	SET_SINGLE_PROGRAM: "program/SET_SINGLE_PROGRAM",
-	CREATE_PROGRAM: "program/ADD_PROGRAM",
-	UPDATE_PROGRAM: "program/EDIT_PROGRAM",
-	DELETE_PROGRAM: "program/DELETE_PROGRAM",
-	SUCCESS_CHANGE_PASSWORD: 'program/SUCCESS_CHANGE_PASSWORD'
+export const subProgramActionType = {
+	FETCHING: "subProgram/FETCH_PROCESS",
+	ERROR: "subProgram/FETCHING_ERROR",
+	SET_ALL_SUB_PROGRAM: "subProgram/SET_ALL_SUB_PROGRAM",
+	SET_SINGLE_SUB_PROGRAM: "subProgram/SET_SINGLE_SUB_PROGRAM",
+	CREATE_SUB_PROGRAM: "subProgram/ADD_SUB_PROGRAM",
+	UPDATE_SUB_PROGRAM: "subProgram/EDIT_SUB_PROGRAM",
+	DELETE_SUB_PROGRAM: "subProgram/DELETE_SUB_PROGRAM"
 };
 
 
 const fetchDataProcess = (value) => {
     return {
-      type: programActionType.FETCHING,
+      type: subProgramActionType.FETCHING,
       payload: {
         loading: value
       }
@@ -24,7 +23,7 @@ const fetchDataProcess = (value) => {
   
 const fetchDataError = (value) => {
 	return {
-		type: programActionType.ERROR,
+		type: subProgramActionType.ERROR,
 		payload: {
 			error: value,
 			loading: value
@@ -32,25 +31,25 @@ const fetchDataError = (value) => {
 	}
 }
 
-const setAllProgram = (data, total) => {
+const setAllSubProgram = (data, total) => {
 	return {
-		type: programActionType.SET_ALL_PROGRAM,
+		type: subProgramActionType.SET_ALL_SUB_PROGRAM,
 		payload: data
 	}
 }
 
-const setSingleProgram = (data) => {
+const setSingleSubProgram = (data) => {
 	return {
-		type: programActionType.SET_SINGLE_PROGRAM,
+		type: subProgramActionType.SET_SINGLE_SUB_PROGRAM,
 		payload: data
 	}
 }
 
-export const getAllProgram = (bodyData) => {
+export const getAllSubProgram = (bodyData) => {
 	return {
 		type: 'API',
 		payload: {
-			url: `${URL_CONFIG.PROGRAM_BASE_URL}?paginate=false`,
+			url: `${URL_CONFIG.SUB_PROGRAM_BASE_URL}`,
 			requestParams: {
 				method: apiMethod.GET,
 				data: bodyData?.param ?? {},
@@ -67,7 +66,7 @@ export const getAllProgram = (bodyData) => {
 			return fetchDataProcess(false);
 		},
 		success: (data, response) => {
-			return setAllProgram(data);
+			return setAllSubProgram(data);
 		},
 		error: (err) => {
 			const error = err.errorCode ? err.errorCode : err.message;
@@ -76,11 +75,11 @@ export const getAllProgram = (bodyData) => {
 	}
 }
 
-export const getSingleProgram = (id, bodyData) => {
+export const getSingleSubProgram = (id, bodyData) => {
 	return {
 		type: 'API',
 		payload: {
-			url: URL_CONFIG.PROGRAM_BASE_URL + id,
+			url: URL_CONFIG.SUB_PROGRAM_BASE_URL + id,
 			requestParams: {
 				method: apiMethod.GET,
 				data: bodyData.param ?? {},
@@ -97,7 +96,7 @@ export const getSingleProgram = (id, bodyData) => {
 			return fetchDataProcess(false);
 		},
 		success: (data, response) => {
-			return setSingleProgram(data);
+			return setSingleSubProgram(data);
 		},
 		error: (err) => {
 			const error = err.errorCode ? err.errorCode : err.message;
@@ -107,16 +106,16 @@ export const getSingleProgram = (id, bodyData) => {
 }
 
 
-export const programSelector = ({ program }) => {
+export const subProgramSelector = ({ subProgram }) => {
 	return {
-		loading: program.loading,
-		error: program.error,
-		called: program.called,
+		loading: subProgram.loading,
+		error: subProgram.error,
+		called: subProgram.called,
 		success: {
-			...program.success
+			...subProgram.success
 		},
 		data: {
-			...program.data
+			...subProgram.data
 		},
 	}
 };

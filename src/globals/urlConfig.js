@@ -5,5 +5,8 @@ export const URL_CONFIG = {
   LOGIN_URL: '/login',
 
   PROGRAM_BASE_URL: '/program',
-  SUB_PROGRAM_BASE_URL: '/sub-program'
+  SUB_PROGRAM_BASE_URL: '/sub-program',
+
+  UPLOAD_FILE_URL: '/upload/file',
+  UPLOAD_IMAGE_URL: '/upload/image'
 }

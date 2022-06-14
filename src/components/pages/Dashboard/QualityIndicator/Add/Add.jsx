@@ -13,7 +13,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import './Add.less';
 import { getAllProgram, programSelector } from '../../../../../redux/modules/program/action';
-// import { useAuthToken } from '../../../../../globals/useAuthToken';
+import { useAuthToken } from '../../../../../globals/useAuthToken';
+import { fileSelector, uploadFileAPI } from '../../../../../redux/modules/file/action';
 
 
 const { Sider, Content } = Layout;
@@ -22,15 +23,23 @@ const { Step } = Steps;
 export const Add = () => {
 
   const {
-    called: programCalled,
+    // called: programCalled,
     data: {
       list: programList
     }
   } = useSelector(programSelector)
 
+  const  {
+    loading: loadingFile,
+    called: calledFile,
+    data: {
+      upload
+    }
+  } = useSelector(fileSelector)
+
   const dispatch = useDispatch();
-  // const { getAccessToken } = useAuthToken();
-  // const accessToken = getAccessToken();
+  const { getAccessToken } = useAuthToken();
+  const accessToken = getAccessToken();
 
   const [secondStepProfileQualityIndicatorForm] = Form.useForm();
   const [thirdStepProfileQualityIndicatorForm] = Form.useForm();
@@ -41,7 +50,10 @@ export const Add = () => {
   const [current, setCurrent] = useState(0);
   const [documentFormChoosen, setDocumentFormChoosen] = useState(0);
 
-  // const [ programOptions, setProgramOptions ] = useState(null);
+  const [ programMutuOptions, setProgramMutuOptions ] = useState(null);
+  const [ subProgramMutuOptions, setSubProgramMutuOptions ] = useState(null);
+
+  const [ profileQualityIndicatorDataTemp, setProfileQualityIndicatorDataTemp ] = useState(null);
 
   useEffect(() => {
     dispatch(getAllProgram());
@@ -50,11 +62,105 @@ export const Add = () => {
   }, [])
 
   useEffect(() => {
-    if (!(programCalled && programList)) return;
-    
-  }, [programCalled, programList])
-  
+    if (!(programList)) return;
+    const fetch = programList.map((item, index) => {
+      return {
+        ...item,
+        key: item.id,
+        title: item.name,
+        value: item.name
+      }
+    })
 
+    setProgramMutuOptions(fetch);
+  }, [programList])
+
+  useEffect(() => {
+    if (!upload) return;
+
+    let quality_dimension = profileQualityIndicatorDataTemp.dimensiMutu.map(item => {
+      return {
+        name: item
+      }
+    })
+
+    let indicator_type = profileQualityIndicatorDataTemp.tipeIndikator.map(item => {
+      return {
+        name: item
+      }
+    });
+    
+    let data_collection_frequency = profileQualityIndicatorDataTemp.frekuensiPengumpulanData.map(item => {
+      return {
+        name: item
+      }
+    });
+
+    let data_collection_period = profileQualityIndicatorDataTemp.periodeWaktuPelaporan.map(item => {
+      return {
+        name: item
+      }
+    });
+
+    let data_analyst_period = profileQualityIndicatorDataTemp.periodeAnalisis.map(item => {
+      return {
+        name: item
+      }
+    });
+
+
+    let finalData = {
+      program_id: profileQualityIndicatorDataTemp.programMutu,
+      sub_program_id: profileQualityIndicatorDataTemp.subProgramMutu,
+      title: profileQualityIndicatorDataTemp.judulIndikator,
+      indicator_selection_based: profileQualityIndicatorDataTemp.dasarPemilihanIndikator,
+      quality_dimension,
+      objective: profileQualityIndicatorDataTemp.tujuan,
+      operational_definition: profileQualityIndicatorDataTemp.definisiOperasional,
+      indicator_type,
+      measurement_status: profileQualityIndicatorDataTemp.statusPengukuran,
+      numerator: profileQualityIndicatorDataTemp.numerator,
+      denominator: profileQualityIndicatorDataTemp.denominator,
+      achievement_target:80,
+      criteria: profileQualityIndicatorDataTemp.kriteriaInklusiEkslusi,
+      measurement_formula: profileQualityIndicatorDataTemp.formulaPengukuran,
+      data_collection_design: profileQualityIndicatorDataTemp.pengumpulanData,
+      data_source: profileQualityIndicatorDataTemp.sumberData,
+      population: profileQualityIndicatorDataTemp.populasiAtauSampel,
+      data_collection_frequency,
+      data_collection_period,
+      data_analyst_period,
+      data_presentation: profileQualityIndicatorDataTemp.penyajianData,
+    }
+
+   // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [upload])
+
+  const handleChangePrograMutu = (value) => {
+    if (!programMutuOptions) return;
+    const filter = programMutuOptions.filter(item => item.id === value);
+
+    if (filter[0].sub_programs.length) {
+      const fetchSubProgram = filter[0].sub_programs.map((item, index) => {
+        return {
+          ...item,
+          key: item.id,
+          value: item.id,
+          title: item.name
+        }
+      })
+
+      setSubProgramMutuOptions(fetchSubProgram)
+    } else {
+      message.warning('Sub Program Mutu tidak tersedia!')
+      setSubProgramMutuOptions(undefined);
+    }
+
+    secondStepProfileQualityIndicatorForm.setFieldsValue({
+      pic: filter[0].pic.name
+    })
+  }
+  
   const handleStepThreeProfileQualityIndicator = (value) => {
     thirdStepProfileQualityIndicatorForm.setFieldsValue({
       programMutu: value.programMutu,
@@ -75,10 +181,13 @@ export const Add = () => {
       sumberData: value.sumberData,
       populasiAtauSampel: value.populasiAtauSampel,
       frekuensiPengumpulanData: value.frekuensiPengumpulanData,
-      periodeWatkuPelaporan: value.periodeWatkuPelaporan,
+      periodeWaktuPelaporan: value.periodeWaktuPelaporan,
       periodeAnalisis: value.periodeAnalisis,
       penyajianData: value.penyajianData,
-      penanggungJawabIndikator: value.penanggungJawabIndikator
+      penanggungJawabIndikator: value.penanggungJawabIndikator,
+      dibuatOleh: value.dibuatOleh,
+      pic: value.pic,
+      dokumenTelusur: value.dokumenTelusur.fileList
     });
   }
 
@@ -137,9 +246,26 @@ export const Add = () => {
     setDocumentFormChoosen(e.target.value)
   }
 
-  // const handleSubmit = () => {
-    
-  // }
+  const handleSubmitFormProfileQualityIndicator = (value) => {
+    console.log(value)
+    setProfileQualityIndicatorDataTemp(value);
+    const formData = new FormData();
+    formData.append('file', value.dokumenTelusur[0].originFileObj)
+    formData.append('group_name', 'document_profile_indicator')
+
+    dispatch(uploadFileAPI({
+      accessToken,
+      param: formData
+    }))
+  }
+
+  const handleSave = () => {
+    if (documentFormChoosen === 1) {
+      thirdStepProfileQualityIndicatorForm.submit();
+    } else if (documentFormChoosen === 2) {
+      thirdStepQualityIndicatorForm.submit();
+    }
+  }
 
   const steps = [
     {
@@ -149,13 +275,24 @@ export const Add = () => {
     {
       title: 'Tahap 2',
       content: documentFormChoosen === 1 ? 
-      <ProfileQualityIndicatorSecondStep onFinish={handleStepThreeProfileQualityIndicator} form={secondStepProfileQualityIndicatorForm} />
+      <ProfileQualityIndicatorSecondStep 
+        onFinish={handleStepThreeProfileQualityIndicator} 
+        form={secondStepProfileQualityIndicatorForm} 
+        programMutuOptions={programMutuOptions}
+        subProgramMutuOptions={subProgramMutuOptions}
+        programMutuChange={handleChangePrograMutu}
+      />
       : <QualityIndicatorSecondStep onFinish={handleStepThreeQualityIndicator} form={secondStepQualityIndicatorForm} />,
     },
     {
       title: 'Tahap 3',
       content: documentFormChoosen === 1 ? 
-      <ProfileQualityIndicatorThirdStep form={thirdStepProfileQualityIndicatorForm} />
+      <ProfileQualityIndicatorThirdStep 
+        form={thirdStepProfileQualityIndicatorForm}
+        programMutuOptions={programMutuOptions}
+        subProgramMutuOptions={subProgramMutuOptions}
+        onFinish={handleSubmitFormProfileQualityIndicator}
+      />
       : <QualityIndicatorThirdStep form={thirdStepQualityIndicatorForm} />,
     }
   ];
@@ -203,7 +340,7 @@ export const Add = () => {
           <Col>
           {
             current === steps.length - 1 && (
-              <Button type="primary" onClick={() => message.success('Processing complete!')}>
+              <Button type="primary" onClick={() => handleSave()}>
                 Simpan
               </Button>
             )
