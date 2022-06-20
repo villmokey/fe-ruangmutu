@@ -9,7 +9,8 @@ const initialState = {
 	email: null,
 	token: null,
 	isAuth: false,
-	role: null
+	role: null,
+	name: ''
 };
 
 export const authReducer = (state = initialState, action) => {
@@ -34,6 +35,7 @@ export const authReducer = (state = initialState, action) => {
 		state.isAuth = action.payload.isAuth;
 		state.role = action.payload.role;
 		state.email = action.payload.email
+		state.name = action.payload.name;
 		state.loading = false;
 		return { ...state };
 

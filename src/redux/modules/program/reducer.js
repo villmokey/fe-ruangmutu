@@ -9,7 +9,8 @@ const initialState = {
 		list: null,
 		single: null,
 		total: 0
-	}
+	},
+	success: false
 }
 
 export const programReducer = (state = initialState, action) => {
@@ -18,6 +19,7 @@ export const programReducer = (state = initialState, action) => {
 			state.called = false;
 			state.loading = action.payload.loading;
 			state.error = action.payload.loading ? state.error : null;
+			state.success = false
 			// state.data.single = null
 			return { ...state };
 
@@ -39,7 +41,7 @@ export const programReducer = (state = initialState, action) => {
 	
 		case programActionType.CREATE_PROGRAM:
 			state.called = true;
-			state.success.add = true;
+			state.success = true;
 			return { ...state };
 
 		case programActionType.DELETE_PROGRAM:

@@ -44,7 +44,7 @@ export const uploadFileAPI = (bodyData) => {
 				method: apiMethod.POST,
 				data: bodyData?.param ?? {},
 				headers: {
-          // 'Authorization': 'Bearer ' + bodyData?.accessToken,
+          'Authorization': 'Bearer ' + bodyData?.accessToken,
 					'Content-Type': 'application/json'
 				}
 			},

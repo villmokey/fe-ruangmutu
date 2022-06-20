@@ -1,4 +1,5 @@
 import { Button, Col, Layout, message, Row, Steps } from 'antd';
+import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { FirstStep } from '../../../../templates/QualityIndicatorTemplates/Add/FirstStep';
 import { SecondStep as ProfileQualityIndicatorSecondStep } from '../../../../templates/QualityIndicatorTemplates/Add/ProfileQualityIndicator/SecondStep';
@@ -14,8 +15,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import './Add.less';
 import { getAllProgram, programSelector } from '../../../../../redux/modules/program/action';
 import { useAuthToken } from '../../../../../globals/useAuthToken';
-import { fileSelector, uploadFileAPI } from '../../../../../redux/modules/file/action';
-
+import { getAllUser, userSelector } from '../../../../../redux/modules/user/action';
+import { addProfileQualityIndicator, profileQualityIndicatorSelector, uploadFileAPI } from '../../../../../redux/modules/profileQualityIndicator/action';
+// import { fileSelector } from '../../../../../redux/modules/file/action';
 
 const { Sider, Content } = Layout;
 const { Step } = Steps;
@@ -29,17 +31,31 @@ export const Add = () => {
     }
   } = useSelector(programSelector)
 
-  const  {
-    loading: loadingFile,
-    called: calledFile,
+  const {
+    // called: calledUser,
+    data: {
+      list: userList
+    }
+  } = useSelector(userSelector);
+
+  const {
+    // called,
     data: {
       upload
-    }
-  } = useSelector(fileSelector)
+    },
+    // success: {
+    //   add
+    // }
+  } = useSelector(profileQualityIndicatorSelector)
+
+  // const {
+  //   data: { upload }
+  // } = useSelector(fileSelector)
 
   const dispatch = useDispatch();
-  const { getAccessToken } = useAuthToken();
+  const { getAccessToken, getName } = useAuthToken();
   const accessToken = getAccessToken();
+  const navigate = useNavigate();
 
   const [secondStepProfileQualityIndicatorForm] = Form.useForm();
   const [thirdStepProfileQualityIndicatorForm] = Form.useForm();
@@ -54,10 +70,13 @@ export const Add = () => {
   const [ subProgramMutuOptions, setSubProgramMutuOptions ] = useState(null);
 
   const [ profileQualityIndicatorDataTemp, setProfileQualityIndicatorDataTemp ] = useState(null);
+  const [ userOptions, setUserOptions ] = useState(null);
+
+  const [ isUploading, setIsUploading ] = useState(false);
 
   useEffect(() => {
     dispatch(getAllProgram());
-
+    dispatch(getAllUser());
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -76,8 +95,29 @@ export const Add = () => {
   }, [programList])
 
   useEffect(() => {
-    if (!upload) return;
+    if (!(userList)) return;
+  
+    secondStepProfileQualityIndicatorForm.setFieldsValue({
+      dibuatOleh: getName()
+    })
 
+    const fetch = userList.map((item, index) => {
+      return {
+        ...item,
+        key: item.id,
+        value: item.id,
+        name: item.name
+      }
+    })
+
+    setUserOptions(fetch);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userList])
+
+  useEffect(() => {
+    if (!(upload && isUploading)) return;
+    
     let quality_dimension = profileQualityIndicatorDataTemp.dimensiMutu.map(item => {
       return {
         name: item
@@ -108,6 +148,24 @@ export const Add = () => {
       }
     });
 
+    let signature = [];
+
+    signature.push({
+      user_id: profileQualityIndicatorDataTemp.pembuatDokumen,
+      level: 1
+    })
+
+    signature.push({
+      user_id: profileQualityIndicatorDataTemp.penanggungJawab1,
+      level: 2
+    })
+
+    if (profileQualityIndicatorDataTemp.penanggungJawab2 !== null && profileQualityIndicatorDataTemp.penanggungJawab2 !== undefined) {
+      signature.push({
+        user_id: profileQualityIndicatorDataTemp.penanggungJawab2,
+        level: 3
+      })
+    }
 
     let finalData = {
       program_id: profileQualityIndicatorDataTemp.programMutu,
@@ -131,10 +189,26 @@ export const Add = () => {
       data_collection_period,
       data_analyst_period,
       data_presentation: profileQualityIndicatorDataTemp.penyajianData,
+      created_by: getName(),
+      first_pic_id: profileQualityIndicatorDataTemp.penanggungJawab1,
+      second_pic_id: profileQualityIndicatorDataTemp.penanggungJawab2,
+      assign_by: profileQualityIndicatorDataTemp.pembuatDokumen,
+      signature,
+      document_id: upload.id
     }
 
+    dispatch(addProfileQualityIndicator({
+      accessToken,
+      param: finalData
+    }))
+
+    message.success('Berhasil membuat profile indikator mutu');
+    navigate(-1);
+
+    setIsUploading(false);
+
    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [upload])
+  }, [isUploading, upload])
 
   const handleChangePrograMutu = (value) => {
     if (!programMutuOptions) return;
@@ -156,9 +230,6 @@ export const Add = () => {
       setSubProgramMutuOptions(undefined);
     }
 
-    secondStepProfileQualityIndicatorForm.setFieldsValue({
-      pic: filter[0].pic.name
-    })
   }
   
   const handleStepThreeProfileQualityIndicator = (value) => {
@@ -184,9 +255,10 @@ export const Add = () => {
       periodeWaktuPelaporan: value.periodeWaktuPelaporan,
       periodeAnalisis: value.periodeAnalisis,
       penyajianData: value.penyajianData,
-      penanggungJawabIndikator: value.penanggungJawabIndikator,
       dibuatOleh: value.dibuatOleh,
-      pic: value.pic,
+      pembuatDokumen: value.pembuatDokumen,
+      penanggungJawab1: value.penanggungJawab1,
+      penanggungJawab2: value.penanggungJawab2,
       dokumenTelusur: value.dokumenTelusur.fileList
     });
   }
@@ -247,8 +319,9 @@ export const Add = () => {
   }
 
   const handleSubmitFormProfileQualityIndicator = (value) => {
-    console.log(value)
     setProfileQualityIndicatorDataTemp(value);
+    setIsUploading(true);
+
     const formData = new FormData();
     formData.append('file', value.dokumenTelusur[0].originFileObj)
     formData.append('group_name', 'document_profile_indicator')
@@ -257,6 +330,7 @@ export const Add = () => {
       accessToken,
       param: formData
     }))
+    
   }
 
   const handleSave = () => {
@@ -281,6 +355,7 @@ export const Add = () => {
         programMutuOptions={programMutuOptions}
         subProgramMutuOptions={subProgramMutuOptions}
         programMutuChange={handleChangePrograMutu}
+        userOptions={userOptions}
       />
       : <QualityIndicatorSecondStep onFinish={handleStepThreeQualityIndicator} form={secondStepQualityIndicatorForm} />,
     },
@@ -292,6 +367,7 @@ export const Add = () => {
         programMutuOptions={programMutuOptions}
         subProgramMutuOptions={subProgramMutuOptions}
         onFinish={handleSubmitFormProfileQualityIndicator}
+        userOptions={userOptions}
       />
       : <QualityIndicatorThirdStep form={thirdStepQualityIndicatorForm} />,
     }

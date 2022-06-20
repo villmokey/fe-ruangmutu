@@ -1,4 +1,4 @@
-import { Checkbox, Col, Form as AntdForm, Radio, Row, Select, Upload } from 'antd';
+import { Checkbox, Col, Form as AntdForm, Row, Select, Upload } from 'antd';
 import { InputText } from '../../../../atoms/InputText/InputText';
 import { Text } from '../../../../atoms/Text/Text';
 import { Title } from "../../../../atoms/Title/Title";
@@ -37,6 +37,10 @@ export const ThirdStep = ({
   ditugaskanChange,
   programMutuOptions,
   subProgramMutuOptions,
+  userOptions,
+  pembuatDokumenChange,
+  penanggungJawab1Change,
+  penanggungJawab2Change
 }) => {
 
   let dimensiMutuOptions = [
@@ -145,7 +149,7 @@ export const ThirdStep = ({
               label="Program Mutu"
               name="programMutu"
               rules={[
-                { required: true, message: 'Program Mutu tidak boleh kosong!' }
+                { required: true, message: 'Program mutu tidak boleh kosong!' }
               ]}
             >
               <Select placeholder="Pilih program mutu" onChange={programMutuChange} disabled>
@@ -186,10 +190,10 @@ export const ThirdStep = ({
               label="Dasar Pemilihan Indikator"
               name="dasarPemilihanIndikator"
               onChange={dasarPemilihanIndikatorChange}
-              disabled
               rules={[
-                { required: true, message: 'Dasar Pemilihan indikator tidak boleh kosong!' }
+                { required: true, message: 'Dasar Pemilihan Indikator tidak boleh kosong!' }
               ]}
+              disabled
             />
 
             <Item
@@ -199,7 +203,7 @@ export const ThirdStep = ({
                 { required: true, message: 'Dimensi Mutu tidak boleh kosong!' }
               ]}
             >
-              <Checkbox.Group options={dimensiMutuOptions} onChange={dimensiMutuChange} disabled></Checkbox.Group>
+              <Checkbox.Group options={dimensiMutuOptions} disabled></Checkbox.Group>
             </Item>
 
             <InputText 
@@ -218,7 +222,7 @@ export const ThirdStep = ({
               onChange={definisiOperasionalChange}
               disabled
               rules={[
-                { required: true, message: 'Definisi Operasional tidak boleh kosong!' }
+                { required: true, message: 'Definisi operasional tidak boleh kosong!' }
               ]}
             />
              <Item
@@ -230,8 +234,7 @@ export const ThirdStep = ({
             >
               <Checkbox.Group options={tipeIndikatorOptions} disabled></Checkbox.Group>
             </Item>
-          </Col>
-          <Col md={8} sm={24} xs={24}>
+
             <InputText 
               label="Status Pengukuran"
               name="statusPengukuran"
@@ -241,6 +244,7 @@ export const ThirdStep = ({
                 { required: true, message: 'Status pengukuran tidak boleh kosong!' }
               ]}
             />
+
             <InputText 
               label="Numerator"
               name="numerator"
@@ -250,6 +254,9 @@ export const ThirdStep = ({
                 { required: true, message: 'Numerator tidak boleh kosong!' }
               ]}
             />
+
+          </Col>
+          <Col md={8} sm={24} xs={24}>
             <InputText 
               label="Denominator"
               name="denominator"
@@ -283,7 +290,7 @@ export const ThirdStep = ({
               onChange={formulaPengukuranChange}
               disabled
               rules={[
-                { required: true, message: 'Formula Pengukuran tidak boleh kosong!' }
+                { required: true, message: 'Formula pengukuran tidak boleh kosong!' }
               ]}
             />
             <InputText 
@@ -304,8 +311,7 @@ export const ThirdStep = ({
                 { required: true, message: 'Sumber data tidak boleh kosong!' }
               ]}
             />
-          </Col>
-          <Col md={8} sm={24} xs={24}>
+
             <InputText 
               label="Populasi Atau Sampel"
               name="populasiAtauSampel"
@@ -315,6 +321,7 @@ export const ThirdStep = ({
                 { required: true, message: 'Populasi tidak boleh kosong!' }
               ]}
             />
+
             <Item
               label="Frekuensi Pengumpulan Data"
               name="frekuensiPengumpulanData"
@@ -324,15 +331,17 @@ export const ThirdStep = ({
             >
               <Checkbox.Group options={frekuensiPengumpulanDataOptions} disabled></Checkbox.Group>
             </Item>
+
             <Item
               label="Periode Waktu Pelaporan"
               name="periodeWaktuPelaporan"
               rules={[
-                { required: true, message: 'Periode waktu pelaporan tidak boleh kosong!' }
+                { required: true, message: 'Periode Waktu pelaporan tidak boleh kosong!' }
               ]}
             >
               <Checkbox.Group options={periodeWaktuPelaporanOptions} disabled></Checkbox.Group>
             </Item>
+
             <Item
               label="Periode Analisis"
               name="periodeAnalisis"
@@ -342,20 +351,16 @@ export const ThirdStep = ({
             >
               <Checkbox.Group options={periodeWaktuPelaporanOptions} disabled></Checkbox.Group>
             </Item>
+          </Col>
+          <Col md={8} sm={24} xs={24}>
             <InputText 
               label="Penyajian Data"
               name="penyajianData"
               onChange={penyajianDataChange}
               disabled
               rules={[
-                { required: true, message: 'Penyajian data tidak boleh kosong!' }
+                { required: true, message: 'Penyajian Data tidak boleh kosong!' }
               ]}
-            />
-            <InputText 
-              label="Penanggung Jawab Indikator"
-              name="penanggungJawabIndikator"
-              onChange={penanggungJawabIndikatorChange}
-              disabled
             />
             <InputText 
               label="Dibuat Oleh"
@@ -365,24 +370,62 @@ export const ThirdStep = ({
                 { required: true, message: 'Pembuat tidak boleh kosong!' }
               ]}
             />
-            <InputText 
-              label="Ditugaskan Oleh"
-              name="pic"
-              disabled
+            <Item
+              label="Pembuat Dokumen"
+              name="pembuatDokumen"
               rules={[
-                { required: true, message: 'Penugas tidak boleh kosong!' }
+                { required: true, message: 'Pembuat tidak boleh kosong!' }
               ]}
-            />
+            >
+              <Select placeholder="Pilih pembuat dokumen" onChange={pembuatDokumenChange} disabled>
+                {
+                  userOptions &&
+                  userOptions.map(( item, index ) => (
+                    <Option value={item.id} key={index}>{ item.name }</Option>
+                  ))
+                }
+              </Select>
+            </Item>
+            <Item
+              label="Penanggung jawab 1"
+              name="penanggungJawab1"
+              rules={[
+                { required: true, message: 'Penanggung Jawab 1 tidak boleh kosong!' }
+              ]}
+            >
+              <Select placeholder="Pilih penanggung jawab 1" onChange={penanggungJawab1Change} disabled>
+                {
+                  userOptions &&
+                  userOptions.map(( item, index ) => (
+                    <Option value={item.id} key={index}>{ item.name }</Option>
+                  ))
+                }
+              </Select>
+            </Item>
+            <Item
+              label="Penanggung jawab 2 (opsional)"
+              name="penanggungJawab2"
+            >
+              <Select placeholder="Pilih penanggung jawab 2" onChange={penanggungJawab2Change} disabled>
+                {
+                  userOptions &&
+                  userOptions.map(( item, index ) => (
+                    <Option value={item.id} key={index}>{ item.name }</Option>
+                  ))
+                }
+              </Select>
+            </Item>
             <Item
               label="Dokumen Telusur"
               name="dokumenTelusur"
               valuePropName="fileList"
               rules={[
-                { required: true, message: 'Dokumen tidak boleh kosong!' }
+                { required: true, message: 'Penugas tidak boleh kosong!' }
               ]}
             >
-              <Dragger 
+              <Dragger
                 beforeUpload={() => false}
+                style={{ height: 200 }}
                 disabled
               >
                 <Text>Drag & Drop</Text>

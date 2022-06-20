@@ -16,7 +16,7 @@ export const fileReducer = (state = initialState, action) => {
 			state.called = false;
 			state.loading = action.payload.loading;
 			state.error = action.payload.loading ? state.error : null;
-			// state.data.single = null
+			// state.data.upload = null;
 			return { ...state };
 
 		case fileActionType.ERROR:

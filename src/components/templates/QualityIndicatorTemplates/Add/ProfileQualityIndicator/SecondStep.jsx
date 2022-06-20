@@ -1,12 +1,15 @@
-import { Checkbox, Col, Form as AntdForm, Radio, Row, Select, Upload } from 'antd';
+import { Checkbox, Col, Form as AntdForm, Row, Select, Upload } from 'antd';
 import { Title } from '../../../../atoms/Title/Title';
 import { Form } from '../../../../molecules/Form/Form';
 import { InputText } from '../../../../atoms/InputText/InputText';
 import { Text } from '../../../../atoms/Text/Text';
 
+import './SecondStep.less';
+
 const { Option } = Select;
 const { Item } = AntdForm;
 const { Dragger } = Upload;
+
 
 export const SecondStep = ({
   form,
@@ -37,6 +40,10 @@ export const SecondStep = ({
   ditugaskanChange,
   programMutuOptions,
   subProgramMutuOptions,
+  userOptions,
+  pembuatDokumenChange,
+  penanggungJawab1Change,
+  penanggungJawab2Change
 }) => {
 
   let dimensiMutuOptions = [
@@ -226,8 +233,7 @@ export const SecondStep = ({
             >
               <Checkbox.Group options={tipeIndikatorOptions}></Checkbox.Group>
             </Item>
-          </Col>
-          <Col md={8} sm={24} xs={24}>
+
             <InputText 
               label="Status Pengukuran"
               name="statusPengukuran"
@@ -236,6 +242,7 @@ export const SecondStep = ({
                 { required: true, message: 'Status pengukuran tidak boleh kosong!' }
               ]}
             />
+
             <InputText 
               label="Numerator"
               name="numerator"
@@ -244,6 +251,9 @@ export const SecondStep = ({
                 { required: true, message: 'Numerator tidak boleh kosong!' }
               ]}
             />
+
+          </Col>
+          <Col md={8} sm={24} xs={24}>
             <InputText 
               label="Denominator"
               name="denominator"
@@ -292,8 +302,7 @@ export const SecondStep = ({
                 { required: true, message: 'Sumber data tidak boleh kosong!' }
               ]}
             />
-          </Col>
-          <Col md={8} sm={24} xs={24}>
+
             <InputText 
               label="Populasi Atau Sampel"
               name="populasiAtauSampel"
@@ -302,6 +311,7 @@ export const SecondStep = ({
                 { required: true, message: 'Populasi tidak boleh kosong!' }
               ]}
             />
+
             <Item
               label="Frekuensi Pengumpulan Data"
               name="frekuensiPengumpulanData"
@@ -311,6 +321,7 @@ export const SecondStep = ({
             >
               <Checkbox.Group options={frekuensiPengumpulanDataOptions}></Checkbox.Group>
             </Item>
+
             <Item
               label="Periode Waktu Pelaporan"
               name="periodeWaktuPelaporan"
@@ -320,6 +331,7 @@ export const SecondStep = ({
             >
               <Checkbox.Group options={periodeWaktuPelaporanOptions}></Checkbox.Group>
             </Item>
+
             <Item
               label="Periode Analisis"
               name="periodeAnalisis"
@@ -329,6 +341,8 @@ export const SecondStep = ({
             >
               <Checkbox.Group options={periodeWaktuPelaporanOptions}></Checkbox.Group>
             </Item>
+          </Col>
+          <Col md={8} sm={24} xs={24}>
             <InputText 
               label="Penyajian Data"
               name="penyajianData"
@@ -338,25 +352,58 @@ export const SecondStep = ({
               ]}
             />
             <InputText 
-              label="Penanggung Jawab Indikator"
-              name="penanggungJawabIndikator"
-              onChange={penanggungJawabIndikatorChange}
-            />
-            <InputText 
               label="Dibuat Oleh"
               name="dibuatOleh"
+              disabled
               rules={[
                 { required: true, message: 'Pembuat tidak boleh kosong!' }
               ]}
             />
-            <InputText 
-              label="Ditugaskan Oleh"
-              name="pic"
-              disabled
+            <Item
+              label="Pembuat Dokumen"
+              name="pembuatDokumen"
               rules={[
-                { required: true, message: 'Penugas tidak boleh kosong!' }
+                { required: true, message: 'Pembuat tidak boleh kosong!' }
               ]}
-            />
+            >
+              <Select placeholder="Pilih pembuat dokumen" onChange={pembuatDokumenChange}>
+                {
+                  userOptions &&
+                  userOptions.map(( item, index ) => (
+                    <Option value={item.id} key={index}>{ item.name }</Option>
+                  ))
+                }
+              </Select>
+            </Item>
+            <Item
+              label="Penanggung jawab 1"
+              name="penanggungJawab1"
+              rules={[
+                { required: true, message: 'Penanggung Jawab 1 tidak boleh kosong!' }
+              ]}
+            >
+              <Select placeholder="Pilih penanggung jawab 1" onChange={penanggungJawab1Change}>
+                {
+                  userOptions &&
+                  userOptions.map(( item, index ) => (
+                    <Option value={item.id} key={index}>{ item.name }</Option>
+                  ))
+                }
+              </Select>
+            </Item>
+            <Item
+              label="Penanggung jawab 2 (opsional)"
+              name="penanggungJawab2"
+            >
+              <Select placeholder="Pilih penanggung jawab 2" onChange={penanggungJawab2Change}>
+                {
+                  userOptions &&
+                  userOptions.map(( item, index ) => (
+                    <Option value={item.id} key={index}>{ item.name }</Option>
+                  ))
+                }
+              </Select>
+            </Item>
             <Item
               label="Dokumen Telusur"
               name="dokumenTelusur"
@@ -365,8 +412,9 @@ export const SecondStep = ({
                 { required: true, message: 'Penugas tidak boleh kosong!' }
               ]}
             >
-              <Dragger 
-                beforeUpload={() => false} 
+              <Dragger
+                beforeUpload={() => false}
+                style={{ height: 200 }}
               >
                 <Text>Drag & Drop</Text>
               </Dragger>

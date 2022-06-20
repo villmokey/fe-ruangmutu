@@ -12,6 +12,10 @@ import { Link } from "react-router-dom";
 import { paths } from "../../../../routing/paths";
 import { QualityIndicatorCard } from "../../../molecules/QualityIndicatorCard/QualityIndicatorCard";
 import { QualityIndicatorSider } from "../../../organism/Dashboard/Sider/QualityIndicatorSider/QualityIndicatorSider";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { getAllProfileQualityIndicator } from "../../../../redux/modules/profileQualityIndicator/action";
+import { useAuthToken } from "../../../../globals/useAuthToken";
 
 const { Content } = Layout;
 
@@ -20,6 +24,9 @@ export const QualityIndicator = () => {
 
   const [ viewType, setViewType ] = useState(1);
   const [ previewVis, setPreviewVis ] = useState(false);
+  const dispatch = useDispatch();
+  const { getAccessToken } = useAuthToken();
+  const accessToken = getAccessToken();
 
   const handleChangeViewType = () => {
     setViewType(viewType === 1 ? 2 : 1);
@@ -32,6 +39,13 @@ export const QualityIndicator = () => {
   const handleClosePreview = () => {
     setPreviewVis(false);
   }
+
+  useEffect(() => {
+    dispatch(getAllProfileQualityIndicator({
+      accessToken
+    }))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
 
   const chartData = [

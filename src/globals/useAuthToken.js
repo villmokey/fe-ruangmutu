@@ -8,7 +8,8 @@ export const useAuthToken = () => {
 		resetPasswordToken,
 		email,
 		isAuth,
-		role
+		role,
+		name
 	} = useSelector(authSelector);
 
 	return {
@@ -19,7 +20,7 @@ export const useAuthToken = () => {
 		getRole: () => {
 			return role ?? localStorage.getItem(localStorageKey.ROLE);
 		},
-		getUserName: () => {
+		getEmail: () => {
 			return email ?? localStorage.getItem(localStorageKey.EMAIL);
 		},
 		getUserId: () => {
@@ -27,6 +28,9 @@ export const useAuthToken = () => {
 		},
 		getResetPasswordToken: () => {
 			return resetPasswordToken ?? localStorage.getItem(localStorageKey.RESET_PASSWORD_TOKEN);
+		},
+		getName: () => {
+			return name ?? localStorage.getItem(localStorageKey.NAME);
 		}
 	}
 }

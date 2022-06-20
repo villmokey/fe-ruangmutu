@@ -24,11 +24,6 @@ export const userReducer = (state = initialState, action) => {
 			state.called = false;
 			state.loading = action.payload.loading;
 			state.error = action.payload.loading ? state.error : null;
-			state.data = {
-				// list: null,
-				single: null,
-				// total: null
-			}
 			state.success = {
 				add: false,
 				edit: false,

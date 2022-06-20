@@ -9,6 +9,7 @@ import { authSelector, loginApi } from "../../../redux/modules/auth/action";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { paths } from "../../../routing/paths";
+import { useAuthToken } from "../../../globals/useAuthToken";
 
 const { Item } = AntdForm;
 
@@ -16,6 +17,7 @@ export const Login = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { getIsAuth } = useAuthToken();
 
   const {
     loading,
@@ -28,7 +30,7 @@ export const Login = () => {
 
   useEffect(() => {
 
-    if (!isAuth) return;
+    if (!getIsAuth()) return;
 
     navigate(paths.DASHBOARD);
 

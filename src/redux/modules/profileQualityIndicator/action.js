@@ -6,21 +6,20 @@ export const profileQualityIndicatorActionType = {
 	ERROR: "profileQualityIndicator/FETCHING_ERROR",
 	SET_ALL_PROFILE_QUALITY_INDICATOR: "profileQualityIndicator/SET_ALL_PROFILE_QUALITY_INDICATOR",
 	SET_SINGLE_PROFILE_QUALITY_INDICATOR: "profileQualityIndicator/SET_SINGLE_PROFILE_QUALITY_INDICATOR",
-	CREATE_PROFILE_QUALITY_INDICATOR: "profileQualityIndicator/ADD_PROFILE_QUALITY_INDICATOR",
+	CREATE_PROFILE_QUALITY_INDICATOR: "profileQualityIndicator/CREATE_PROFILE_QUALITY_INDICATOR",
 	UPDATE_PROFILE_QUALITY_INDICATOR: "profileQualityIndicator/EDIT_PROFILE_QUALITY_INDICATOR",
-	DELETE_PROFILE_QUALITY_INDICATOR: "profileQualityIndicator/DELETE_PROFILE_QUALITY_INDICATOR",
-	SUCCESS_CHANGE_PASSWORD: 'profileQualityIndicator/SUCCESS_CHANGE_PASSWORD'
+	SET_FILE: "profileQualityIndicator/UPLOAD_FILE",
 };
 
 
 const fetchDataProcess = (value) => {
-    return {
-      type: profileQualityIndicatorActionType.FETCHING,
-      payload: {
-        loading: value
-      }
-    }
-  }
+	return {
+		type: profileQualityIndicatorActionType.FETCHING,
+		payload: {
+			loading: value
+		}
+	}
+}
   
 const fetchDataError = (value) => {
 	return {
@@ -45,6 +44,24 @@ const setSingleProfileQualityIndicator = (data) => {
 		payload: data
 	}
 }
+
+const setAddProfileQualityIndicator = (response) => {
+	return {
+		type: profileQualityIndicatorActionType.CREATE_PROFILE_QUALITY_INDICATOR,
+		payload: { response },  
+	}
+};
+
+const setFile = (data) => {
+	return {
+		type: profileQualityIndicatorActionType.SET_FILE,
+		payload: {
+			successUpload: true,
+			upload: data
+		}
+	}
+}
+
 
 export const getAllProfileQualityIndicator = (bodyData) => {
 	return {
@@ -106,15 +123,73 @@ export const getSingleProfileQualityIndicator = (id, bodyData) => {
 	}
 }
 
+export const addProfileQualityIndicator = (bodyData) => {
+	return {
+		type: 'API',
+		payload: {
+			url: URL_CONFIG.PROFILE_QUALITY_INDICATOR_BASE_URL,
+			requestParams: {
+				method: apiMethod.POST,
+				data: bodyData.param ?? {},
+				headers: {
+          'Authorization': 'Bearer ' + bodyData.accessToken,
+					'Content-Type': 'application/json'
+				}
+			}
+		},
+		startNetwork: () => {
+			return fetchDataProcess(true);
+		},
+		endNetwork: () => {
+			return fetchDataProcess(false);
+		},
+		success: (data, response) => {
+			return setAddProfileQualityIndicator(data);
+		},
+		error: (err) => {
+			const error = err.errorCode ? err.errorCode : err.message;
+			return fetchDataError(error);
+		}
+	}
+}
+
+export const uploadFileAPI = (bodyData) => {
+	return {
+		type: 'API',
+		payload: {
+			url: `${URL_CONFIG.UPLOAD_FILE_URL}`,
+			requestParams: {
+				method: apiMethod.POST,
+				data: bodyData?.param ?? {},
+				headers: {
+          'Authorization': 'Bearer ' + bodyData?.accessToken,
+					'Content-Type': 'application/json'
+				}
+			},
+		},
+		startNetwork: () => {
+			return fetchDataProcess(true);
+		},
+		endNetwork: () => {
+			return fetchDataProcess(false);
+		},
+		success: (data, response) => {
+			return setFile(data);
+		},
+		error: (err) => {
+			const error = err.errorCode ? err.errorCode : err.message;
+			return fetchDataError(error);
+		},
+	}
+}
+
 
 export const profileQualityIndicatorSelector = ({ profileQualityIndicator }) => {
 	return {
 		loading: profileQualityIndicator.loading,
 		error: profileQualityIndicator.error,
 		called: profileQualityIndicator.called,
-		success: {
-			...profileQualityIndicator.success
-		},
+		success: profileQualityIndicator.success,
 		data: {
 			...profileQualityIndicator.data
 		},

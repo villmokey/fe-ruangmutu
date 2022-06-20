@@ -8,5 +8,10 @@ export const URL_CONFIG = {
   SUB_PROGRAM_BASE_URL: '/sub-program',
 
   UPLOAD_FILE_URL: '/upload/file',
-  UPLOAD_IMAGE_URL: '/upload/image'
+  UPLOAD_IMAGE_URL: '/upload/image',
+
+  USER_BASE_URL: '/user',
+
+  PROFILE_QUALITY_INDICATOR_BASE_URL: '/indicator-profile'
+
 }

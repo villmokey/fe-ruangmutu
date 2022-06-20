@@ -1,14 +1,18 @@
 import { combineReducers } from "redux";
 import { authReducer } from '../modules/auth/reducer';
 import { fileReducer } from "./file/reducer";
+import { profileQualityIndicatorReducer } from "./profileQualityIndicator/reducer";
 import { programReducer } from "./program/reducer";
 import { subProgramReducer } from "./subProgram/reducer";
+import { userReducer } from "./user/reducer";
 
 const reducers = combineReducers({
   auth: authReducer,
   program: programReducer,
   subProgram: subProgramReducer,
-  file: fileReducer
+  file: fileReducer,
+  user: userReducer,
+  profileQualityIndicator: profileQualityIndicatorReducer
 });
 
 export default reducers;

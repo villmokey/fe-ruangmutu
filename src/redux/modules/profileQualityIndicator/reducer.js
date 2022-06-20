@@ -8,7 +8,11 @@ const initialState = {
 	data: {
 		list: null,
 		single: null,
-		total: 0
+		total: 0,
+		upload: null
+	},
+	success: {
+		add: false
 	}
 }
 
@@ -18,7 +22,9 @@ export const profileQualityIndicatorReducer = (state = initialState, action) => 
 			state.called = false;
 			state.loading = action.payload.loading;
 			state.error = action.payload.loading ? state.error : null;
-			// state.data.single = null
+			state.success = {
+				add: false
+			}
 			return { ...state };
 
 		case profileQualityIndicatorActionType.ERROR:
@@ -38,13 +44,8 @@ export const profileQualityIndicatorReducer = (state = initialState, action) => 
 			return { ...state };
 	
 		case profileQualityIndicatorActionType.CREATE_PROFILE_QUALITY_INDICATOR:
-			state.called = true;
+			state.called = true
 			state.success.add = true;
-			return { ...state };
-
-		case profileQualityIndicatorActionType.DELETE_PROFILE_QUALITY_INDICATOR:
-			state.called = true;
-			state.success.delete = true;
 			return { ...state };
 
 		case profileQualityIndicatorActionType.UPDATE_PROFILE_QUALITY_INDICATOR:
@@ -52,9 +53,9 @@ export const profileQualityIndicatorReducer = (state = initialState, action) => 
 			state.success.update = true;
 			return { ...state };
 
-		case profileQualityIndicatorActionType.SUCCESS_CHANGE_PASSWORD:
+		case profileQualityIndicatorActionType.SET_FILE:
 			state.called = true;
-			state.success.changePassword = true;
+			state.data.upload = action.payload.upload;
 			return { ...state };
 
 		default:
