@@ -6,7 +6,6 @@ import './QualityIndicator.less';
 import { InputSearch } from "../../../atoms/InputSearch/InputSearch";
 import { FileTextOutlined, PlusOutlined, BarChartOutlined } from "@ant-design/icons";
 
-import { BarChart } from "../../../molecules/Chart/Bar/BarChart";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { paths } from "../../../../routing/paths";
@@ -16,6 +15,8 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { getAllProfileQualityIndicator } from "../../../../redux/modules/profileQualityIndicator/action";
 import { useAuthToken } from "../../../../globals/useAuthToken";
+import { QualityIndicatorChart } from "../../../molecules/QualityIndicatorChart/QualityIndicatorChart";
+
 
 const { Content } = Layout;
 
@@ -48,56 +49,7 @@ export const QualityIndicator = () => {
   }, [])
 
 
-  const chartData = [
-    {
-      month: 'JAN',
-      value: 52,
-    },
-    {
-      month: 'FEB',
-      value: 92,
-    },
-    {
-      month: 'MAR',
-      value: 90,
-    },
-    {
-      month: 'APR',
-      value: 97,
-    },
-    {
-      month: 'MEI',
-      value: 50,
-    },
-    {
-      month: 'JUN',
-      value: 99,
-    },
-    {
-      month: 'JUL',
-      value: 87,
-    },
-    {
-      month: 'AGU',
-      value: 85,
-    },
-    {
-      month: 'SEP',
-      value: 0,
-    },
-    {
-      month: 'OKT',
-      value: 99,
-    },
-    {
-      month: 'NOV',
-      value: 86,
-    },
-    {
-      month: 'DES',
-      value: 100,
-    }
-  ]
+  let chartData = [ 20, 75, 98, 10, 0, 0, 50, 73, 20, 10, 80, 46 ];
 
   return (
     <Layout>
@@ -195,28 +147,18 @@ export const QualityIndicator = () => {
             </Row>
             :
             <>
-              <Card className="indikator-mutu">
-                <BarChart 
-                  data={chartData} 
-                  className="chart"
-                  XAxisDataKey="month"
-                  barColor="#5DC8BDE5"
-                  barDataKey="value"
-                  width={700}
-                  height={300}
-                />
-              </Card>
-              <Card className="indikator-mutu">
-                <BarChart 
-                  data={chartData} 
-                  className="chart"
-                  XAxisDataKey="month"
-                  barColor="#5DC8BDE5"
-                  barDataKey="value"
-                  width={700}
-                  height={300}
-                />
-              </Card>
+              <QualityIndicatorChart 
+                chartData={chartData} 
+                className="indikator-mutu"
+              />
+              <QualityIndicatorChart 
+                chartData={chartData} 
+                className="indikator-mutu"
+              />
+              <QualityIndicatorChart 
+                chartData={chartData} 
+                className="indikator-mutu"
+              />
             </>
           }
           

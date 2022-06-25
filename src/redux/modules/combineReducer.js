@@ -3,6 +3,7 @@ import { authReducer } from '../modules/auth/reducer';
 import { fileReducer } from "./file/reducer";
 import { profileQualityIndicatorReducer } from "./profileQualityIndicator/reducer";
 import { programReducer } from "./program/reducer";
+import { qualityIndicatorReducer } from "./qualityIndicator/reducer";
 import { subProgramReducer } from "./subProgram/reducer";
 import { userReducer } from "./user/reducer";
 
@@ -12,7 +13,8 @@ const reducers = combineReducers({
   subProgram: subProgramReducer,
   file: fileReducer,
   user: userReducer,
-  profileQualityIndicator: profileQualityIndicatorReducer
+  profileQualityIndicator: profileQualityIndicatorReducer,
+  qualityIndicator: qualityIndicatorReducer
 });
 
 export default reducers;

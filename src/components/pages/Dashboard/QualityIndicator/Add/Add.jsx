@@ -16,7 +16,8 @@ import './Add.less';
 import { getAllProgram, programSelector } from '../../../../../redux/modules/program/action';
 import { useAuthToken } from '../../../../../globals/useAuthToken';
 import { getAllUser, userSelector } from '../../../../../redux/modules/user/action';
-import { addProfileQualityIndicator, profileQualityIndicatorSelector, uploadFileAPI } from '../../../../../redux/modules/profileQualityIndicator/action';
+import { addProfileQualityIndicator, getAllProfileQualityIndicator, profileQualityIndicatorSelector, uploadFileAPIProfileQualityIndicator } from '../../../../../redux/modules/profileQualityIndicator/action';
+import { addQualityIndicator, qualityIndicatorSelector, uploadFileAPIQualityIndicator } from '../../../../../redux/modules/qualityIndicator/action';
 // import { fileSelector } from '../../../../../redux/modules/file/action';
 
 const { Sider, Content } = Layout;
@@ -39,18 +40,25 @@ export const Add = () => {
   } = useSelector(userSelector);
 
   const {
-    // called,
+    called,
     data: {
-      upload
+      upload,
+      list: profileList
     },
-    // success: {
-    //   add
-    // }
+    success: {
+      add
+    }
   } = useSelector(profileQualityIndicatorSelector)
 
-  // const {
-  //   data: { upload }
-  // } = useSelector(fileSelector)
+  const {
+    called: calledQualityIndicator,
+    data: { 
+      upload: uploadQualityIndicator 
+    },
+    success: {
+      add: addQualityIndicatorSuccess
+    }
+  } = useSelector(qualityIndicatorSelector)
 
   const dispatch = useDispatch();
   const { getAccessToken, getName } = useAuthToken();
@@ -71,12 +79,14 @@ export const Add = () => {
 
   const [ profileQualityIndicatorDataTemp, setProfileQualityIndicatorDataTemp ] = useState(null);
   const [ userOptions, setUserOptions ] = useState(null);
+  const [ profileQualityOptions, setProfileQualityOptions ] = useState(null);
 
   const [ isUploading, setIsUploading ] = useState(false);
 
   useEffect(() => {
     dispatch(getAllProgram());
     dispatch(getAllUser());
+    dispatch(getAllProfileQualityIndicator());
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -95,9 +105,41 @@ export const Add = () => {
   }, [programList])
 
   useEffect(() => {
+    if (!(add && called)) return;
+    message.success('Berhasil membuat profil indikator mutu!');
+    navigate(-1);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [add, called])
+
+  useEffect(() => {
+    if (!(addQualityIndicatorSuccess && calledQualityIndicator)) return;
+    message.success('Berhasil membuat indikator mutu!');
+    navigate(-1);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [addQualityIndicatorSuccess, calledQualityIndicator])
+
+  useEffect(() => {
+    if (!(profileList)) return;
+    const fetch = profileList.map((item, index) => {
+      return {
+        ...item,
+        key: item.id
+      }
+    }) 
+
+    setProfileQualityOptions(fetch);
+  }, [profileList])
+
+  useEffect(() => {
     if (!(userList)) return;
   
     secondStepProfileQualityIndicatorForm.setFieldsValue({
+      dibuatOleh: getName()
+    })
+
+    secondStepQualityIndicatorForm.setFieldsValue({
       dibuatOleh: getName()
     })
 
@@ -205,12 +247,70 @@ export const Add = () => {
     message.success('Berhasil membuat profile indikator mutu');
     navigate(-1);
 
+
     setIsUploading(false);
 
    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isUploading, upload])
 
-  const handleChangePrograMutu = (value) => {
+  useEffect(() => {
+    if (!(uploadQualityIndicator && isUploading)) return;
+    console.log(uploadQualityIndicator);
+    
+    let signature = [];
+
+    signature.push({
+      user_id: profileQualityIndicatorDataTemp.pembuatDokumen,
+      level: 1
+    })
+
+    signature.push({
+      user_id: profileQualityIndicatorDataTemp.penanggungJawab1,
+      level: 2
+    })
+
+    if (profileQualityIndicatorDataTemp.penanggungJawab2 !== null && profileQualityIndicatorDataTemp.penanggungJawab2 !== undefined) {
+      signature.push({
+        user_id: profileQualityIndicatorDataTemp.penanggungJawab2,
+        level: 3
+      })
+    }
+
+    let finalData = {
+      title: profileQualityIndicatorDataTemp.judulIndikator,
+      program_id: profileQualityIndicatorDataTemp.programMutu,
+      sub_program_id: profileQualityIndicatorDataTemp.subProgramMutu,
+      month: profileQualityIndicatorDataTemp.bulan,
+      quality_goal: profileQualityIndicatorDataTemp.sasaranMutu,
+      human: profileQualityIndicatorDataTemp.manusia,
+      tools: profileQualityIndicatorDataTemp.alat,
+      method: profileQualityIndicatorDataTemp.metode,
+      policy: profileQualityIndicatorDataTemp.kebijakan,
+      environment: profileQualityIndicatorDataTemp.lingkungan,
+      next_plan: profileQualityIndicatorDataTemp.rencanaTindakLanjut,
+      created_by: getName(),
+      first_pic_id: profileQualityIndicatorDataTemp.penanggungJawab1,
+      second_pic_id: profileQualityIndicatorDataTemp.penanggungJawab2,
+      assign_by: profileQualityIndicatorDataTemp.pembuatDokumen,
+      signature,
+      document_id: uploadQualityIndicator.data.id
+    }
+
+    dispatch(addQualityIndicator({
+      accessToken,
+      param: finalData
+    }))
+
+    message.success('Berhasil membuat indikator mutu');
+    navigate(-1);
+
+
+    setIsUploading(false);
+
+   // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isUploading, uploadQualityIndicator])
+
+  const handleChangeProgramMutu = (value) => {
     if (!programMutuOptions) return;
     const filter = programMutuOptions.filter(item => item.id === value);
 
@@ -230,6 +330,32 @@ export const Add = () => {
       setSubProgramMutuOptions(undefined);
     }
 
+  }
+
+  const handleChangeJudulIndikator = (value) => {
+    const filter = profileQualityOptions.filter(item => item.id === value);
+    if (filter.length) {
+     
+      const filterProgramMutu = programMutuOptions.filter(item => item.id === filter[0].program_id);
+
+      if (filterProgramMutu.length) {
+        const fetchSubProgram = filterProgramMutu[0].sub_programs.map((item, index) => {
+          return {
+            ...item,
+            key: item.id,
+            value: item.id,
+            title: item.name
+          }
+        })
+  
+        setSubProgramMutuOptions(fetchSubProgram)
+
+        secondStepQualityIndicatorForm.setFieldsValue({
+          programMutu: filter[0].program_id,
+          subProgramMutu: filter[0].sub_program_id
+        })
+      }
+    } 
   }
   
   const handleStepThreeProfileQualityIndicator = (value) => {
@@ -267,6 +393,7 @@ export const Add = () => {
     thirdStepQualityIndicatorForm.setFieldsValue({
       judulIndikator: value.judulIndikator,
       programMutu: value.programMutu,
+      subProgramMutu: value.subProgramMutu,
       manusia: value.manusia,
       alat: value.alat,
       metode: value.metode,
@@ -275,7 +402,11 @@ export const Add = () => {
       kebijakan: value.kebijakan,
       lingkungan: value.lingkungan,
       rencanaTindakLanjut: value.rencanaTindakLanjut,
-      dokumenTelusur: value.dokumenTelusur
+      dokumenTelusur: value.dokumenTelusur.fileList,
+      dibuatOleh: value.dibuatOleh,
+      pembuatDokumen: value.pembuatDokumen,
+      penanggungJawab1: value.penanggungJawab1,
+      penanggungJawab2: value.penanggungJawab2,
     });
   }
 
@@ -326,7 +457,22 @@ export const Add = () => {
     formData.append('file', value.dokumenTelusur[0].originFileObj)
     formData.append('group_name', 'document_profile_indicator')
 
-    dispatch(uploadFileAPI({
+    dispatch(uploadFileAPIProfileQualityIndicator({
+      accessToken,
+      param: formData
+    }))
+    
+  }
+
+  const handleSubmitFormQualityIndicator = (value) => {
+    setProfileQualityIndicatorDataTemp(value);
+    setIsUploading(true);
+
+    const formData = new FormData();
+    formData.append('file', value.dokumenTelusur[0].originFileObj)
+    formData.append('group_name', 'document_quality_indicator')
+
+    dispatch(uploadFileAPIQualityIndicator({
       accessToken,
       param: formData
     }))
@@ -354,10 +500,19 @@ export const Add = () => {
         form={secondStepProfileQualityIndicatorForm} 
         programMutuOptions={programMutuOptions}
         subProgramMutuOptions={subProgramMutuOptions}
-        programMutuChange={handleChangePrograMutu}
+        programMutuChange={handleChangeProgramMutu}
         userOptions={userOptions}
       />
-      : <QualityIndicatorSecondStep onFinish={handleStepThreeQualityIndicator} form={secondStepQualityIndicatorForm} />,
+      : 
+      <QualityIndicatorSecondStep 
+        onFinish={handleStepThreeQualityIndicator} 
+        judulIndikatorChange={handleChangeJudulIndikator} 
+        form={secondStepQualityIndicatorForm} 
+        profileOptions={profileQualityOptions}
+        programMutuOptions={programMutuOptions}
+        subProgramMutuOptions={subProgramMutuOptions}
+        userOptions={userOptions}
+      />,
     },
     {
       title: 'Tahap 3',
@@ -369,7 +524,15 @@ export const Add = () => {
         onFinish={handleSubmitFormProfileQualityIndicator}
         userOptions={userOptions}
       />
-      : <QualityIndicatorThirdStep form={thirdStepQualityIndicatorForm} />,
+      : 
+      <QualityIndicatorThirdStep 
+        form={thirdStepQualityIndicatorForm}
+        profileOptions={profileQualityOptions}
+        programMutuOptions={programMutuOptions}
+        subProgramMutuOptions={subProgramMutuOptions}
+        onFinish={handleSubmitFormQualityIndicator}
+        userOptions={userOptions}
+      />,
     }
   ];
 

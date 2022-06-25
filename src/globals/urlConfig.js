@@ -12,6 +12,7 @@ export const URL_CONFIG = {
 
   USER_BASE_URL: '/user',
 
-  PROFILE_QUALITY_INDICATOR_BASE_URL: '/indicator-profile'
+  PROFILE_QUALITY_INDICATOR_BASE_URL: '/indicator-profile',
+  QUALITY_INDICATOR_BASE_URL: '/indicator'
 
 }

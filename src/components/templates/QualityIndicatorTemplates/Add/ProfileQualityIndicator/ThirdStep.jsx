@@ -420,7 +420,7 @@ export const ThirdStep = ({
               name="dokumenTelusur"
               valuePropName="fileList"
               rules={[
-                { required: true, message: 'Penugas tidak boleh kosong!' }
+                { required: true, message: 'Dokumen tidak boleh kosong!' }
               ]}
             >
               <Dragger

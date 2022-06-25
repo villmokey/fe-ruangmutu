@@ -24,6 +24,11 @@ export const Navbar = ({
           title: 'INDIKATOR MUTU',
           url: paths.QUALITY_INDICATOR,
         },
+        {
+          key: 'approval_document',
+          title: 'DOKUMEN APPROVAL',
+          url: paths.APPROVAL_DOCUMENT,
+        }
         // {  
         //   key: 'operational_standard',
         //   title: 'STANDAR OPERASIONAL (SOP)',
@@ -42,16 +47,9 @@ export const Navbar = ({
       url: paths.CALENDER
     },
     {
-      key: 'submenu_lemarimutu',
+      key: 'lemarimutu',
       title: 'LEMARI MUTU',
-      url: paths.DASHBOARD,
-      children: [
-        {
-          key: 'approval_document',
-          title: 'DOKUMEN APPROVAL',
-          url: paths.APPROVAL_DOCUMENT,
-        }
-      ]
+      url: paths.DASHBOARD
     }
   ];
 

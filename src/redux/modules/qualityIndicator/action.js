@@ -1,20 +1,20 @@
 import { apiMethod } from "../../../globals/apiMethod";
 import { URL_CONFIG } from "../../../globals/urlConfig";
 
-export const profileQualityIndicatorActionType = {
-	FETCHING: "profileQualityIndicator/FETCH_PROCESS",
-	ERROR: "profileQualityIndicator/FETCHING_ERROR",
-	SET_ALL_PROFILE_QUALITY_INDICATOR: "profileQualityIndicator/SET_ALL_PROFILE_QUALITY_INDICATOR",
-	SET_SINGLE_PROFILE_QUALITY_INDICATOR: "profileQualityIndicator/SET_SINGLE_PROFILE_QUALITY_INDICATOR",
-	CREATE_PROFILE_QUALITY_INDICATOR: "profileQualityIndicator/CREATE_PROFILE_QUALITY_INDICATOR",
-	UPDATE_PROFILE_QUALITY_INDICATOR: "profileQualityIndicator/EDIT_PROFILE_QUALITY_INDICATOR",
-	SET_FILE: "profileQualityIndicator/UPLOAD_FILE",
+export const qualityIndicatorActionType = {
+	FETCHING: "qualityIndicator/FETCH_PROCESS",
+	ERROR: "qualityIndicator/FETCHING_ERROR",
+	SET_ALL_QUALITY_INDICATOR: "qualityIndicator/SET_ALL_QUALITY_INDICATOR",
+	SET_SINGLE_QUALITY_INDICATOR: "qualityIndicator/SET_SINGLE_QUALITY_INDICATOR",
+	CREATE_QUALITY_INDICATOR: "qualityIndicator/CREATE_QUALITY_INDICATOR",
+	UPDATE_QUALITY_INDICATOR: "qualityIndicator/EDIT_QUALITY_INDICATOR",
+	SET_FILE: "qualityIndicator/UPLOAD_FILE",
 };
 
 
 const fetchDataProcess = (value) => {
 	return {
-		type: profileQualityIndicatorActionType.FETCHING,
+		type: qualityIndicatorActionType.FETCHING,
 		payload: {
 			loading: value
 		}
@@ -23,7 +23,7 @@ const fetchDataProcess = (value) => {
   
 const fetchDataError = (value) => {
 	return {
-		type: profileQualityIndicatorActionType.ERROR,
+		type: qualityIndicatorActionType.ERROR,
 		payload: {
 			error: value,
 			loading: value
@@ -31,30 +31,30 @@ const fetchDataError = (value) => {
 	}
 }
 
-const setAllProfileQualityIndicator = (data, total) => {
+const setAllQualityIndicator = (data, total) => {
 	return {
-		type: profileQualityIndicatorActionType.SET_ALL_PROFILE_QUALITY_INDICATOR,
+		type: qualityIndicatorActionType.SET_ALL_QUALITY_INDICATOR,
 		payload: data
 	}
 }
 
-const setSingleProfileQualityIndicator = (data) => {
+const setSingleQualityIndicator = (data) => {
 	return {
-		type: profileQualityIndicatorActionType.SET_SINGLE_PROFILE_QUALITY_INDICATOR,
+		type: qualityIndicatorActionType.SET_SINGLE_QUALITY_INDICATOR,
 		payload: data
 	}
 }
 
-const setAddProfileQualityIndicator = (response) => {
+const setAddQualityIndicator = (response) => {
 	return {
-		type: profileQualityIndicatorActionType.CREATE_PROFILE_QUALITY_INDICATOR,
+		type: qualityIndicatorActionType.CREATE_QUALITY_INDICATOR,
 		payload: { response },  
 	}
 };
 
 const setFile = (data) => {
 	return {
-		type: profileQualityIndicatorActionType.SET_FILE,
+		type: qualityIndicatorActionType.SET_FILE,
 		payload: {
 			successUpload: true,
 			upload: data
@@ -63,11 +63,11 @@ const setFile = (data) => {
 }
 
 
-export const getAllProfileQualityIndicator = (bodyData) => {
+export const getAllQualityIndicator = (bodyData) => {
 	return {
 		type: 'API',
 		payload: {
-			url: `${URL_CONFIG.PROFILE_QUALITY_INDICATOR_BASE_URL}?paginate=false`,
+			url: `${URL_CONFIG.QUALITY_INDICATOR_BASE_URL}?paginate=false`,
 			requestParams: {
 				method: apiMethod.GET,
 				data: bodyData?.param ?? {},
@@ -84,7 +84,7 @@ export const getAllProfileQualityIndicator = (bodyData) => {
 			return fetchDataProcess(false);
 		},
 		success: (data, response) => {
-			return setAllProfileQualityIndicator(data);
+			return setAllQualityIndicator(data);
 		},
 		error: (err) => {
 			const error = err.errorCode ? err.errorCode : err.message;
@@ -93,11 +93,11 @@ export const getAllProfileQualityIndicator = (bodyData) => {
 	}
 }
 
-export const getSingleProfileQualityIndicator = (id, bodyData) => {
+export const getSingleQualityIndicator = (id, bodyData) => {
 	return {
 		type: 'API',
 		payload: {
-			url: URL_CONFIG.PROFILE_QUALITY_INDICATOR_BASE_URL + id,
+			url: URL_CONFIG.QUALITY_INDICATOR_BASE_URL + id,
 			requestParams: {
 				method: apiMethod.GET,
 				data: bodyData.param ?? {},
@@ -114,7 +114,7 @@ export const getSingleProfileQualityIndicator = (id, bodyData) => {
 			return fetchDataProcess(false);
 		},
 		success: (data, response) => {
-			return setSingleProfileQualityIndicator(data);
+			return setSingleQualityIndicator(data);
 		},
 		error: (err) => {
 			const error = err.errorCode ? err.errorCode : err.message;
@@ -123,11 +123,11 @@ export const getSingleProfileQualityIndicator = (id, bodyData) => {
 	}
 }
 
-export const addProfileQualityIndicator = (bodyData) => {
+export const addQualityIndicator = (bodyData) => {
 	return {
 		type: 'API',
 		payload: {
-			url: URL_CONFIG.PROFILE_QUALITY_INDICATOR_BASE_URL,
+			url: URL_CONFIG.QUALITY_INDICATOR_BASE_URL,
 			requestParams: {
 				method: apiMethod.POST,
 				data: bodyData.param ?? {},
@@ -144,7 +144,7 @@ export const addProfileQualityIndicator = (bodyData) => {
 			return fetchDataProcess(false);
 		},
 		success: (data, response) => {
-			return setAddProfileQualityIndicator(data);
+			return setAddQualityIndicator(data);
 		},
 		error: (err) => {
 			const error = err.errorCode ? err.errorCode : err.message;
@@ -153,7 +153,7 @@ export const addProfileQualityIndicator = (bodyData) => {
 	}
 }
 
-export const uploadFileAPIProfileQualityIndicator = (bodyData) => {
+export const uploadFileAPIQualityIndicator = (bodyData) => {
 	return {
 		type: 'API',
 		payload: {
@@ -184,14 +184,14 @@ export const uploadFileAPIProfileQualityIndicator = (bodyData) => {
 }
 
 
-export const profileQualityIndicatorSelector = ({ profileQualityIndicator }) => {
+export const qualityIndicatorSelector = ({ qualityIndicator }) => {
 	return {
-		loading: profileQualityIndicator.loading,
-		error: profileQualityIndicator.error,
-		called: profileQualityIndicator.called,
-		success: profileQualityIndicator.success,
+		loading: qualityIndicator.loading,
+		error: qualityIndicator.error,
+		called: qualityIndicator.called,
+		success: qualityIndicator.success,
 		data: {
-			...profileQualityIndicator.data
+			...qualityIndicator.data
 		},
 	}
 };
