@@ -1,6 +1,5 @@
 import { apiMethod } from "../../../globals/apiMethod";
-import { URL_CONFIG } from "../../../globals/URL_CONFIG";
-
+import { URL_CONFIG } from "../../../globals/urlConfig";
 
 export const userActionType = {
 	FETCHING: "user/FETCH_PROCESS",
@@ -79,12 +78,12 @@ export const getAllUser = (bodyData) => {
 	return {
 		type: 'API',
 		payload: {
-			url: `${URL_CONFIG.USER_BASE_URL}?page=${bodyData.page?.pageIndex ?? 1}&limit=${bodyData.page?.pageSize ?? 10}`,
+			url: `${URL_CONFIG.USER_BASE_URL}?pagination=false`,
 			requestParams: {
 				method: apiMethod.GET,
-				data: bodyData.param ?? {},
+				// data: bodyData.param ?? {},
 				headers: {
-          'Authorization': 'Bearer ' + bodyData.accessToken,
+          // 'Authorization': 'Bearer ' + bodyData.accessToken,
 					'Content-Type': 'application/json'
 				}
 			},

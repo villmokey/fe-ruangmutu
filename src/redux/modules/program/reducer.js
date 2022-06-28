@@ -5,17 +5,12 @@ const initialState = {
 	called: false,
 	error: null,
 	response: null,
-	success: {
-		add: false,
-		update: false,
-		delete: false,
-		changePassword: false
-	},
 	data: {
 		list: null,
 		single: null,
 		total: 0
-	}
+	},
+	success: false
 }
 
 export const programReducer = (state = initialState, action) => {
@@ -24,17 +19,8 @@ export const programReducer = (state = initialState, action) => {
 			state.called = false;
 			state.loading = action.payload.loading;
 			state.error = action.payload.loading ? state.error : null;
-			state.data = {
-				// list: null,
-				single: null,
-				// total: null
-			}
-			state.success = {
-				add: false,
-				edit: false,
-				delete: false,
-				changePassword: false
-			};
+			state.success = false
+			// state.data.single = null
 			return { ...state };
 
 		case programActionType.ERROR:
@@ -44,12 +30,8 @@ export const programReducer = (state = initialState, action) => {
 			return { ...state };
 
 		case programActionType.SET_ALL_PROGRAM:
-			console.log(action.payload.data.data);
 			state.called = true;
-			state.data = {
-				list: action.payload.data.data,
-				total: parseInt(action.payload.data.total)
-			};
+			state.data.list = action.payload.data;
 			return { ...state };
 
 		case programActionType.SET_SINGLE_PROGRAM:
@@ -59,7 +41,7 @@ export const programReducer = (state = initialState, action) => {
 	
 		case programActionType.CREATE_PROGRAM:
 			state.called = true;
-			state.success.add = true;
+			state.success = true;
 			return { ...state };
 
 		case programActionType.DELETE_PROGRAM:

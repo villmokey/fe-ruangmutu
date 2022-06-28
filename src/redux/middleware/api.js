@@ -19,12 +19,10 @@ export const api = ({ dispatch, getState }) => (next) => {
       ...requestParams 
     })
     .then(res => {
-      console.log(res);
-      if (res.status === 200) {
+      (URL_CONFIG.ENV === 'development') && console.log(res);
         
-        if (success) {
-          dispatch(success(res.data, res));
-        }
+      if (success) {
+        dispatch(success(res.data, res));
       }
 
       if (endNetwork) {
@@ -33,6 +31,7 @@ export const api = ({ dispatch, getState }) => (next) => {
       
     })
     .catch(err => {
+      (URL_CONFIG.ENV === 'development') && console.log('Err: ' + err);
       if (error) {
         dispatch(error(err.response));
       }

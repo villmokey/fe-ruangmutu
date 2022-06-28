@@ -53,7 +53,8 @@ const setLoginSuccess = (data, response) => {
 	if (!!accessToken) {
 		localStorage.setItem(localStorageKey.ACCESS_TOKEN, accessToken);
 		localStorage.setItem(localStorageKey.ROLE, resultData.user.role);
-		localStorage.setItem(localStorageKey.EMAIL, resultData.user.email)
+		localStorage.setItem(localStorageKey.EMAIL, resultData.user.email);
+		localStorage.setItem(localStorageKey.NAME, resultData.user.name);
 	}
 
 	return {
@@ -63,7 +64,8 @@ const setLoginSuccess = (data, response) => {
 			isAuth: !!accessToken,
 			token: accessToken,
 			role: resultData.user.role,
-			email: resultData.user.email
+			email: resultData.user.email,
+			name: resultData.user.name
 		},
 	}
 };
