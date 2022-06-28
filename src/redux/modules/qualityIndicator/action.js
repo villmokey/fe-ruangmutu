@@ -34,7 +34,7 @@ const fetchDataError = (value) => {
 const setAllQualityIndicator = (data, total) => {
 	return {
 		type: qualityIndicatorActionType.SET_ALL_QUALITY_INDICATOR,
-		payload: data
+		payload: { data }
 	}
 }
 
@@ -67,7 +67,7 @@ export const getAllQualityIndicator = (bodyData) => {
 	return {
 		type: 'API',
 		payload: {
-			url: `${URL_CONFIG.QUALITY_INDICATOR_BASE_URL}?paginate=false`,
+			url: `${URL_CONFIG.QUALITY_INDICATOR_BASE_URL}?paginate=false&monthly=true`,
 			requestParams: {
 				method: apiMethod.GET,
 				data: bodyData?.param ?? {},

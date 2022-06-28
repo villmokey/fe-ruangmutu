@@ -12,10 +12,11 @@ import { paths } from "../../../../routing/paths";
 import { QualityIndicatorCard } from "../../../molecules/QualityIndicatorCard/QualityIndicatorCard";
 import { QualityIndicatorSider } from "../../../organism/Dashboard/Sider/QualityIndicatorSider/QualityIndicatorSider";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getAllProfileQualityIndicator } from "../../../../redux/modules/profileQualityIndicator/action";
 import { useAuthToken } from "../../../../globals/useAuthToken";
 import { QualityIndicatorChart } from "../../../molecules/QualityIndicatorChart/QualityIndicatorChart";
+import { getAllQualityIndicator, qualityIndicatorSelector } from "../../../../redux/modules/qualityIndicator/action";
 
 
 const { Content } = Layout;
@@ -28,6 +29,13 @@ export const QualityIndicator = () => {
   const dispatch = useDispatch();
   const { getAccessToken } = useAuthToken();
   const accessToken = getAccessToken();
+
+  const {
+    called,
+    data: {
+      list
+    }
+  } = useSelector(qualityIndicatorSelector)
 
   const handleChangeViewType = () => {
     setViewType(viewType === 1 ? 2 : 1);
@@ -42,11 +50,16 @@ export const QualityIndicator = () => {
   }
 
   useEffect(() => {
-    dispatch(getAllProfileQualityIndicator({
+    dispatch(getAllQualityIndicator({
       accessToken
     }))
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    if (!list) return;
+    console.log(list);
+  }, [list])
 
 
   let chartData = [ 20, 75, 98, 10, 0, 0, 50, 73, 20, 10, 80, 46 ];

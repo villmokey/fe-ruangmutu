@@ -35,7 +35,7 @@ export const qualityIndicatorReducer = (state = initialState, action) => {
 
 		case qualityIndicatorActionType.SET_ALL_QUALITY_INDICATOR:
 			state.called = true;
-			state.data.list = action.payload.data;
+			state.data.list = action.payload.data.data;
 			return { ...state };
 
 		case qualityIndicatorActionType.SET_SINGLE_QUALITY_INDICATOR:

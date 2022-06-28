@@ -78,6 +78,7 @@ export const Add = () => {
   const [ subProgramMutuOptions, setSubProgramMutuOptions ] = useState(null);
 
   const [ profileQualityIndicatorDataTemp, setProfileQualityIndicatorDataTemp ] = useState(null);
+  const [ qualityIndicatorDataTemp, setQualityIndicatorDataTemp ] = useState(null);
   const [ userOptions, setUserOptions ] = useState(null);
   const [ profileQualityOptions, setProfileQualityOptions ] = useState(null);
 
@@ -255,45 +256,45 @@ export const Add = () => {
 
   useEffect(() => {
     if (!(uploadQualityIndicator && isUploading)) return;
-    console.log(uploadQualityIndicator);
     
     let signature = [];
 
     signature.push({
-      user_id: profileQualityIndicatorDataTemp.pembuatDokumen,
+      user_id: qualityIndicatorDataTemp.pembuatDokumen,
       level: 1
     })
 
     signature.push({
-      user_id: profileQualityIndicatorDataTemp.penanggungJawab1,
+      user_id: qualityIndicatorDataTemp.penanggungJawab1,
       level: 2
     })
 
-    if (profileQualityIndicatorDataTemp.penanggungJawab2 !== null && profileQualityIndicatorDataTemp.penanggungJawab2 !== undefined) {
+    if (qualityIndicatorDataTemp.penanggungJawab2 !== null && qualityIndicatorDataTemp.penanggungJawab2 !== undefined) {
       signature.push({
-        user_id: profileQualityIndicatorDataTemp.penanggungJawab2,
+        user_id: qualityIndicatorDataTemp.penanggungJawab2,
         level: 3
       })
     }
 
     let finalData = {
-      title: profileQualityIndicatorDataTemp.judulIndikator,
-      program_id: profileQualityIndicatorDataTemp.programMutu,
-      sub_program_id: profileQualityIndicatorDataTemp.subProgramMutu,
-      month: profileQualityIndicatorDataTemp.bulan,
-      quality_goal: profileQualityIndicatorDataTemp.sasaranMutu,
-      human: profileQualityIndicatorDataTemp.manusia,
-      tools: profileQualityIndicatorDataTemp.alat,
-      method: profileQualityIndicatorDataTemp.metode,
-      policy: profileQualityIndicatorDataTemp.kebijakan,
-      environment: profileQualityIndicatorDataTemp.lingkungan,
-      next_plan: profileQualityIndicatorDataTemp.rencanaTindakLanjut,
+      title: qualityIndicatorDataTemp.judulIndikator,
+      program_id: qualityIndicatorDataTemp.programMutu,
+      sub_program_id: qualityIndicatorDataTemp.subProgramMutu,
+      month: qualityIndicatorDataTemp.bulan,
+      quality_goal: qualityIndicatorDataTemp.sasaranMutu,
+      human: qualityIndicatorDataTemp.manusia,
+      tools: qualityIndicatorDataTemp.alat,
+      method: qualityIndicatorDataTemp.metode,
+      policy: qualityIndicatorDataTemp.kebijakan,
+      environment: qualityIndicatorDataTemp.lingkungan,
+      next_plan: qualityIndicatorDataTemp.rencanaTindakLanjut,
       created_by: getName(),
-      first_pic_id: profileQualityIndicatorDataTemp.penanggungJawab1,
-      second_pic_id: profileQualityIndicatorDataTemp.penanggungJawab2,
-      assign_by: profileQualityIndicatorDataTemp.pembuatDokumen,
+      first_pic_id: qualityIndicatorDataTemp.penanggungJawab1,
+      second_pic_id: qualityIndicatorDataTemp.penanggungJawab2,
+      assign_by: qualityIndicatorDataTemp.pembuatDokumen,
       signature,
-      document_id: uploadQualityIndicator.data.id
+      document_id: uploadQualityIndicator.data.id,
+      month_target: qualityIndicatorDataTemp.capaianBulanIni
     }
 
     dispatch(addQualityIndicator({
@@ -407,6 +408,7 @@ export const Add = () => {
       pembuatDokumen: value.pembuatDokumen,
       penanggungJawab1: value.penanggungJawab1,
       penanggungJawab2: value.penanggungJawab2,
+      capaianBulanIni: value.capaianBulanIni
     });
   }
 
@@ -465,7 +467,7 @@ export const Add = () => {
   }
 
   const handleSubmitFormQualityIndicator = (value) => {
-    setProfileQualityIndicatorDataTemp(value);
+    setQualityIndicatorDataTemp(value);
     setIsUploading(true);
 
     const formData = new FormData();
