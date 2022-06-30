@@ -28,12 +28,12 @@ export const Navbar = ({
           key: 'approval_document',
           title: 'DOKUMEN APPROVAL',
           url: paths.APPROVAL_DOCUMENT,
-        }
-        // {  
-        //   key: 'operational_standard',
-        //   title: 'STANDAR OPERASIONAL (SOP)',
-        //   url: paths.QUALITY_INDICATOR,
-        // },
+        },
+        {  
+          key: 'operational_standard',
+          title: 'STANDAR OPERASIONAL (SOP)',
+          url: paths.OPERATIONAL_STANDARD,
+        },
         // {  
         //   key: 'operational_standard',
         //   title: 'KEPUASAN LAYANAN',
