@@ -1,14 +1,17 @@
 import { PlusOutlined } from "@ant-design/icons";
-import { Button, Col, Layout, Row, Space, Tag } from "antd"
+import { Button, Col, Layout, Row, Space, Tabs, Tag } from "antd"
 import { Link } from "react-router-dom";
 import { paths } from "../../../../routing/paths";
 import { Card } from "../../../atoms/Card/Card";
 import { InputSearch } from "../../../atoms/InputSearch/InputSearch";
 import { Title } from "../../../atoms/Title/Title";
-import { DocumentApprovalCard } from "../../../molecules/DocumentApprovalCard/DocumentApprovalCard";
 import { DocumentApprovalSider } from "../../../organism/Dashboard/Sider/DocumentApprovalSider/DocumentApprovalSider";
+import { QualityIndicatorApproval } from "./QualityIndicatorApproval/QualityIndicatorApproval";
+import { QualityIndicatorProfileApproval } from "./QualityIndicatorProfileApproval/QualityIndicatorProfileApproval";
 
 const { Content } = Layout;
+
+const { TabPane } = Tabs;
 
 export const DocumentApproval = () => {
   return (
@@ -59,27 +62,16 @@ export const DocumentApproval = () => {
             </Space>
           </Col>
         </Row>
-        <div className="document-approval-container">
-          <DocumentApprovalCard 
-            documentApprovalTitle="Butuh Judul"
-            documentApprovalCreatedAt="20/06/2020"
-            documentApprovalDate="25/06/2020"
-            createdBy="Budi"
-          />
-          <DocumentApprovalCard 
-            documentApprovalTitle="Butuh Judul"
-            documentApprovalCreatedAt="20/06/2020"
-            documentApprovalDate="25/06/2020"
-            createdBy="Budi"
-            isApproved={true}
-          />
-          <DocumentApprovalCard 
-            documentApprovalTitle="Butuh Judul"
-            documentApprovalCreatedAt="20/06/2020"
-            documentApprovalDate="25/06/2020"
-            createdBy="Budi"
-          />
-        </div>
+        {/* <div className="document-approval-container"> */}
+        <Tabs defaultActiveKey="1">
+          <TabPane tab="Indikator Mutu" key="1">
+            <QualityIndicatorApproval />
+          </TabPane>
+          <TabPane tab="Profil Indikator Mutu" key="2">
+            <QualityIndicatorProfileApproval />
+          </TabPane>
+        </Tabs>
+        {/* </div> */}
       </Content>
     </Layout>
   )
