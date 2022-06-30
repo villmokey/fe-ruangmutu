@@ -14,5 +14,6 @@ export const paths = {
   QUALITY_INDICATOR: 'quality-indicator/',
   CALENDER: 'calender/',
   QUALITY_CUPBOARD: 'quality-cupboard/',
-  APPROVAL_DOCUMENT: 'approval-document/'
-}
+  APPROVAL_DOCUMENT: 'approval-document/',
+  OPERATIONAL_STANDARD: 'operational-standard/',
+};

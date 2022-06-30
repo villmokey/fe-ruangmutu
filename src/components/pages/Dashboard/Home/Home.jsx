@@ -11,6 +11,7 @@ import { QualityIndicator } from "../QualityIndicator/QualityIndicator";
 
 import { Add as AddQualityIndicator } from '../QualityIndicator/Add/Add';
 import { DocumentApproval } from "../DocumentApproval/DocumentApproval";
+import { OperationalStandard } from "../OperationalStandard/OperationalStandard";
 
 import './Home.less';
 const { Content } = Layout;
@@ -47,6 +48,7 @@ export const Home = () => {
             <Route path={paths.CALENDER} element={<Calender />} />
             {/* <Route path={paths.QUALITY_CUPBOARD} element={<QualityIndicator />} /> */}
             <Route path={paths.APPROVAL_DOCUMENT} element={<DocumentApproval />} />
+            <Route path={paths.OPERATIONAL_STANDARD} element={<OperationalStandard />} />
             <Route path="*" element={
               <>
                 <h1>404 NOT FOUND!</h1>
