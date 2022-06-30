@@ -1,0 +1,38 @@
+[
+  {
+    "indikator_mutu_id": "1",
+    "profil_indikator_id":"",
+    "profil_indikator": {
+      "judul_indikator":"",
+      "sub_program_id": ""
+    },
+    "month": [
+      {
+        "name":"januari",
+        "metode":"metode"
+      },
+      {
+        "name":"januari",
+        "metode":"metode"
+      }
+    ]
+  },
+  {
+    "indikator_mutu_id": "2",
+    "profil_indikator_id":"",
+    "profil_indikator": {
+      "judul_indikator":"",
+      "sub_program_id": ""
+    },
+    "month": [
+      {
+        "name":"januari",
+        "metode":"metode"
+      },
+      {
+        "name":"januari",
+        "metode":"metode"
+      }
+    ]
+  }
+]

@@ -82,7 +82,8 @@ export const Add = () => {
   const [ userOptions, setUserOptions ] = useState(null);
   const [ profileQualityOptions, setProfileQualityOptions ] = useState(null);
 
-  const [ isUploading, setIsUploading ] = useState(false);
+  const [ qualityProfileIndicatorIsUploading, setProfileQualityIndicatorIsUploading ] = useState(false);
+  const [ qualityIndicatorIsUploading, setQualityIndicatorIsUploading ] = useState(false);
 
   useEffect(() => {
     dispatch(getAllProgram());
@@ -159,7 +160,7 @@ export const Add = () => {
   }, [userList])
 
   useEffect(() => {
-    if (!(upload && isUploading)) return;
+    if (!(upload && qualityProfileIndicatorIsUploading)) return;
     
     let quality_dimension = profileQualityIndicatorDataTemp.dimensiMutu.map(item => {
       return {
@@ -249,13 +250,13 @@ export const Add = () => {
     navigate(-1);
 
 
-    setIsUploading(false);
+    setProfileQualityIndicatorIsUploading(false);
 
    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isUploading, upload])
+  }, [qualityProfileIndicatorIsUploading, upload])
 
   useEffect(() => {
-    if (!(uploadQualityIndicator && isUploading)) return;
+    if (!(uploadQualityIndicator && qualityIndicatorIsUploading)) return;
     
     let signature = [];
 
@@ -306,10 +307,10 @@ export const Add = () => {
     navigate(-1);
 
 
-    setIsUploading(false);
+    setQualityIndicatorIsUploading(false);
 
    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isUploading, uploadQualityIndicator])
+  }, [qualityIndicatorIsUploading, uploadQualityIndicator])
 
   const handleChangeProgramMutu = (value) => {
     if (!programMutuOptions) return;
@@ -453,7 +454,7 @@ export const Add = () => {
 
   const handleSubmitFormProfileQualityIndicator = (value) => {
     setProfileQualityIndicatorDataTemp(value);
-    setIsUploading(true);
+    setProfileQualityIndicatorIsUploading(true);
 
     const formData = new FormData();
     formData.append('file', value.dokumenTelusur[0].originFileObj)
@@ -468,7 +469,7 @@ export const Add = () => {
 
   const handleSubmitFormQualityIndicator = (value) => {
     setQualityIndicatorDataTemp(value);
-    setIsUploading(true);
+    setQualityIndicatorIsUploading(true);
 
     const formData = new FormData();
     formData.append('file', value.dokumenTelusur[0].originFileObj)
