@@ -67,7 +67,7 @@ export const getAllQualityIndicator = (bodyData) => {
 	return {
 		type: 'API',
 		payload: {
-			url: `${URL_CONFIG.QUALITY_INDICATOR_BASE_URL}?paginate=false&monthly=true`,
+			url: `${URL_CONFIG.DASHBOARD_QUALITY_INDICATOR}`,
 			requestParams: {
 				method: apiMethod.GET,
 				data: bodyData?.param ?? {},
@@ -182,6 +182,7 @@ export const uploadFileAPIQualityIndicator = (bodyData) => {
 		},
 	}
 }
+
 
 
 export const qualityIndicatorSelector = ({ qualityIndicator }) => {

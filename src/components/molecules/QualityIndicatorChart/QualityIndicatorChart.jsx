@@ -1,17 +1,89 @@
-import { Button, Col, Row } from "antd"
-import { useState } from "react"
+import { Button, Col, message, Row } from "antd"
+import { useEffect, useState } from "react"
 import { monthFullID } from "../../../globals/monthLabel"
 import { Card } from "../../atoms/Card/Card"
 import { Text } from "../../atoms/Text/Text"
 import { Title } from "../../atoms/Title/Title"
 import { BarChart } from "../Chart/Bar/BarChart"
 
+import PropTypes from 'prop-types';
+
+const propTypes = {
+  target: PropTypes.number,
+  title: PropTypes.string
+}
+
+const defaultProps = {
+  target: 75
+}
+
 export const QualityIndicatorChart = ({
   chartData,
-  className
+  className,
+  title,
+  year,
+  target,
+  data,
+  onChangeMonth,
+  dataID
 }) => {
 
   const [ isExpand, setIsExpand ] = useState(false);
+  const [ stringData, setStringData ] = useState({
+    human: '-',
+    tools: '-',
+    method: '-',
+    policy: '-',
+    environment: '-',
+    next_plan: '-'
+  })
+
+  const [ monthlyData, setMonthlyData ] = useState(null);
+
+  useEffect(() => {
+    if (!data) return;
+    setMonthlyData(data);
+  }, [data])
+  
+  const handleChangeMonth = (month) => {
+    let lower = month.toLowerCase();
+
+    if (monthlyData) {
+      let filterMonth = monthlyData.filter(item => item.month === lower)[0];
+      if (filterMonth.human) {
+        setStringData({
+          human: filterMonth.human,
+          tools: filterMonth.tools,
+          method: filterMonth.method,
+          policy: filterMonth.policy,
+          environment: filterMonth.environment,
+          next_plan: filterMonth.next_plan
+        })
+      } else {
+        message.warning('Data bulan ini tidak tersedia!');
+        setStringData({
+          human: '-',
+          tools: '-',
+          method: '-',
+          policy: '-',
+          environment: '-',
+          next_plan: '-'
+        })
+      }
+    } else {
+      message.warning('Data bulanan tidak tersedia!');
+      setStringData({
+        human: '-',
+        tools: '-',
+        method: '-',
+        policy: '-',
+        environment: '-',
+        next_plan: '-'
+      })
+    }
+    
+    
+  }
 
   const barColor = (data) => {
     let backgroundColor = [];
@@ -20,11 +92,11 @@ export const QualityIndicatorChart = ({
       let color = '';
       if (item < 50) {
         color = '#C85D5D'
-      } else if (item < 75) {
+      } else if (item < target) {
         color = '#C8BD5D'
-      } else if (item === 75) {
+      } else if (item === target) {
         color = '#6CC85D'
-      } else if (item > 75) {
+      } else if (item > target) {
         color = '#5F5DC8'
       }
 
@@ -38,46 +110,52 @@ export const QualityIndicatorChart = ({
 
   return (
     <Card className={className}>
-      <Title level={4}>Kepegawaian - Pegawai dengan atribut lengkap</Title>
-      <Title level={5} type="secondary">Tahun mutu 2022</Title>
+      <Title level={4}>{ title }</Title>
+      <Title level={5} type="secondary">{ year }</Title>
       <Button type="text" onClick={() => setIsExpand(!isExpand)}><i>{ isExpand ? 'Show Less...' : 'Show More...' }</i></Button>
       <div style={ !isExpand ? { display: 'none' } : {}}>
         {
           months.map((item, index) => (
-            <Button key={index} style={{ margin: '5px' }}>{ item }</Button>
+            <Button key={item} style={{ margin: '5px' }} onClick={() => handleChangeMonth(item)}>{ item }</Button>
           ))
         }
         <Row gutter={[8,8]} style={{ marginTop: 20 }}>
           <Col span={8}>
             <Card style={{ background: '#f6f6f6' }}>
-              <Text>Terdapat petugas yang lalai dikarenakan di era pandemi memakai scrub</Text>
+              <Title level={5}>Manusia</Title>
+              <Text>{ stringData?.human ?? '-' }</Text>
             </Card>
           </Col>
           <Col span={8}>
             <Card style={{ background: '#f6f6f6' }}>
-              <Text>Alat Rekam Atribut Pegawai Rusak</Text>
+              <Title level={5}>Alat</Title>
+              <Text>{ stringData?.tools ?? '-' }</Text>
             </Card>
           </Col>
           <Col span={8}>
             <Card style={{ background: '#f6f6f6' }}>
-              <Text>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Alias corrupti eveniet possimus corporis ipsum assumenda nostrum praesentium neque aut, molestiae fugit dicta, hic ipsa maxime aperiam, vel similique delectus quibusdam!</Text>
+              <Title level={5}>Metode</Title>
+              <Text>{ stringData?.method ?? '-' }</Text>
             </Card>
           </Col>
         </Row>
         <Row gutter={[8,8]} style={{ marginTop: 20 }}>
           <Col span={8}>
             <Card style={{ background: '#f6f6f6' }}>
-              <Text>Permenkes XII/2120 mengenai perubahan pakaian kedinasan</Text>
+              <Title level={5}>Kebijakan</Title>
+              <Text>{ stringData?.policy ?? '-' }</Text>
             </Card>
           </Col>
           <Col span={8}>
             <Card style={{ background: '#f6f6f6' }}>
-              <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam nemo saepe fugiat maxime. Beatae nemo, officiis voluptatibus obcaecati ipsum consectetur atque quas quod facere perspiciatis blanditiis iste delectus vitae a.</Text>
+              <Title level={5}>Lingkungan</Title>
+              <Text>{ stringData?.environment ?? '-' }</Text>
             </Card>
           </Col>
           <Col span={8}>
             <Card style={{ background: '#f6f6f6' }}>
-              <Text>Membeli alat baru dalam tahun 2123</Text>
+              <Title level={5}>Tindak lanjut</Title>
+              <Text>{ stringData?.next_plan ?? '-' }</Text>
             </Card>
           </Col>
         </Row>
@@ -86,3 +164,6 @@ export const QualityIndicatorChart = ({
     </Card>
   )
 }
+
+QualityIndicatorChart.propTypes = propTypes;
+QualityIndicatorChart.defaultProps = defaultProps;
