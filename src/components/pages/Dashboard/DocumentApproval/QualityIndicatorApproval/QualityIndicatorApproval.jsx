@@ -64,6 +64,17 @@ export const QualityIndicatorApproval = () => {
         filterSignature = item.signature.filter(item => item.user_id === userID && item.signed === 1)
       }
 
+      let approval3Temp = '';
+      if (approval3.length) {
+        if (approval3[0].signed === 1) {
+          approval3Temp = approval3[0].signed_at;
+        } else {
+          approval3Temp = 'Belum disetujui';
+        }
+      } else {
+        approval3Temp = 'Tidak ada penanggung jawab 2'
+      }
+
       return {
         id: item.id,
         userID,
@@ -73,7 +84,7 @@ export const QualityIndicatorApproval = () => {
         createdAt: new Date(item.created_at).toLocaleDateString(),
         approval1: approval1.signed === 1 ? approval1.signed_at : 'Belum disetujui',
         approval2: approval2.signed === 1 ? approval2.signed_at: 'Belum disetujui',
-        approval3: approval3.length ? approval2.signed === 1 ? approval3.signed_at : 'Belum disetujui' : '-',
+        approval3: approval3Temp,
         status: item.status
       }
     })
