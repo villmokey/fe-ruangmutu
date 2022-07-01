@@ -14,6 +14,8 @@ export const URL_CONFIG = {
 
   PROFILE_QUALITY_INDICATOR_BASE_URL: '/indicator-profile',
   QUALITY_INDICATOR_BASE_URL: '/indicator',
-  DASHBOARD_QUALITY_INDICATOR: '/dashboard/indicator'
+  DASHBOARD_QUALITY_INDICATOR: '/dashboard/indicator',
+
+  
 
 }

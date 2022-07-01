@@ -9,10 +9,12 @@ const initialState = {
 		list: null,
 		single: null,
 		total: 0,
-		upload: null
+		upload: null,
+		approvalList: null
 	},
 	success: {
-		add: false
+		add: false,
+		update: false
 	}
 }
 
@@ -23,7 +25,8 @@ export const profileQualityIndicatorReducer = (state = initialState, action) => 
 			state.loading = action.payload.loading;
 			state.error = action.payload.loading ? state.error : null;
 			state.success = {
-				add: false
+				add: false,
+				update: false
 			}
 			return { ...state };
 
@@ -48,10 +51,16 @@ export const profileQualityIndicatorReducer = (state = initialState, action) => 
 			state.success.add = true;
 			return { ...state };
 
-		case profileQualityIndicatorActionType.UPDATE_PROFILE_QUALITY_INDICATOR:
+		case profileQualityIndicatorActionType.UPDATE_STATUS_QUALITY_INDICATOR:
 			state.called = true;
 			state.success.update = true;
 			return { ...state };
+
+		case profileQualityIndicatorActionType.SET_ALL_APPROVAL_PROFILE_QUALITY_INDICATOR:
+			state.called = true;
+			state.data.approvalList = action.payload.data.data;
+			return { ...state };
+	
 
 		case profileQualityIndicatorActionType.SET_FILE:
 			state.called = true;

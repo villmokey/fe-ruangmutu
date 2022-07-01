@@ -131,7 +131,9 @@ export const Add = () => {
       }
     }) 
 
-    setProfileQualityOptions(fetch);
+    const filter = fetch.filter(item => item.status === 3)
+
+    setProfileQualityOptions(filter);
   }, [profileList])
 
   useEffect(() => {

@@ -6,13 +6,15 @@ const initialState = {
 	error: null,
 	response: null,
 	data: {
+		approvalList: null,
 		list: null,
 		single: null,
 		total: 0,
 		upload: null
 	},
 	success: {
-		add: false
+		add: false,
+		update: false
 	}
 }
 
@@ -23,7 +25,8 @@ export const qualityIndicatorReducer = (state = initialState, action) => {
 			state.loading = action.payload.loading;
 			state.error = action.payload.loading ? state.error : null;
 			state.success = {
-				add: false
+				add: false,
+				update: false
 			}
 			return { ...state };
 
@@ -38,6 +41,11 @@ export const qualityIndicatorReducer = (state = initialState, action) => {
 			state.data.list = action.payload.data.data;
 			return { ...state };
 
+		case qualityIndicatorActionType.SET_ALL_APPROVAL_QUALITY_INDICATOR:
+			state.called = true;
+			state.data.approvalList = action.payload.data.data;
+			return { ...state };
+
 		case qualityIndicatorActionType.SET_SINGLE_QUALITY_INDICATOR:
 			state.called = true;
 			state.data.single = action.payload.data;
@@ -48,7 +56,7 @@ export const qualityIndicatorReducer = (state = initialState, action) => {
 			state.success.add = true;
 			return { ...state };
 
-		case qualityIndicatorActionType.UPDATE_QUALITY_INDICATOR:
+		case qualityIndicatorActionType.UPDATE_STATUS_QUALITY_INDICATOR:
 			state.called = true;
 			state.success.update = true;
 			return { ...state };
