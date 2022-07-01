@@ -18,7 +18,6 @@ import { QualityIndicatorChart } from "../../../molecules/QualityIndicatorChart/
 import { getAllQualityIndicator, qualityIndicatorSelector } from "../../../../redux/modules/qualityIndicator/action";
 import { monthLowerWithObjID } from "../../../../globals/monthLabel";
 
-
 const { Content } = Layout;
 
 
@@ -66,6 +65,7 @@ export const QualityIndicator = () => {
     let monthList = monthLowerWithObjID;
 
     const fetch = data.map((item, index) => {
+      let monthsTarget = [];
       if (item.month.length) {
 
         monthList.forEach((month, index) => {
@@ -81,12 +81,10 @@ export const QualityIndicator = () => {
             }
           }
         });
+        let sortedMonth = item.month.sort((a, b) => a.order - b.order)
+        sortedMonth.forEach(item => monthsTarget.push(item.month_target ?? 0))
 
       }
-
-      let sortedMonth = item.month.sort((a, b) => a.order - b.order)
-      let monthsTarget = [];
-      sortedMonth.forEach(item => monthsTarget.push(item.month_target ?? 0))
 
       return {
         id: item.id,
@@ -94,9 +92,12 @@ export const QualityIndicator = () => {
         title: `${item.sub_program.name} - ${item.title}`,
         year: `Tahun Mutu ${item.year}`,
         monthlyData: item.month.length ? item.month : null,
-        chartData: monthsTarget
+        chartData: monthsTarget,
+        status: item.status
       }
     })
+
+    console.log(fetch)
 
     setChartDataSource(fetch);
 

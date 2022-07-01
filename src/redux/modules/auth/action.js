@@ -55,6 +55,7 @@ const setLoginSuccess = (data, response) => {
 		localStorage.setItem(localStorageKey.ROLE, resultData.user.role);
 		localStorage.setItem(localStorageKey.EMAIL, resultData.user.email);
 		localStorage.setItem(localStorageKey.NAME, resultData.user.name);
+		localStorage.setItem(localStorageKey.USER_ID, resultData.user.id);
 	}
 
 	return {
@@ -65,7 +66,8 @@ const setLoginSuccess = (data, response) => {
 			token: accessToken,
 			role: resultData.user.role,
 			email: resultData.user.email,
-			name: resultData.user.name
+			name: resultData.user.name,
+			id: resultData.user.id
 		},
 	}
 };

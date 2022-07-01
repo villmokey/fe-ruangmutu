@@ -5,9 +5,10 @@ export const qualityIndicatorActionType = {
 	FETCHING: "qualityIndicator/FETCH_PROCESS",
 	ERROR: "qualityIndicator/FETCHING_ERROR",
 	SET_ALL_QUALITY_INDICATOR: "qualityIndicator/SET_ALL_QUALITY_INDICATOR",
+	SET_ALL_APPROVAL_QUALITY_INDICATOR: "qualityIndicator/SET_ALL_APPROVAL_QUALITY_INDICATOR",
 	SET_SINGLE_QUALITY_INDICATOR: "qualityIndicator/SET_SINGLE_QUALITY_INDICATOR",
 	CREATE_QUALITY_INDICATOR: "qualityIndicator/CREATE_QUALITY_INDICATOR",
-	UPDATE_QUALITY_INDICATOR: "qualityIndicator/EDIT_QUALITY_INDICATOR",
+	UPDATE_STATUS_QUALITY_INDICATOR: "qualityIndicator/UPDATE_STATUS_QUALITY_INDICATOR",
 	SET_FILE: "qualityIndicator/UPLOAD_FILE",
 };
 
@@ -52,6 +53,13 @@ const setAddQualityIndicator = (response) => {
 	}
 };
 
+const setUpdateStatusQualityIndicator = (response) => {
+	return {
+		type: qualityIndicatorActionType.UPDATE_STATUS_QUALITY_INDICATOR,
+		payload: { response },  
+	}
+};
+
 const setFile = (data) => {
 	return {
 		type: qualityIndicatorActionType.SET_FILE,
@@ -59,6 +67,13 @@ const setFile = (data) => {
 			successUpload: true,
 			upload: data
 		}
+	}
+}
+
+const setAllApprovalQualityIndicator = (data, total) => {
+	return {
+		type: qualityIndicatorActionType.SET_ALL_APPROVAL_QUALITY_INDICATOR,
+		payload: { data }
 	}
 }
 
@@ -183,6 +198,66 @@ export const uploadFileAPIQualityIndicator = (bodyData) => {
 	}
 }
 
+
+export const getAllApprovalQualityIndicator = (userID, bodyData) => {
+	return {
+		type: 'API',
+		payload: {
+			url: `${URL_CONFIG.QUALITY_INDICATOR_BASE_URL}/${userID}/signature`,
+			requestParams: {
+				method: apiMethod.GET,
+				data: bodyData?.param ?? {},
+				headers: {
+          'Authorization': 'Bearer ' + bodyData?.accessToken,
+					'Content-Type': 'application/json'
+				}
+			},
+		},
+		startNetwork: () => {
+			return fetchDataProcess(true);
+		},
+		endNetwork: () => {
+			return fetchDataProcess(false);
+		},
+		success: (data, response) => {
+			return setAllApprovalQualityIndicator(data);
+		},
+		error: (err) => {
+			const error = err.errorCode ? err.errorCode : err.message;
+			return fetchDataError(error);
+		},
+	}
+}
+
+export const updateStatusQualityIndicator = (id, bodyData) => {
+	return {
+		type: 'API',
+		payload: {
+			url: `${URL_CONFIG.QUALITY_INDICATOR_BASE_URL}/${id}/status`,
+			requestParams: {
+				method: apiMethod.POST,
+				data: bodyData.param ?? {},
+				headers: {
+          'Authorization': 'Bearer ' + bodyData.accessToken,
+					'Content-Type': 'application/json'
+				}
+			}
+		},
+		startNetwork: () => {
+			return fetchDataProcess(true);
+		},
+		endNetwork: () => {
+			return fetchDataProcess(false);
+		},
+		success: (data, response) => {
+			return setUpdateStatusQualityIndicator(data);
+		},
+		error: (err) => {
+			const error = err.errorCode ? err.errorCode : err.message;
+			return fetchDataError(error);
+		}
+	}
+}
 
 
 export const qualityIndicatorSelector = ({ qualityIndicator }) => {
