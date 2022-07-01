@@ -1,76 +1,24 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
 import { Breadcrumb, Layout, Steps, Row, Col, Button } from "antd";
-import { HomeFilled, UserOutlined } from '@ant-design/icons';
+import { HomeFilled } from '@ant-design/icons';
 
 import { Card } from '../../../atoms/Card/Card';
 import { Text } from "../../../atoms/Text/Text";
 import { Title } from "../../../atoms/Title/Title";
-
-import { InputSearch } from "../../../atoms/InputSearch/InputSearch";
 
 import { FirstStep as OperationalStandardFirstStep } from "../../../templates/OperationalStandardTemplates/Add/FirstStep";
 import { SecondStep as OperationalStandardSecondStep } from "../../../templates/OperationalStandardTemplates/Add/SecondStep";
 import { ThirdStep as OperationalStandardThirdStep } from "../../../templates/OperationalStandardTemplates/Add/ThirdStep";
 
 import { paths } from "../../../../routing/paths";
-import { QualityIndicatorCard } from "../../../molecules/QualityIndicatorCard/QualityIndicatorCard";
-import { Sider } from "../../../organism/Dashboard/Sider/Sider";
-import { getAllProfileQualityIndicator } from "../../../../redux/modules/profileQualityIndicator/action";
-import { useAuthToken } from "../../../../globals/useAuthToken";
-import { QualityIndicatorChart } from "../../../molecules/QualityIndicatorChart/QualityIndicatorChart";
-import { getAllQualityIndicator, qualityIndicatorSelector } from "../../../../redux/modules/qualityIndicator/action";
 
 import './OperationalStandard.less';
-
 
 const { Content, Sider: AntdSider } = Layout;
 const { Step } = Steps;
 
-
 export const OperationalStandard = () => {
-
-  const [ viewType, setViewType ] = useState(1);
-  const [ previewVis, setPreviewVis ] = useState(false);
   const [current, setCurrent] = useState(0);
-  const dispatch = useDispatch();
-  const { getAccessToken } = useAuthToken();
-  const accessToken = getAccessToken();
-
-  const {
-    called,
-    data: {
-      list
-    }
-  } = useSelector(qualityIndicatorSelector)
-
-  const handleChangeViewType = () => {
-    setViewType(viewType === 1 ? 2 : 1);
-  }
-
-  const handleOpenPreview = () => {
-    setPreviewVis(true);
-  }
-
-  const handleClosePreview = () => {
-    setPreviewVis(false);
-  }
-
-  useEffect(() => {
-    dispatch(getAllQualityIndicator({
-      accessToken
-    }))
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  useEffect(() => {
-    if (!list) return;
-    console.log(list);
-  }, [list])
-
-
-  let chartData = [ 20, 75, 98, 10, 0, 0, 50, 73, 20, 10, 80, 46 ];
 
   const steps = [
     {

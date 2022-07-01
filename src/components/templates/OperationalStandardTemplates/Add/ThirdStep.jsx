@@ -11,7 +11,7 @@ import { Form } from '../../../molecules/Form/Form';
  
 const { Item } = AntdForm;
 
-export const ThirdStep = ({}) => {
+export const ThirdStep = () => {
   return (
     <>
       <Title level={4} style={{ marginBottom: '1.5rem' }}>
