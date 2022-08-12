@@ -8,12 +8,14 @@ export const InputSearch = ({
   style,
   className,
   allowClear,
+  onChange,
   size
 }) => {
   return (
     <Search 
       placeholder={placeholder}
       onSearch={onSearch}
+      onChange={onChange}
       style={style}
       className={className}
       allowClear={allowClear}

@@ -30,7 +30,7 @@ export const Menu = ({
       defaultSelectedKeys={defaultSelectedKeys}
       defaultOpenKeys={defaultOpenKeys}
       mode={mode}
-      className={className}
+      className={'myclasss ' +className}
       style={style}
     >
       {
