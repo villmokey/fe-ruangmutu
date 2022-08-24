@@ -1,40 +1,40 @@
-import { Select, Space } from "antd"
-import { Text } from "../../../atoms/Text/Text"
+import React from "react";
+import { Select, Space } from "antd";
+import { Text } from "../../../atoms/Text/Text";
+import { fetchApiGet } from "../../../../globals/fetchApi";
 
 const { Option } = Select;
 
-const programMutuOptions = [
-  { value: 'admen', title: 'ADMEN' },
-  { value: 'ukp', title: 'UKP' },
-  { value: 'ukm', title: 'UKM' },
-  { value: 'prioritasPuskesmas', title: 'PRIORITAS PUSKESMAS' },
-  { value: 'perilakuPemberiLayanan', title: 'UKM' },
-  { value: 'mutuLayanan', title: 'MUTU LAYANAN KLINIS DAN KESELAMATAN PASIEN INSIDEN KESELAMATAN PASIEN' },
-  { value: 'qpi', title: 'QPI' }
-];
-
-export const UnitService = ({
-  onChange,
-  value
-}) => {
+export const UnitService = ({ onChange, value, multiple = false }) => {
+  const [programs, setPrograms] = React.useState([]);
+  React.useEffect(() => {
+    fetchApiGet("/program?paginate=false")
+      .then((res) => {
+        if (res && res.data) {
+          setPrograms(res.data);
+        }
+      })
+      .catch();
+  }, []);
   return (
     <Space direction="vertical">
-      <Text>Unit Layanan</Text>
-      <Select 
-        placeholder="Pilih unit layanan" 
-        onChange={onChange} 
+      <Text>Program/Unit</Text>
+      <Select
+        placeholder="Pilih program/unit"
+        onChange={onChange}
         value={value}
+        mode={multiple ? "multiple" : ""}
         style={{ width: 170 }}
       >
-        {
-          programMutuOptions &&
-          programMutuOptions.map((item, index) => {
+        {programs &&
+          programs.map((item, index) => {
             return (
-              <Option value={item.value} key={index}>{ item.title }</Option>
-            )
-          })
-        }
+              <Option value={item.id} key={index}>
+                {item.name}
+              </Option>
+            );
+          })}
       </Select>
     </Space>
-  )
-}
+  );
+};

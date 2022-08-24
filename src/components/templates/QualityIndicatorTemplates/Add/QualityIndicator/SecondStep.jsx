@@ -176,9 +176,10 @@ export const SecondStep = ({
             <InputText 
               label="Sasaran Mutu"
               name="sasaranMutu"
+              type={'number'}
               onChange={sasaranMutuChange}
               rules={[
-                { required: true, message: 'Sasaran mutu tidak boleh kosong!' }
+                { required: true, message: 'Sasaran mutu tidak boleh kosong!', InputNumber: true }
               ]}
             />
 
@@ -223,11 +224,12 @@ export const SecondStep = ({
             <Item
               label="Capaian bulan ini"
               name="capaianBulanIni"
+              type={'number'}
               rules={[
                 { required: true, message: 'Pembuat tidak boleh kosong!' }
               ]}
             >
-              <InputNumber min={0} max={100} style={{ width: '100%' }}/>
+              <InputNumber min={0} max={100} style={{ width: '100%' }} type={'number'}/>
             </Item>
             
             <Item

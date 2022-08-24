@@ -22,7 +22,7 @@ import {
 } from "../../../../globals/fetchApi";
 import { ToastContainer, toast } from "react-toastify";
 import EventLoader from "./Loader/event.shimmer";
-import { uploadFileAPI } from "../../../../redux/modules/file/action";
+import Navigation from "../../../organism/Dashboard/Breadcrumb";
 
 const { Content } = Layout;
 
@@ -88,24 +88,14 @@ export const Calender = () => {
       <ToastContainer />
       <CalendarSider onFilter={(filter) => setFilterPayload(filter)} />
       <Content className="main-content calendar">
-        <Stack
-          direction={"row"}
-          spacing={1}
-          alignItems={"center"}
-          margin={"0 0 20px 0"}
-        >
-          <img
-            onClick={() => navigate("/")}
-            src={HomeFilledIcon}
-            alt={"ic_home"}
-            style={{ cursor: "pointer" }}
-          />
-          <Typography fontSize={"14px"}>Home</Typography>
-          <Typography fontSize={"14px"}>/</Typography>
-          <Typography fontSize={"14px"} color={"#5DC8BD"} fontWeight={"bold"}>
-            Kalender
-          </Typography>
-        </Stack>
+        <Navigation
+          items={[
+            {
+              path: "/dashboard/" + paths.CALENDER,
+              label: "Kalender",
+            },
+          ]}
+        />
         <FormCalendar
           open={formOpen}
           onClose={() => setFormOpen(false)}

@@ -20,6 +20,7 @@ export const QualityYear = ({
         placeholder="Pilih tahun mutu" 
         onChange={onChange} 
         value={value}
+        allowClear
         style={{ width: 170 }}
       >
         {

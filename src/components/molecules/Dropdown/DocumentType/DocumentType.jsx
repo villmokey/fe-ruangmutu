@@ -1,35 +1,45 @@
-import { Select, Space } from "antd"
-import { Text } from "../../../atoms/Text/Text"
+import { Select, Space } from "antd";
+import { Text } from "../../../atoms/Text/Text";
+import { fetchApiGet } from "../../../../globals/fetchApi";
+import { useState, useEffect } from "react";
 
 const { Option } = Select;
 
 const documentType = [
-  { title: 'PROFIL INDIKATOR MUTU', value: 'qualityIndicatorProfile' },
-  { title: 'INDIKATOR MUTU', value: 'indicatorProfile' },
+  { title: "PROFIL INDIKATOR MUTU", value: "qualityIndicatorProfile" },
+  { title: "INDIKATOR MUTU", value: "indicatorProfile" },
 ];
 
-export const DocumentType = ({
-  onChange,
-  value
-}) => {
+export const DocumentType = ({ onChange, value }) => {
+  const [types, setTypes] = useState([]);
+  useEffect(() => {
+    fetchApiGet("/document-type?paginate=false")
+      .then((res) => {
+        if (res && res.data) {
+          setTypes(res.data);
+        }
+      })
+      .catch();
+  }, []);
   return (
     <Space direction="vertical">
       <Text>Jenis Dokumen </Text>
-      <Select 
-        placeholder="Pilih jenis dokumen" 
-        onChange={onChange} 
+      <Select
+        placeholder="Pilih jenis dokumen"
+        onChange={onChange}
         value={value}
+        allowClear
         style={{ width: 170 }}
       >
-        {
-          documentType &&
-          documentType.map((item, index) => {
+        {types &&
+          types.map((item, index) => {
             return (
-              <Option value={item.value} key={index}>{ item.title }</Option>
-            )
-          })
-        }
+              <Option value={item.id} key={index}>
+                {item.name}
+              </Option>
+            );
+          })}
       </Select>
     </Space>
-  )
-}
+  );
+};

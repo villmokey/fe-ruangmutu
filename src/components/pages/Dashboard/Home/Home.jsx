@@ -9,15 +9,16 @@ import { Navbar } from "../../../organism/Dashboard/Navbar/Navbar";
 import { Calender } from "../Calender/Calender";
 import { QualityIndicator } from "../QualityIndicator/QualityIndicator";
 
-import { Add as AddQualityIndicator } from '../QualityIndicator/Add/Add';
+import { Add as AddQualityIndicator } from "../QualityIndicator/Add/Add";
 import { DocumentApproval } from "../DocumentApproval/DocumentApproval";
 import { OperationalStandard } from "../OperationalStandard/OperationalStandard";
+import { QualityCupboard } from "../QualityCupboard/QualityCupboard";
 
-import './Home.less';
+import "./Home.less";
+import DetailCupboardPage from "../QualityCupboard/Detail/detail.page";
 const { Content } = Layout;
 
 export const Home = () => {
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -30,33 +31,55 @@ export const Home = () => {
     }
     navigate(paths.QUALITY_INDICATOR);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleLogout = () => {
     dispatch(removeAccessToken());
-  }
+  };
 
   return (
     <Layout>
-      <Navbar onLogout={handleLogout}/>
+      <Navbar onLogout={handleLogout} />
       <Layout className="dashboard-layout">
         <Content className="dashboard-content">
           <Routes>
-            <Route path={paths.QUALITY_INDICATOR} element={<QualityIndicator />} />
-            <Route path={`${paths.QUALITY_INDICATOR}${paths.ADD}`} element={<AddQualityIndicator />} />
+            <Route
+              path={paths.QUALITY_INDICATOR}
+              element={<QualityIndicator />}
+            />
+            <Route
+              path={`${paths.QUALITY_INDICATOR}${paths.ADD}`}
+              element={<AddQualityIndicator />}
+            />
             <Route path={paths.CALENDER} element={<Calender />} />
-            {/* <Route path={paths.QUALITY_CUPBOARD} element={<QualityIndicator />} /> */}
-            <Route path={paths.APPROVAL_DOCUMENT} element={<DocumentApproval />} />
-            <Route path={paths.OPERATIONAL_STANDARD} element={<OperationalStandard />} />
-            <Route path="*" element={
-              <>
-                <h1>404 NOT FOUND!</h1>
-              </>
-            }></Route>
+            <Route
+              path={paths.QUALITY_CUPBOARD}
+              element={<QualityCupboard />}
+            />
+            <Route
+              path={`${paths.QUALITY_CUPBOARD}:id/${paths.VIEW}`}
+              element={<DetailCupboardPage />}
+            />
+            <Route
+              path={paths.APPROVAL_DOCUMENT}
+              element={<DocumentApproval />}
+            />
+            <Route
+              path={paths.OPERATIONAL_STANDARD}
+              element={<OperationalStandard />}
+            />
+            <Route
+              path="*"
+              element={
+                <>
+                  <h1>404 NOT FOUND!</h1>
+                </>
+              }
+            ></Route>
           </Routes>
         </Content>
       </Layout>
     </Layout>
-  )
-}
+  );
+};

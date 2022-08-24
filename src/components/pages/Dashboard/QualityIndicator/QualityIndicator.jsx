@@ -1,8 +1,8 @@
 import { Button, Col, Layout, Row, Space, Tag } from "antd";
-import { Card } from '../../../atoms/Card/Card';
+import { Card } from "../../../atoms/Card/Card";
 import { Title } from "../../../atoms/Title/Title";
 
-import './QualityIndicator.less';
+import "./QualityIndicator.less";
 import { InputSearch } from "../../../atoms/InputSearch/InputSearch";
 import { PlusOutlined } from "@ant-design/icons";
 
@@ -15,14 +15,15 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useAuthToken } from "../../../../globals/useAuthToken";
 import { QualityIndicatorChart } from "../../../molecules/QualityIndicatorChart/QualityIndicatorChart";
-import { getAllQualityIndicator, qualityIndicatorSelector } from "../../../../redux/modules/qualityIndicator/action";
+import {
+  getAllQualityIndicator,
+  qualityIndicatorSelector,
+} from "../../../../redux/modules/qualityIndicator/action";
 import { monthLowerWithObjID } from "../../../../globals/monthLabel";
 
 const { Content } = Layout;
 
-
 export const QualityIndicator = () => {
-
   // const [ viewType, setViewType ] = useState(1);
   // const [ previewVis, setPreviewVis ] = useState(false);
   const dispatch = useDispatch();
@@ -30,24 +31,24 @@ export const QualityIndicator = () => {
   const accessToken = getAccessToken();
 
   const {
-    data: {
-      list
-    }
-  } = useSelector(qualityIndicatorSelector)
+    data: { list },
+  } = useSelector(qualityIndicatorSelector);
 
-  const [ chartDataSource, setChartDataSource ] = useState(null);
+  const [chartDataSource, setChartDataSource] = useState(null);
 
   useEffect(() => {
-    dispatch(getAllQualityIndicator({
-      accessToken
-    }))
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    dispatch(
+      getAllQualityIndicator({
+        accessToken,
+      })
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (!list) return;
     fetchData(list);
-  }, [list])
+  }, [list]);
 
   // const handleChangeViewType = () => {
   //   setViewType(viewType === 1 ? 2 : 1);
@@ -67,23 +68,28 @@ export const QualityIndicator = () => {
     const fetch = data.map((item, index) => {
       let monthsTarget = [];
       if (item.month.length) {
-
         monthList.forEach((month, index) => {
-
           // if month does not exist, push the unexisting month
-          let thisMonth = item.month.findIndex(obj => obj.month === month.month);
+          let thisMonth = item.month.findIndex(
+            (obj) => obj.month === month.month
+          );
           if (thisMonth === -1) {
-            item.month.push({ month: month.month, month_target: 0, order: month.order })
+            item.month.push({
+              month: month.month,
+              month_target: 0,
+              order: month.order,
+            });
           } else {
             item.month[thisMonth] = {
               ...item.month[thisMonth],
-              order: month.order
-            }
+              order: month.order,
+            };
           }
         });
-        let sortedMonth = item.month.sort((a, b) => a.order - b.order)
-        sortedMonth.forEach(item => monthsTarget.push(item.month_target ?? 0))
-
+        let sortedMonth = item.month.sort((a, b) => a.order - b.order);
+        sortedMonth.forEach((item) =>
+          monthsTarget.push(item.month_target ?? 0)
+        );
       }
 
       return {
@@ -93,22 +99,20 @@ export const QualityIndicator = () => {
         year: `Tahun Mutu ${item.year}`,
         monthlyData: item.month.length ? item.month : null,
         chartData: monthsTarget,
-        status: item.status
-      }
-    })
+        status: item.status,
+      };
+    });
 
-    console.log(fetch)
+    console.log(fetch);
 
     setChartDataSource(fetch);
-
-  }
-
+  };
 
   return (
     <Layout>
       <QualityIndicatorSider />
       <Content className="main-content">
-        <Row justify="center" align="middle" gutter={[ 24,16 ]}>
+        <Row justify="center" align="middle" gutter={[24, 16]}>
           <Col>
             <Card className="total">
               <p className="card-title">TOTAL INDIKATOR MUTU</p>
@@ -124,7 +128,7 @@ export const QualityIndicator = () => {
           <Col>
             <Card className="total">
               <p className="card-title">BELUM TERCAPAI</p>
-            <Title className="card-content">3</Title>
+              <Title className="card-content">3</Title>
             </Card>
           </Col>
         </Row>
@@ -134,24 +138,24 @@ export const QualityIndicator = () => {
           </Col>
           <Col>
             <Link to={`${paths.ADD}`}>
-              <Button 
-                type="primary" 
-                icon={<PlusOutlined />} 
-                size="large" 
+              <Button
+                type="primary"
+                icon={<PlusOutlined />}
+                size="large"
                 style={{ borderRadius: 8 }}
               />
             </Link>
           </Col>
         </Row>
         <Row style={{ marginTop: 40 }}>
-          <Col style={{ marginRight: 'auto' }}>
+          <Col style={{ marginRight: "auto" }}>
             <Space>
               <Tag color="#6A9695">#INDIKATOR MUTU</Tag>
               <Tag color="#6A9695">#KEPEGAWAIAN</Tag>
               <Tag color="#6A9695">#MUTU</Tag>
             </Space>
           </Col>
-          <Col style={{ marginLeft: 'auto' }}>
+          <Col style={{ marginLeft: "auto" }}>
             {/* <Button 
               type="primary" 
               icon={viewType === 1 ? <FileTextOutlined /> : <BarChartOutlined />} 
@@ -162,19 +166,22 @@ export const QualityIndicator = () => {
           </Col>
         </Row>
         <div className="indikator-mutu-container">
-          {
-            chartDataSource &&
+          {chartDataSource &&
             chartDataSource.map((item, index) => (
               <QualityIndicatorChart
                 key={index}
                 chartData={item.chartData}
                 title={item.title}
+                average={
+                  item.achievement_target > 0
+                    ? Number(item.achievement_target) / 2
+                    : 0
+                }
                 year={item.year}
                 className="indikator-mutu"
                 data={item.monthlyData}
               />
-            ))
-          }
+            ))}
           {/* {
             viewType === 2 ?
             <Row align="center" gutter={[24,8]}>
@@ -234,5 +241,5 @@ export const QualityIndicator = () => {
         </div>
       </Content>
     </Layout>
-  )
-}
+  );
+};

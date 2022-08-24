@@ -1,4 +1,4 @@
-import { Input } from 'antd';
+import { Input } from "antd";
 
 const { Search } = Input;
 
@@ -9,17 +9,21 @@ export const InputSearch = ({
   className,
   allowClear,
   onChange,
-  size
+  size,
+  onReset,
+  loading = false,
 }) => {
   return (
-    <Search 
+    <Search
       placeholder={placeholder}
       onSearch={onSearch}
+      onReset={onReset}
+      loading={loading}
       onChange={onChange}
       style={style}
       className={className}
       allowClear={allowClear}
       size={size}
     />
-  )
-}
+  );
+};
