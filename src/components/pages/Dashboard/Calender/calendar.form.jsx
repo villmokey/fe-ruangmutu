@@ -8,7 +8,6 @@ import {
   Typography,
   Stack,
   Autocomplete,
-  OutlinedInput,
   TextField,
 } from "@mui/material";
 import { Upload } from "antd";
@@ -26,14 +25,11 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import "./Calendar.less";
 import { fetchApiGet, fetchApiPost } from "../../../../globals/fetchApi";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { useAuthToken } from "../../../../globals/useAuthToken";
 import { useDebounce } from "../../../../hooks";
 
 import { Select, Space } from "antd";
-import { Text } from "../../../atoms/Text/Text";
-import { uploadFileAPI } from "../../../../redux/modules/file/action";
-import { useDispatch } from "react-redux";
 
 const { Option } = Select;
 const { Dragger } = Upload;
@@ -66,7 +62,6 @@ ClassicEditor.defaultConfig = {
 
 const FormCalendar = ({ open, onClose, onSuccessSubmit }) => {
   const { getAccessToken } = useAuthToken();
-  const dispatch = useDispatch();
   const accessToken = getAccessToken();
   const [openModal, setOpenModal] = React.useState(false);
   const [docsLoading, setDocsLoading] = React.useState(false);
@@ -103,40 +98,13 @@ const FormCalendar = ({ open, onClose, onSuccessSubmit }) => {
     return await uploaded;
   };
 
-  const upload = async (fileList = []) => {
-    let fileIds = [];
-    let fileForm = new FormData();
-
-    if (fileList && fileList.length > 0) {
-      fileList.forEach(async (file) => {
-        await fetchApiPost("/upload/file", accessToken, fileForm).then(
-          async (res) => {
-            if (res && res.code === 200) {
-              await fileIds.push(res.data.id);
-            }
-          }
-        );
-      });
-      return fileIds;
-    } else {
-      return fileIds;
-    }
-  };
-
   const handleSubmit = async () => {
     setLoading(true);
-    // let formdata = new FormData();
 
     let formdata = {
       ...payload,
       description: desc,
     };
-
-    // formdata.append("end_date", payload.end_date);
-    // formdata.append("start_date", payload.start_date);
-    // formdata.append("name", payload.name);
-    // formdata.append("program_id", payload.program_id);
-    // formdata.append("description", desc);
 
     if (selected && selected.length > 0) {
       let docs = selected.map((item) => {
@@ -170,7 +138,7 @@ const FormCalendar = ({ open, onClose, onSuccessSubmit }) => {
                 if (onSuccessSubmit) {
                   onSuccessSubmit();
                 }
-              } else if (res && res.code == 422) {
+              } else if (res && res.code === 422) {
                 toast.error(res.message);
               } else {
                 if (res.response.data) {
@@ -190,7 +158,7 @@ const FormCalendar = ({ open, onClose, onSuccessSubmit }) => {
             if (onSuccessSubmit) {
               onSuccessSubmit();
             }
-          } else if (res && res.code == 422) {
+          } else if (res && res.code === 422) {
             toast.error(res.message);
           } else {
             if (res.response.data) {
@@ -234,11 +202,11 @@ const FormCalendar = ({ open, onClose, onSuccessSubmit }) => {
 
   React.useEffect(() => {
     requestDocument();
-  }, [keyword]);
+  }, [keyword]); //eslint-disable-line
 
   React.useEffect(() => {
     requestPrograms();
-  }, []);
+  }, []); //eslint-disable-line
 
   return (
     open && (

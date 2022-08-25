@@ -5,11 +5,6 @@ import { useState, useEffect } from "react";
 
 const { Option } = Select;
 
-const documentType = [
-  { title: "PROFIL INDIKATOR MUTU", value: "qualityIndicatorProfile" },
-  { title: "INDIKATOR MUTU", value: "indicatorProfile" },
-];
-
 export const DocumentType = ({ onChange, value }) => {
   const [types, setTypes] = useState([]);
   useEffect(() => {

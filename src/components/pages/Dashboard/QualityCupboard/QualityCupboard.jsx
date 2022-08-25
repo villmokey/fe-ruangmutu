@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Col, Layout, Row, Space, Tag, Typography } from "antd";
+import { Button, Col, Layout, Row, Space, Tag } from "antd";
 import { Card } from "../../../atoms/Card/Card";
 import { Title } from "../../../atoms/Title/Title";
 import { InputSearch } from "../../../atoms/InputSearch/InputSearch";
@@ -8,12 +8,10 @@ import {
   FileTextOutlined,
   OrderedListOutlined,
 } from "@ant-design/icons";
-import { Box, Skeleton, Grid } from "@mui/material";
-import { useState, useEffect } from "react";
+import { Skeleton } from "@mui/material";
+import { useState } from "react";
 import { paths } from "../../../../routing/paths";
 import { QualityCupboardSider } from "../../../organism/Dashboard/Sider/QualityCupboardSider/QualityCupboardSider";
-import { useDispatch } from "react-redux";
-import { useAuthToken } from "../../../../globals/useAuthToken";
 import CardView from "./cardview";
 import ListView from "./listview";
 import QualityCupboardForm from "./cupboard.form";
@@ -24,9 +22,6 @@ import { fetchApiGet } from "../../../../globals/fetchApi";
 const { Content } = Layout;
 
 export const QualityCupboard = () => {
-  const dispatch = useDispatch();
-  const { getAccessToken } = useAuthToken();
-  const accessToken = getAccessToken();
 
   const [viewType, setViewType] = useState(1);
   const [formOpen, setFormOpen] = useState(false);
@@ -113,7 +108,7 @@ export const QualityCupboard = () => {
 
   React.useEffect(() => {
     fetchDocuments();
-  }, [page, search, sorting]);
+  }, [page, search, sorting]); //eslint-disable-line
 
   return (
     <Layout>

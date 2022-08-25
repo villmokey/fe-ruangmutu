@@ -19,7 +19,10 @@ import {
   getAllQualityIndicator,
   qualityIndicatorSelector,
 } from "../../../../redux/modules/qualityIndicator/action";
-import { monthLowerWithObjID } from "../../../../globals/monthLabel";
+import {
+  monthLowerWithObjID,
+  monthAcronymID,
+} from "../../../../globals/monthLabel";
 
 const { Content } = Layout;
 
@@ -64,7 +67,6 @@ export const QualityIndicator = () => {
 
   const fetchData = (data) => {
     let monthList = monthLowerWithObjID;
-
     const fetch = data.map((item, index) => {
       let monthsTarget = [];
       if (item.month.length) {
@@ -87,8 +89,11 @@ export const QualityIndicator = () => {
           }
         });
         let sortedMonth = item.month.sort((a, b) => a.order - b.order);
-        sortedMonth.forEach((item) =>
-          monthsTarget.push(item.month_target ?? 0)
+        sortedMonth.forEach((item, index) =>
+          monthsTarget.push({
+            month: monthAcronymID[index],
+            capaian: item.month_target ?? 0,
+          })
         );
       }
 
@@ -98,13 +103,11 @@ export const QualityIndicator = () => {
         title: `${item.sub_program.name} - ${item.title}`,
         year: `Tahun Mutu ${item.year}`,
         monthlyData: item.month.length ? item.month : null,
+        target: item.achievement_target,
         chartData: monthsTarget,
         status: item.status,
       };
     });
-
-    console.log(fetch);
-
     setChartDataSource(fetch);
   };
 
@@ -172,11 +175,8 @@ export const QualityIndicator = () => {
                 key={index}
                 chartData={item.chartData}
                 title={item.title}
-                average={
-                  item.achievement_target > 0
-                    ? Number(item.achievement_target) / 2
-                    : 0
-                }
+                // average={item.target > 60 ? 40 : item.target}
+                average={item.target}
                 year={item.year}
                 className="indikator-mutu"
                 data={item.monthlyData}

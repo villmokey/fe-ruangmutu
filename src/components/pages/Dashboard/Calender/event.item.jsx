@@ -5,8 +5,6 @@ import {
   CollapseOpenIcon,
   SettingIcon,
 } from "../../../../assets/icons";
-
-import { Menu } from "../../../molecules/Menu/Menu";
 import { Dropdown, Button, Popconfirm } from "antd";
 import { Stack, Box, Typography } from "@mui/material";
 import moment from "moment";
@@ -168,6 +166,7 @@ const EventItem = ({
                           rel.related.file.file_path
                         }
                         target={"_blank"}
+                        rel="noreferrer"
                       >
                         {rel.related &&
                         rel.related.file &&
@@ -197,6 +196,7 @@ const EventItem = ({
                           process.env.REACT_APP_API_URL + "/" + rel.file_path
                         }
                         target={"_blank"}
+                        rel="noreferrer"
                       >
                         {rel.real_name ? rel.real_name : "Undefined"}
                       </a>
@@ -232,12 +232,6 @@ const EventContainer = styled.div`
   border: 2px solid #e5e5e5;
   padding: 25px;
   margin-bottom: 10px;
-`;
-
-const DocumentPlaceholder = styled.div`
-  width: 100px;
-  height: 150px;
-  background: #a1a0a0;
 `;
 
 const Badge = styled.div`

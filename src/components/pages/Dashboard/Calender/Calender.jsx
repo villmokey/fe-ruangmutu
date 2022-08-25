@@ -4,16 +4,13 @@ import "./Calendar.less";
 import { InputSearch } from "../../../atoms/InputSearch/InputSearch";
 import { PlusOutlined } from "@ant-design/icons";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { paths } from "../../../../routing/paths";
 import { CalendarSider } from "../../../organism/Dashboard/Sider/CalendarSider/CalendarSider";
-import { useDispatch, useSelector } from "react-redux";
 import { useAuthToken } from "../../../../globals/useAuthToken";
 import styled from "styled-components";
 import EventItem from "./event.item";
 import EventCalendar from "./event.calendar";
-import { Typography, Stack } from "@mui/material";
-import { HomeFilledIcon } from "../../../../assets/icons";
+import { Typography } from "@mui/material";
 import FormCalendar from "./calendar.form";
 import {
   fetchApiGet,
@@ -32,10 +29,8 @@ export const Calender = () => {
     month: "",
     program_id: "",
   });
-  const dispatch = useDispatch();
   const { getAccessToken } = useAuthToken();
   const accessToken = getAccessToken();
-  const navigate = useNavigate();
   const [formOpen, setFormOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
@@ -75,13 +70,9 @@ export const Calender = () => {
     });
   };
 
-  React.useEffect(
-    () => {
-      getEvents();
-    },
-    [filterPayload],
-    search
-  );
+  React.useEffect(() => {
+    getEvents();
+  }, [filterPayload, search]); //eslint-disable-line
 
   return (
     <Layout>

@@ -157,12 +157,12 @@ const QualityCupboardForm = ({ open, onClose, onSuccessSubmit }) => {
 
   React.useEffect(() => {
     requestDocument();
-  }, [keyword]);
+  }, [keyword]); //eslint-disable-line
 
   React.useEffect(() => {
     requestPrograms();
     requestDocumentTypes();
-  }, []);
+  }, []); //eslint-disable-line
 
   // Reset State
   React.useEffect(() => {
@@ -178,7 +178,7 @@ const QualityCupboardForm = ({ open, onClose, onSuccessSubmit }) => {
       file_id: "",
       is_confidential: false,
     });
-  }, []);
+  }, []); //eslint-disable-line
 
   return (
     open && (

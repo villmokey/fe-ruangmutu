@@ -4,7 +4,7 @@ import { monthFullID } from "../../../globals/monthLabel";
 import { Card } from "../../atoms/Card/Card";
 import { Text } from "../../atoms/Text/Text";
 import { Title } from "../../atoms/Title/Title";
-import { BarChart } from "../Chart/Bar/BarChart";
+import IndicatorBarChart from "./Chart/IndicatorBarChart";
 
 import PropTypes from "prop-types";
 
@@ -22,7 +22,7 @@ export const QualityIndicatorChart = ({
   className,
   title,
   year,
-  average = 15,
+  average = 0,
   target,
   data,
   onChangeMonth,
@@ -82,27 +82,6 @@ export const QualityIndicatorChart = ({
         next_plan: "-",
       });
     }
-  };
-
-  const barColor = (data) => {
-    let backgroundColor = [];
-
-    data?.forEach((item) => {
-      let color = "";
-      if (item < average) {
-        color = "#C85D5D";
-      } else if (item < target) {
-        color = "#C8BD5D";
-      } else if (item === target) {
-        color = "#6CC85D";
-      } else if (item > target) {
-        color = "#5F5DC8";
-      }
-
-      backgroundColor.push(color);
-    });
-
-    return backgroundColor;
   };
 
   const months = monthFullID;
@@ -167,10 +146,7 @@ export const QualityIndicatorChart = ({
           </Col>
         </Row>
       </div>
-      <BarChart
-        chartData={chartData}
-        barColor={barColor(chartData)}
-      />
+      <IndicatorBarChart chartData={chartData} achievement={average} />
     </Card>
   );
 };
