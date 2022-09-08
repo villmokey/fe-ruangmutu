@@ -39,32 +39,36 @@ const ListView = ({
           documents.map((doc, index) => (
             <TableRow key={index}>
               <TableData>
-                <Box width={"100%"}>
-                  {doc.related_program && doc.related_program.length > 0 && (
-                    <Stack direction={"row"}>
-                      {doc.related_program.map((program, index) => (
-                        <Tag
-                          key={index}
-                          style={{ color: "white", background: "#6A9695" }}
-                        >
-                          {program && program.program && program.program.name
-                            ? program.program.name
-                            : ""}
-                        </Tag>
-                      ))}
-                    </Stack>
-                  )}
-                  <Typography style={{ fontSize: "14px", fontWeight: "bold" }}>
-                    {doc.name}
-                  </Typography>
-                  <Typography style={{ fontSize: "10px", fontWeight: "300" }}>
-                    {doc.document_type &&
-                    doc.document_type &&
-                    doc.document_type.name
-                      ? doc.document_type.name
-                      : ""}
-                  </Typography>
-                </Box>
+                <a href={doc.file.file_link} target={'_blank'}>
+                  <Box width={"100%"}>
+                    {doc.related_program && doc.related_program.length > 0 && (
+                      <Stack direction={"row"}>
+                        {doc.related_program.map((program, index) => (
+                          <Tag
+                            key={index}
+                            style={{ color: "white", background: "#6A9695" }}
+                          >
+                            {program && program.program && program.program.name
+                              ? program.program.name
+                              : ""}
+                          </Tag>
+                        ))}
+                      </Stack>
+                    )}
+                    <Typography
+                      style={{ fontSize: "14px", fontWeight: "bold" }}
+                    >
+                      {doc.name}
+                    </Typography>
+                    <Typography style={{ fontSize: "10px", fontWeight: "300" }}>
+                      {doc.document_type &&
+                      doc.document_type &&
+                      doc.document_type.name
+                        ? doc.document_type.name
+                        : ""}
+                    </Typography>
+                  </Box>
+                </a>
               </TableData>
               <TableData>
                 {moment(doc.publish_date).format("dddd, DD MMMM YYYY")}

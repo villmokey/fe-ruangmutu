@@ -10,6 +10,97 @@ const { Option } = Select;
 const { Item } = AntdForm;
 const { Dragger } = Upload;
 
+export const dimensiMutuOptions = [
+  {
+    label: 'Kelayakan',
+    value: 'Kelayakan',
+  },
+  {
+    label: 'Ketepatan Waktu',
+    value: 'Ketepatan Waktu',
+  },
+  {
+    label: 'Manfaat',
+    value: 'Manfaat',
+  },
+  {
+    label: 'Ketersiadaan',
+    value: 'Ketersiadaan',
+  },
+  {
+    label: 'Keselamatan',
+    value: 'Keselamatan',
+  },
+  {
+    label: 'Efisiensi',
+    value: 'Efisiensi',
+  },
+  {
+    label: 'Efektivias',
+    value: 'Efektivias',
+  },
+  {
+    label: 'Kesinambungan',
+    value: 'Kesinambungan',
+  }
+];
+
+export const frekuensiPengumpulanDataOptions = [
+  {
+    label: 'Harian',
+    value: 'Harian',
+  },
+  {
+    label: 'Mingguan',
+    value: 'Mingguan',
+  },
+  {
+    label: 'Bulan',
+    value: 'Bulan',
+  },
+  {
+    label: 'Tahunan',
+    value: 'Tahunan',
+  }
+];
+
+export const periodeWaktuPelaporanOptions = [
+  {
+    label: 'Bulanan',
+    value: 'Bulanan',
+  },
+  {
+    label: 'Triwulan',
+    value: 'Triwulan',
+  },
+  {
+    label: 'Semester',
+    value: 'Semester',
+  },
+  {
+    label: 'Tahunan',
+    value: 'Tahunan',
+  }
+];
+
+export const tipeIndikatorOptions = [
+  {
+    label: 'Input',
+    value: 'Input',
+  },
+  {
+    label: 'Proses',
+    value: 'Proses',
+  },
+  {
+    label: 'Output',
+    value: 'Output',
+  },
+  {
+    label: 'Outcome',
+    value: 'Outcome',
+  }
+]
 
 export const SecondStep = ({
   form,
@@ -46,98 +137,6 @@ export const SecondStep = ({
   penanggungJawab2Change
 }) => {
 
-  let dimensiMutuOptions = [
-    {
-      label: 'Kelayakan',
-      value: 'Kelayakan',
-    },
-    {
-      label: 'Ketepatan Waktu',
-      value: 'Ketepatan Waktu',
-    },
-    {
-      label: 'Manfaat',
-      value: 'Manfaat',
-    },
-    {
-      label: 'Ketersiadaan',
-      value: 'Ketersiadaan',
-    },
-    {
-      label: 'Keselamatan',
-      value: 'Keselamatan',
-    },
-    {
-      label: 'Efisiensi',
-      value: 'Efisiensi',
-    },
-    {
-      label: 'Efektivias',
-      value: 'Efektivias',
-    },
-    {
-      label: 'Kesinambungan',
-      value: 'Kesinambungan',
-    }
-  ];
-
-  let frekuensiPengumpulanDataOptions = [
-    {
-      label: 'Harian',
-      value: 'Harian',
-    },
-    {
-      label: 'Mingguan',
-      value: 'Mingguan',
-    },
-    {
-      label: 'Bulan',
-      value: 'Bulan',
-    },
-    {
-      label: 'Tahunan',
-      value: 'Tahunan',
-    }
-  ];
-
-  let periodeWaktuPelaporanOptions = [
-    {
-      label: 'Bulanan',
-      value: 'Bulanan',
-    },
-    {
-      label: 'Triwulan',
-      value: 'Triwulan',
-    },
-    {
-      label: 'Semester',
-      value: 'Semester',
-    },
-    {
-      label: 'Tahunan',
-      value: 'Tahunan',
-    }
-  ];
-
-  let tipeIndikatorOptions = [
-    {
-      label: 'Input',
-      value: 'Input',
-    },
-    {
-      label: 'Proses',
-      value: 'Proses',
-    },
-    {
-      label: 'Output',
-      value: 'Output',
-    },
-    {
-      label: 'Outcome',
-      value: 'Outcome',
-    }
-  ]
-
   return (
     <>
       <Title level={4}>Form Profil Indikator Mutu</Title>
@@ -158,8 +157,8 @@ export const SecondStep = ({
               <Select placeholder="Pilih program mutu" onChange={programMutuChange}>
                 {
                   programMutuOptions &&
-                  programMutuOptions.map(( item, index ) => (
-                    <Option value={item.id} key={index}>{ item.title }</Option>
+                  programMutuOptions.map((item, index) => (
+                    <Option value={item.id} key={index}>{item.title}</Option>
                   ))
                 }
               </Select>
@@ -174,13 +173,13 @@ export const SecondStep = ({
               <Select placeholder="Pilih Sub program mutu" onChange={subProgramMutuChange}>
                 {
                   subProgramMutuOptions &&
-                  subProgramMutuOptions.map(( item, index ) => (
-                    <Option value={item.id} key={index}>{ item.title }</Option>
+                  subProgramMutuOptions.map((item, index) => (
+                    <Option value={item.id} key={index}>{item.title}</Option>
                   ))
                 }
               </Select>
             </Item>
-            <InputText 
+            <InputText
               label="Judul Indikator"
               name="judulIndikator"
               onChange={judulIndikatorChange}
@@ -188,7 +187,7 @@ export const SecondStep = ({
                 { required: true, message: 'Judul Indikator tidak boleh kosong!' }
               ]}
             />
-            <InputText 
+            <InputText
               label="Dasar Pemilihan Indikator"
               name="dasarPemilihanIndikator"
               onChange={dasarPemilihanIndikatorChange}
@@ -207,7 +206,7 @@ export const SecondStep = ({
               <Checkbox.Group options={dimensiMutuOptions}></Checkbox.Group>
             </Item>
 
-            <InputText 
+            <InputText
               label="Tujuan"
               name="tujuan"
               onChange={tujuanChange}
@@ -216,7 +215,7 @@ export const SecondStep = ({
               ]}
             />
 
-            <InputText 
+            <InputText
               label="Definisi Operasional"
               name="definisiOperasional"
               onChange={definisiOperasionalChange}
@@ -224,7 +223,7 @@ export const SecondStep = ({
                 { required: true, message: 'Definisi operasional tidak boleh kosong!' }
               ]}
             />
-             <Item
+            <Item
               label="Tipe Indikator"
               name="tipeIndikator"
               rules={[
@@ -234,7 +233,7 @@ export const SecondStep = ({
               <Checkbox.Group options={tipeIndikatorOptions}></Checkbox.Group>
             </Item>
 
-            <InputText 
+            <InputText
               label="Status Pengukuran"
               name="statusPengukuran"
               onChange={statusPengukuranChange}
@@ -243,7 +242,7 @@ export const SecondStep = ({
               ]}
             />
 
-            <InputText 
+            <InputText
               label="Numerator"
               name="numerator"
               onChange={numeratorChange}
@@ -254,7 +253,7 @@ export const SecondStep = ({
 
           </Col>
           <Col md={8} sm={24} xs={24}>
-            <InputText 
+            <InputText
               label="Denominator"
               name="denominator"
               onChange={denominatorChange}
@@ -262,15 +261,15 @@ export const SecondStep = ({
                 { required: true, message: 'Denominator tidak boleh kosong!' }
               ]}
             />
-            <InputText 
+            <InputText
               label="Target Capaian"
               name="targetCapaian"
               onChange={targetCapaianChange}
               rules={[
-                { required: true, message: 'Target capaian tidak boleh kosong!' }
+                { required: true, message: 'Target capaian tidak boleh kosong!', inputNumber: true }
               ]}
             />
-            <InputText 
+            <InputText
               label="Kriteria Inklusi & Ekslusi"
               name="kriteriaInklusiEkslusi"
               onChange={kriteriaInklusiEkslusiChange}
@@ -278,7 +277,7 @@ export const SecondStep = ({
                 { required: true, message: 'Kriteria tidak boleh kosong!' }
               ]}
             />
-            <InputText 
+            <InputText
               label="Formula Pengukuran"
               name="formulaPengukuran"
               onChange={formulaPengukuranChange}
@@ -286,7 +285,7 @@ export const SecondStep = ({
                 { required: true, message: 'Formula pengukuran tidak boleh kosong!' }
               ]}
             />
-            <InputText 
+            <InputText
               label="Pengumpulan Data"
               name="pengumpulanData"
               onChange={pengumpulanDataChange}
@@ -294,7 +293,7 @@ export const SecondStep = ({
                 { required: true, message: 'Pengumpulan data tidak boleh kosong!' }
               ]}
             />
-            <InputText 
+            <InputText
               label="Sumber Data"
               name="sumberData"
               onChange={sumberDataChange}
@@ -303,7 +302,7 @@ export const SecondStep = ({
               ]}
             />
 
-            <InputText 
+            <InputText
               label="Populasi Atau Sampel"
               name="populasiAtauSampel"
               onChange={populasiAtauSampelChange}
@@ -343,7 +342,7 @@ export const SecondStep = ({
             </Item>
           </Col>
           <Col md={8} sm={24} xs={24}>
-            <InputText 
+            <InputText
               label="Penyajian Data"
               name="penyajianData"
               onChange={penyajianDataChange}
@@ -351,7 +350,7 @@ export const SecondStep = ({
                 { required: true, message: 'Penyajian Data tidak boleh kosong!' }
               ]}
             />
-            <InputText 
+            <InputText
               label="Dibuat Oleh"
               name="dibuatOleh"
               disabled
@@ -369,8 +368,8 @@ export const SecondStep = ({
               <Select placeholder="Pilih pembuat dokumen" onChange={pembuatDokumenChange}>
                 {
                   userOptions &&
-                  userOptions.map(( item, index ) => (
-                    <Option value={item.id} key={index}>{ item.name }</Option>
+                  userOptions.map((item, index) => (
+                    <Option value={item.id} key={index}>{item.name}</Option>
                   ))
                 }
               </Select>
@@ -385,8 +384,8 @@ export const SecondStep = ({
               <Select placeholder="Pilih penanggung jawab 1" onChange={penanggungJawab1Change}>
                 {
                   userOptions &&
-                  userOptions.map(( item, index ) => (
-                    <Option value={item.id} key={index}>{ item.name }</Option>
+                  userOptions.map((item, index) => (
+                    <Option value={item.id} key={index}>{item.name}</Option>
                   ))
                 }
               </Select>
@@ -398,8 +397,8 @@ export const SecondStep = ({
               <Select placeholder="Pilih penanggung jawab 2" onChange={penanggungJawab2Change}>
                 {
                   userOptions &&
-                  userOptions.map(( item, index ) => (
-                    <Option value={item.id} key={index}>{ item.name }</Option>
+                  userOptions.map((item, index) => (
+                    <Option value={item.id} key={index}>{item.name}</Option>
                   ))
                 }
               </Select>

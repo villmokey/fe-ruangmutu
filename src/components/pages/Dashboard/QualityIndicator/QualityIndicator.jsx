@@ -1,4 +1,12 @@
-import { Button, Col, Layout, Row, Space, Tag } from "antd";
+import {
+  Button,
+  Col,
+  Layout,
+  Row,
+  Skeleton,
+  Space,
+  Tag,
+} from "antd";
 import { Card } from "../../../atoms/Card/Card";
 import { Title } from "../../../atoms/Title/Title";
 
@@ -9,7 +17,6 @@ import { PlusOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { paths } from "../../../../routing/paths";
-// import { QualityIndicatorCard } from "../../../molecules/QualityIndicatorCard/QualityIndicatorCard";
 import { QualityIndicatorSider } from "../../../organism/Dashboard/Sider/QualityIndicatorSider/QualityIndicatorSider";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,28 +30,58 @@ import {
   monthLowerWithObjID,
   monthAcronymID,
 } from "../../../../globals/monthLabel";
+import { FileTextOutlined, BarChartOutlined } from "@ant-design/icons";
+import { fetchApiGet } from "../../../../globals/fetchApi";
+import QualityIndicatorCardview from "./View/Cardview";
 
 const { Content } = Layout;
 
 export const QualityIndicator = () => {
-  // const [ viewType, setViewType ] = useState(1);
-  // const [ previewVis, setPreviewVis ] = useState(false);
+  const [viewType, setViewType] = useState(1);
   const dispatch = useDispatch();
   const { getAccessToken } = useAuthToken();
   const accessToken = getAccessToken();
-
+  const [programs, setPrograms] = useState([]);
+  const [totalResult, setTotalResult] = useState({
+    all: "",
+    selected: "",
+    unreached: "",
+  });
+  const [filter, setFilter] = useState({
+    year: undefined,
+    program_id: undefined,
+    type: undefined,
+  });
   const {
     data: { list },
+    loading,
   } = useSelector(qualityIndicatorSelector);
 
   const [chartDataSource, setChartDataSource] = useState(null);
 
-  useEffect(() => {
+  const fetchQuality = () => {
     dispatch(
       getAllQualityIndicator({
         accessToken,
+        filter: {
+          year: filter.year !== undefined ? filter.year : "",
+          program_id: filter.program_id !== undefined ? filter.program_id : "",
+        },
       })
     );
+  };
+
+  const fetchPrograms = () => {
+    fetchApiGet("/program", { paginate: false }, accessToken).then((res) => {
+      if (res && res.success) {
+        setPrograms(res.data ?? []);
+      }
+    });
+  };
+
+  useEffect(() => {
+    fetchPrograms();
+    fetchQuality();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -53,21 +90,18 @@ export const QualityIndicator = () => {
     fetchData(list);
   }, [list]);
 
-  // const handleChangeViewType = () => {
-  //   setViewType(viewType === 1 ? 2 : 1);
-  // }
-
-  // const handleOpenPreview = () => {
-  //   setPreviewVis(true);
-  // }
-
-  // const handleClosePreview = () => {
-  //   setPreviewVis(false);
-  // }
+  const handleChangeViewType = () => {
+    setViewType(viewType === 1 ? 2 : 1);
+  };
 
   const fetchData = (data) => {
     let monthList = monthLowerWithObjID;
-    const fetch = data.map((item, index) => {
+    setTotalResult({
+      all: data.total_all,
+      selected: data.total_selected,
+      unreached: data.total_unreached,
+    });
+    const fetch = data.result.map((item, index) => {
       let monthsTarget = [];
       if (item.month.length) {
         monthList.forEach((month, index) => {
@@ -105,6 +139,7 @@ export const QualityIndicator = () => {
         monthlyData: item.month.length ? item.month : null,
         target: item.achievement_target,
         chartData: monthsTarget,
+        created_at: item.created_at,
         status: item.status,
       };
     });
@@ -113,25 +148,32 @@ export const QualityIndicator = () => {
 
   return (
     <Layout>
-      <QualityIndicatorSider />
+      <QualityIndicatorSider
+        qualityYearValue={filter.year}
+        onChangeQualityYear={(v) => setFilter({ ...filter, year: v })}
+        unitServiceValue={filter.program_id}
+        onChangeUnitService={(v) => setFilter({ ...filter, program_id: v })}
+        onChangeDocumentType={(v) => setFilter({ ...filter, type: v })}
+        onFilter={() => fetchQuality()}
+      />
       <Content className="main-content">
         <Row justify="center" align="middle" gutter={[24, 16]}>
           <Col>
             <Card className="total">
               <p className="card-title">TOTAL INDIKATOR MUTU</p>
-              <Title className="card-content">153</Title>
+              <Title className="card-content">{totalResult.all}</Title>
             </Card>
           </Col>
           <Col>
             <Card className="total">
               <p className="card-title">INDIKATOR MUTU TERPILIH</p>
-              <Title className="card-content">5</Title>
+              <Title className="card-content">{totalResult.selected}</Title>
             </Card>
           </Col>
           <Col>
             <Card className="total">
               <p className="card-title">BELUM TERCAPAI</p>
-              <Title className="card-content">3</Title>
+              <Title className="card-content">{totalResult.unreached}</Title>
             </Card>
           </Col>
         </Row>
@@ -153,91 +195,57 @@ export const QualityIndicator = () => {
         <Row style={{ marginTop: 40 }}>
           <Col style={{ marginRight: "auto" }}>
             <Space>
-              <Tag color="#6A9695">#INDIKATOR MUTU</Tag>
-              <Tag color="#6A9695">#KEPEGAWAIAN</Tag>
-              <Tag color="#6A9695">#MUTU</Tag>
+              {filter.program_id ? (
+                programs.map((prog) => (
+                  filter.program_id.some((x) => x === prog.id) && (
+                    <Tag color="#6A9695">
+                      {prog.name}
+                    </Tag>
+                  )
+                ))
+              ) : (
+                <Tag color="#6A9695">SEMUA UNIT</Tag>
+              )}
+
+              {filter.year && <Tag color="#6A9695">{filter.year}</Tag>}
+              {filter.type && <Tag color="#6A9695">{filter.type === 'indicator_profile' ? 'PROFIL INDIKATOR' : filter.type === 'indicator' ? 'INDIKATOR MUTU' : 'SEMUA DOKUMEN'}</Tag>}
             </Space>
           </Col>
           <Col style={{ marginLeft: "auto" }}>
-            {/* <Button 
-              type="primary" 
-              icon={viewType === 1 ? <FileTextOutlined /> : <BarChartOutlined />} 
-              size="large" 
+            <Button
+              type="primary"
+              icon={
+                viewType === 1 ? <FileTextOutlined /> : <BarChartOutlined />
+              }
+              size="large"
               style={{ borderRadius: 8 }}
               onClick={handleChangeViewType}
-            /> */}
+            />
           </Col>
         </Row>
         <div className="indikator-mutu-container">
-          {chartDataSource &&
-            chartDataSource.map((item, index) => (
-              <QualityIndicatorChart
-                key={index}
-                chartData={item.chartData}
-                title={item.title}
-                // average={item.target > 60 ? 40 : item.target}
-                average={item.target}
-                year={item.year}
-                className="indikator-mutu"
-                data={item.monthlyData}
-              />
-            ))}
-          {/* {
-            viewType === 2 ?
-            <Row align="center" gutter={[24,8]}>
-              <Col>
-                <QualityIndicatorCard 
-                  previewVisibility={previewVis}
-                  onClosePreviewVisibility={handleClosePreview}
-                  onOpenPreview={handleOpenPreview}
-                  key={1}
-                />
-              </Col>
-              <Col>
-                <QualityIndicatorCard 
-                  previewVisibility={previewVis}
-                  onClosePreviewVisibility={handleClosePreview}
-                  onOpenPreview={handleOpenPreview}
-                  key={2}
-                />
-              </Col>
-              <Col>
-                <QualityIndicatorCard 
-                  previewVisibility={previewVis}
-                  onClosePreviewVisibility={handleClosePreview}
-                  onOpenPreview={handleOpenPreview}
-                  key={3}
-                />
-              </Col>
-              <Col>
-                <QualityIndicatorCard 
-                  previewVisibility={previewVis}
-                  onClosePreviewVisibility={handleClosePreview}
-                  onOpenPreview={handleOpenPreview}
-                  key={4}
-                />
-              </Col>
-            </Row>
-            :
-            <>
-              {
-                chartDataSource &&
-                chartDataSource.map((item, index) => (
-                  <QualityIndicatorChart
-                    key={index}
-                    chartData={item.chartData}
-                    title={item.title}
-                    year={item.year}
-                    className="indikator-mutu"
-                    data={item.monthlyData}
-                  />
-                ))
-
-              }
-              
-            </>
-          }
-           */}
+          {!loading ? (
+            viewType === 2 ? (
+              <QualityIndicatorCardview filter={filter} />
+            ) : (
+              <>
+                {chartDataSource &&
+                  chartDataSource.map((item, index) => (
+                    <QualityIndicatorChart
+                      key={index}
+                      chartData={item.chartData}
+                      title={item.title}
+                      average={item.target}
+                      year={item.year}
+                      className="indikator-mutu"
+                      data={item.monthlyData}
+                    />
+                  ))}
+              </>
+            )
+          ) : (
+            <Skeleton style={{ textAlign: "center" }}>Loading</Skeleton>
+          )}
         </div>
       </Content>
     </Layout>

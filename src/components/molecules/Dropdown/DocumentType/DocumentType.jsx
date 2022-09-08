@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 
 const { Option } = Select;
 
-export const DocumentType = ({ onChange, value }) => {
+export const DocumentType = ({ onChange, value, customList = [] }) => {
   const [types, setTypes] = useState([]);
   useEffect(() => {
     fetchApiGet("/document-type?paginate=false")
@@ -26,14 +26,22 @@ export const DocumentType = ({ onChange, value }) => {
         allowClear
         style={{ width: 170 }}
       >
-        {types &&
-          types.map((item, index) => {
-            return (
-              <Option value={item.id} key={index}>
-                {item.name}
-              </Option>
-            );
-          })}
+        {customList && customList.length > 0
+          ? customList.map((item, index) => {
+              return (
+                <Option value={item.id} key={index}>
+                  {item.name}
+                </Option>
+              );
+            })
+          : types &&
+            types.map((item, index) => {
+              return (
+                <Option value={item.id} key={index}>
+                  {item.name}
+                </Option>
+              );
+            })}
       </Select>
     </Space>
   );

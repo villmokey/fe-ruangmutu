@@ -1,8 +1,8 @@
-import { CheckOutlined, CloseOutlined } from "@ant-design/icons"
-import { Button, Col, Popconfirm, Row, Space } from "antd"
-import { Card } from "../../atoms/Card/Card"
-import { Text } from "../../atoms/Text/Text"
-import { Title } from "../../atoms/Title/Title"
+import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
+import { Button, Col, Popconfirm, Row, Space } from "antd";
+import { Card } from "../../atoms/Card/Card";
+import { Text } from "../../atoms/Text/Text";
+import { Title } from "../../atoms/Title/Title";
 
 export const DocumentApprovalCard = ({
   documentApprovalTitle,
@@ -11,54 +11,71 @@ export const DocumentApprovalCard = ({
   documentApproval2Date,
   documentApproval3Date,
   indicatorID,
+  type,
+  month,
   // onEdit,
   onSubmit,
+  signature = [],
   createdBy,
   isApproved,
   onApprove,
   onReject,
-  status
+  status,
 }) => {
-
   const renderCardStyle = () => {
-    let style = {}
+    let style = {};
     if (isApproved && status !== -1) {
       style = {
-        color: 'white',
-        backgroundColor: '#6A9695',
-        margin: '10px 0px'
-      }
+        color: "white",
+        backgroundColor: "#6A9695",
+        margin: "10px 0px",
+      };
     } else if (!isApproved && status === -1) {
       style = {
-        color: 'white',
-        backgroundColor: '#ff7875',
-        margin: '10px 0px'
-      }
+        color: "white",
+        backgroundColor: "#ff7875",
+        margin: "10px 0px",
+      };
     } else if (!isApproved) {
       style = {
-        margin: '10px 0px'
-      }
+        margin: "10px 0px",
+      };
     }
 
     return style;
-  }
+  };
 
   const renderFontStyle = () => {
-    let style = {}
+    let style = {};
     if (isApproved && status !== -1) {
       style = {
-        color: 'white'
-      }
+        color: "white",
+      };
     } else if (!isApproved && status === -1) {
       style = {
-        color: 'white'
-      }
+        color: "white",
+      };
     } else if (!isApproved) {
-      style = {}
+      style = {};
     }
 
     return style;
-  }
+  };
+
+  const handleGenerate = (id) => {
+    let anchor = document.createElement("a");
+    anchor.target = "_blank";
+
+    if (type === "indicator") {
+      anchor.href = `${process.env.REACT_APP_API_URL}/indicator/generate/${id}`;
+      anchor.click();
+    } else if (type === "profile") {
+      anchor.href = `${process.env.REACT_APP_API_URL}/indicator-profile/generate/${id}`;
+      anchor.click();
+    } else {
+      alert("Terjadi Kesalahan");
+    }
+  };
 
   const ApprovedButton = () => {
     return (
@@ -71,7 +88,12 @@ export const DocumentApprovalCard = ({
           shape="circle"
           size="large"
         /> */}
-        <Popconfirm title="Anda yakin akan menyetujui pengajuan ini?" okText="Ya" cancelText="Tidak" onConfirm={() => onApprove(indicatorID)}>
+        <Popconfirm
+          title="Anda yakin akan menyetujui pengajuan ini?"
+          okText="Ya"
+          cancelText="Tidak"
+          onConfirm={() => onApprove(indicatorID)}
+        >
           <Button
             type="primary"
             icon={<CheckOutlined />}
@@ -79,7 +101,12 @@ export const DocumentApprovalCard = ({
             size="large"
           />
         </Popconfirm>
-        <Popconfirm title="Anda yakin ingin menolak pengajuan ini?" okText="Ya" cancelText="Tidak" onConfirm={() => onReject(indicatorID)}>
+        <Popconfirm
+          title="Anda yakin ingin menolak pengajuan ini?"
+          okText="Ya"
+          cancelText="Tidak"
+          onConfirm={() => onReject(indicatorID)}
+        >
           <Button
             type="danger"
             icon={<CloseOutlined />}
@@ -88,60 +115,94 @@ export const DocumentApprovalCard = ({
           />
         </Popconfirm>
       </Space>
-    )
-  }
+    );
+  };
 
   return (
-    <Card 
-      style={renderCardStyle()}
-    >
-      <Row style={{ margin: '10px 0px' }} align="middle">
+    <Card style={renderCardStyle()}>
+      <Row style={{ margin: "10px 0px" }} align="middle">
         <Col sm={12} md={6} lg={5}>
           <Space direction="vertical">
             <Text style={renderFontStyle()}>Judul Dokumen Approval </Text>
-            <Title level={4} style={renderFontStyle()}>{ documentApprovalTitle }</Title>
+            <Title level={4} style={renderFontStyle()}>
+              {documentApprovalTitle}{" "}
+              {type === "indicator"
+                ? `(${month ? month.toUpperCase() : ""})`
+                : ""}
+            </Title>
           </Space>
         </Col>
         <Col sm={12} md={12} lg={5}>
           <Space direction="vertical">
-            <Text style={renderFontStyle()}>Tanggal Approval Pembuat Dokumen </Text>
-            <Title level={4} style={renderFontStyle()}>{ documentApproval1Date }</Title>
+            <Text style={renderFontStyle()}>
+              Tanggal Approval Pembuat Dokumen{" "}
+            </Text>
+            <Title level={4} style={renderFontStyle()}>
+              {documentApproval1Date}
+            </Title>
           </Space>
         </Col>
         <Col sm={12} md={6} lg={5}>
           <Space direction="vertical">
-            <Text style={renderFontStyle()}>Tanggal Approval PenanggungJawab 1 </Text>
-            <Title level={4} style={renderFontStyle()}>{ documentApproval2Date }</Title>
+            <Text style={renderFontStyle()}>
+              Tanggal Approval PenanggungJawab 1{" "}
+            </Text>
+            <Title level={4} style={renderFontStyle()}>
+              {documentApproval2Date}
+            </Title>
           </Space>
         </Col>
         <Col sm={12} md={6} lg={5}>
           <Space direction="vertical">
-            <Text style={renderFontStyle()}>Tanggal Approval PenanggungJawab 2 </Text>
-            <Title level={4} style={renderFontStyle()}>{ documentApproval3Date }</Title>
+            <Text style={renderFontStyle()}>
+              Tanggal Approval PenanggungJawab 2{" "}
+            </Text>
+            <Title level={4} style={renderFontStyle()}>
+              {documentApproval3Date}
+            </Title>
           </Space>
         </Col>
         <Col sm={12} md={6} lg={4}>
-          {
-            isApproved ?
-            <Title level={3} style={{ color: 'white' }}>Telah Disetujui oleh Anda</Title>
-            : 
-            (!isApproved && status === -1) ?
-            <Title level={3} style={{ color: 'white' }}>Ditolak</Title>
-            :
+          {isApproved ? (
+            <Title level={3} style={{ color: "white" }}>
+              Telah Disetujui oleh Anda
+            </Title>
+          ) : !isApproved && status === -1 ? (
+            <Title level={3} style={{ color: "white" }}>
+              Ditolak
+            </Title>
+          ) : (
             <ApprovedButton />
-          }
+          )}
         </Col>
       </Row>
-      <Row style={{ margin: '10px 0px' }}>
-        <Col> 
-          <Text style={renderFontStyle()}>Dibuat Oleh : { createdBy }</Text>
+      <Row style={{ margin: "10px 0px" }}>
+        <Col>
+          <Text style={renderFontStyle()}>Dibuat Oleh : {createdBy}</Text>
         </Col>
       </Row>
       <Row>
-        <Col> 
-          <Text style={renderFontStyle()}>Tanggal dokumen dibuat : { documentApprovalCreatedAt }</Text>
+        <Col>
+          <Text style={renderFontStyle()}>
+            Tanggal dokumen dibuat : {documentApprovalCreatedAt}
+          </Text>
         </Col>
       </Row>
+      {type === "profile" &&
+        signature &&
+        !signature.some((sign) => sign.signed === 0) && (
+          <Row style={{ margin: "10px 0px" }}>
+            <Col>
+              <Button
+                onClick={() => handleGenerate(indicatorID)}
+                size="small"
+                type="dashed"
+              >
+                Generate
+              </Button>
+            </Col>
+          </Row>
+        )}
     </Card>
-  )
-}
+  );
+};

@@ -22,6 +22,7 @@ export const UnitService = ({ onChange, value, multiple = false }) => {
       <Select
         placeholder="Pilih program/unit"
         onChange={onChange}
+        allowClear
         value={value}
         mode={multiple ? "multiple" : ""}
         style={{ width: 170 }}

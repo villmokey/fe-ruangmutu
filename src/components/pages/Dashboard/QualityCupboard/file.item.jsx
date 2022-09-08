@@ -169,9 +169,8 @@ const DetailContainer = styled.div`
 `;
 
 const ExtensionLogo = styled.img`
-  width: 60%;
-  margin: 30px 0;
-  background: #1f1f1f;
+  width: 150px;
+  margin: 10px 0;
   border-radius: 10px;
   padding: 15px;
   user-select: none;

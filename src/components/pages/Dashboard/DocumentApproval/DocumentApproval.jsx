@@ -1,6 +1,8 @@
+import React from "react";
 import { PlusOutlined } from "@ant-design/icons";
-import { Button, Col, Layout, Row, Space, Tabs, Tag } from "antd"
+import { Button, Col, Layout, Row, Space, Tabs, Tag } from "antd";
 import { Link } from "react-router-dom";
+import { fetchApiGet } from "../../../../globals/fetchApi";
 import { paths } from "../../../../routing/paths";
 import { Card } from "../../../atoms/Card/Card";
 import { InputSearch } from "../../../atoms/InputSearch/InputSearch";
@@ -8,33 +10,69 @@ import { Title } from "../../../atoms/Title/Title";
 import { DocumentApprovalSider } from "../../../organism/Dashboard/Sider/DocumentApprovalSider/DocumentApprovalSider";
 import { QualityIndicatorApproval } from "./QualityIndicatorApproval/QualityIndicatorApproval";
 import { QualityIndicatorProfileApproval } from "./QualityIndicatorProfileApproval/QualityIndicatorProfileApproval";
+import { useAuthToken } from "../../../../globals/useAuthToken";
 
 const { Content } = Layout;
 
 const { TabPane } = Tabs;
 
 export const DocumentApproval = () => {
+  const { getAccessToken } = useAuthToken();
+  const accessToken = getAccessToken();
+  const [programs, setPrograms] = React.useState([])
+  const [information, setInformation] = React.useState({
+    approval: 0,
+    approved: 0,
+    new_approval: 0,
+  });
+
+  const [filter, setFilter] = React.useState({
+    year: undefined,
+    program_id: undefined,
+    status: undefined,
+  });
+
+  const fetchPrograms = () => {
+    fetchApiGet("/program", { paginate: false }, accessToken).then((res) => {
+      if (res && res.success) {
+        setPrograms(res.data ?? []);
+      }
+    });
+  };
+
+  React.useEffect(() => {
+    fetchApiGet("/indicator-aprroval/info", {}, accessToken).then((res) => {
+      if (res)
+        setInformation({
+          approval: res.data.approval,
+          approved: res.data.approved,
+          new_approval: res.data.new_approval,
+        });
+    });
+    fetchPrograms()
+  }, []);
+
   return (
     <Layout>
-      <DocumentApprovalSider />
+      <DocumentApprovalSider onFilter={(f) => setFilter(f)} />
       <Content className="main-content">
-        <Row justify="center" align="middle" gutter={[ 24,16 ]}>
+        <Row justify="center" align="middle" gutter={[24, 16]}>
           <Col>
             <Card className="total">
               <p className="card-title">TOTAL APPROVAL</p>
-              <Title className="card-content">2048</Title>
+              <Title className="card-content">{information.approval}</Title>
             </Card>
           </Col>
           <Col>
             <Card className="total">
               <p className="card-title">DOKUMEN DIAPPROVE</p>
-              <Title className="card-content">1024</Title>
+              <Title className="card-content">{information.approved}</Title>
             </Card>
           </Col>
           <Col>
             <Card className="total">
               <p className="card-title">APPROVAL BARU</p>
-            <Title className="card-content">512</Title>
+              <Title className="card-content">{information.new_approval}</Title>
             </Card>
           </Col>
         </Row>
@@ -42,37 +80,37 @@ export const DocumentApproval = () => {
           <Col>
             <InputSearch size="large" />
           </Col>
-          <Col>
-            <Link to={`${paths.ADD}`}>
-              <Button 
-                type="primary" 
-                icon={<PlusOutlined />} 
-                size="large" 
-                style={{ borderRadius: 8 }}
-              />
-            </Link>
-          </Col>
         </Row>
         <Row style={{ marginTop: 40 }}>
-          <Col style={{ marginRight: 'auto' }}>
+          <Col style={{ marginRight: "auto" }}>
             <Space>
-              <Tag color="#6A9695">#INDIKATOR MUTU</Tag>
-              <Tag color="#6A9695">#KEPEGAWAIAN</Tag>
-              <Tag color="#6A9695">#MUTU</Tag>
+              {filter.year &&
+                <Tag color="#6A9695">{filter.year}</Tag>
+              }
+              {filter.status && filter.status !== 0 &&
+                <Tag color="#6A9695">{filter.status === 'unsigned' ? 'BELUM DITANDATANG' : filter.status === 'signed' ? 'SUDAH DITANDATANGAN' : 'SUDAH & BELUM DITANDATANGAN'}</Tag>
+              }
+              {filter.program_id && (
+                programs.map((prog) => (
+                  filter.program_id.some((x) => x === prog.id) && (
+                    <Tag color="#6A9695">{prog.name}</Tag>
+                  )
+                ))
+              )}
             </Space>
           </Col>
         </Row>
         {/* <div className="document-approval-container"> */}
         <Tabs defaultActiveKey="1">
           <TabPane tab="Indikator Mutu" key="1">
-            <QualityIndicatorApproval />
+            <QualityIndicatorApproval filter={filter} />
           </TabPane>
           <TabPane tab="Profil Indikator Mutu" key="2">
-            <QualityIndicatorProfileApproval />
+            <QualityIndicatorProfileApproval filter={filter} />
           </TabPane>
         </Tabs>
         {/* </div> */}
       </Content>
     </Layout>
-  )
-}
+  );
+};

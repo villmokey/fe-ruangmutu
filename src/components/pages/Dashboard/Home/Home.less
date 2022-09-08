@@ -1,3 +1,17 @@
+*::-webkit-scrollbar-track {
+  // -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  background-color: #F5F5F5;
+}
+
+*::-webkit-scrollbar {
+  width: 5px;
+  background-color: #F5F5F5;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #6A9695;
+}
+
 section.ant-layout {
   background: transparent !important;
 }
@@ -9,8 +23,11 @@ section.ant-layout {
     background: transparent !important;
     padding: 20px 40px;
     margin: 20px 40px;
+    min-height: 100vh;
     background-color: transparent !important;
   }
+
+
 
   .ant-breadcrumb {
     margin-bottom: 50px;
@@ -35,5 +52,51 @@ section.ant-layout {
     letter-spacing: -0.01em;
     color: #5DC8BD;
   }
+
+}
+
+.footer {
+  padding: 20px 150px 20px 150px;
+  color: white !important;
+
+  .logo-text {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 48px;
+    line-height: 59px;
+    color: white;
+  }
+
+  .description-text {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 23px;
+    /* or 142% */
+    letter-spacing: 1px;
+    color: #FFFFFF;
+  }
+
+  .ft-white {
+    color: #FFFFFF;
+  }
+
+  .ft-bold {
+    font-weight: bold;
+  }
+
+  .ft-15 {
+    font-size: 16px;
+  }
+
   
+}
+
+@media only screen and (max-width: 720px) {
+  .dashboard-layout .dashboard-content {
+    padding: unset;
+    margin: 10px;
+  }
 }

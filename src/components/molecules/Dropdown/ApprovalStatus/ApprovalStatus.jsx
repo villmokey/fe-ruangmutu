@@ -4,7 +4,6 @@ import { Text } from "../../../atoms/Text/Text";
 const { Option } = Select;
 
 const documentType = [
-  { title: 'SEMUA', value: 'all' },
   { title: 'SUDAH DITANDATANGANI', value: 'signed' },
   { title: 'BELUM DITANDATANGANI', value: 'unsigned' }
 ];
@@ -19,6 +18,7 @@ export const ApprovalStatus = ({
       <Select 
         placeholder="Pilih status approval" 
         onChange={onChange} 
+        allowClear
         value={value}
         style={{ width: 170 }}
       >

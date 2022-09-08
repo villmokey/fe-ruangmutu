@@ -1,4 +1,4 @@
-import { Layout } from "antd";
+import { Layout, Row, Col, Typography, Space } from "antd";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Route, Routes, useNavigate } from "react-router-dom";
@@ -8,15 +8,17 @@ import { paths } from "../../../../routing/paths";
 import { Navbar } from "../../../organism/Dashboard/Navbar/Navbar";
 import { Calender } from "../Calender/Calender";
 import { QualityIndicator } from "../QualityIndicator/QualityIndicator";
-
 import { Add as AddQualityIndicator } from "../QualityIndicator/Add/Add";
 import { DocumentApproval } from "../DocumentApproval/DocumentApproval";
 import { OperationalStandard } from "../OperationalStandard/OperationalStandard";
 import { QualityCupboard } from "../QualityCupboard/QualityCupboard";
-
 import "./Home.less";
 import DetailCupboardPage from "../QualityCupboard/Detail/detail.page";
+
+import styled from 'styled-components'
+
 const { Content } = Layout;
+const { Text } = Typography;
 
 export const Home = () => {
   const navigate = useNavigate();
@@ -40,6 +42,11 @@ export const Home = () => {
 
   return (
     <Layout>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
+      </head>
       <Navbar onLogout={handleLogout} />
       <Layout className="dashboard-layout">
         <Content className="dashboard-content">
@@ -80,6 +87,79 @@ export const Home = () => {
           </Routes>
         </Content>
       </Layout>
+      <Footer className="footer">
+        <Row gutter={[8, 16]}>
+          <Col span={24} style={{ margin: '20px 0 10px 0' }}>
+            <hr />
+          </Col>
+          <Col xs={24} sm={24} md={12} xl={12}>
+            <Text className="logo-text">RUANG <strong>MUTU</strong></Text><br />
+            <Text className="description-text">Aplikasi Dokumentasi serta Pemantauan Kegiatan Mutu</Text><br />
+            <Text className="description-text">Puskesmas Kecamatan Gambir</Text>
+          </Col>
+          <Col xs={24} sm={24} md={12} xl={12}>
+            <Typography.Paragraph className="ft-white ft-bold ft-15">Hubungi Kami</Typography.Paragraph>
+            <Row>
+              <Col span={12}>
+                <Space direction="vertical">
+                  <Space direction="vertical">
+                    <Text className="ft-white ft-bold">Website</Text>
+                    <Text className="ft-white">www.pkcgambir.co.id</Text>
+                  </Space>
+                  <Space direction="vertical">
+                    <Text className="ft-white ft-bold">Hotline</Text>
+                    <Text className="ft-white">www.pkcgambir.co.id</Text>
+                  </Space>
+                  <Space direction="vertical">
+                    <Text className="ft-white ft-bold">WhatsApp</Text>
+                    <Text className="ft-white">www.pkcgambir.co.id</Text>
+                  </Space>
+                </Space>
+              </Col>
+              <Col span={12}>
+                <Space direction="vertical">
+                  <Space direction="vertical">
+                    <Text className="ft-white ft-bold">Instagram</Text>
+                    <Text className="ft-white">@PKCGambir</Text>
+                  </Space>
+                  <Space direction="vertical">
+                    <Text className="ft-white ft-bold">Youtube</Text>
+                    <Text className="ft-white">PKMGambir</Text>
+                  </Space>
+                  <Space direction="vertical">
+                    <Text className="ft-white ft-bold">Twitter</Text>
+                    <Text className="ft-white">pkcgambir</Text>
+                  </Space>
+                </Space>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </Footer>
+      <Copyright>
+        PKC Gambir All Rights Reserved.
+      </Copyright>
     </Layout>
   );
 };
+
+const Copyright = styled.div`
+    background: #E5E5E5;
+    color: #5E6E89;
+    height: 76px;
+    padding: 25px 150px;
+
+    @media only screen and (max-width: 720px) {
+      padding: 25px 10px;
+    }
+`
+
+const Footer = styled.footer`
+    min-height: 300px;
+    background-color: #6A9695;
+    color: white;
+
+    @media only screen and (max-width: 720px) {
+      padding: 10px;
+    }
+`;

@@ -89,10 +89,10 @@ export async function fetchApiDelete(url, token) {
   }
 }
 
-const convertToParams = (params) => {
+export const convertToParams = (params) => {
   const searchParams = new URLSearchParams();
   Object.keys(params).forEach((key) => {
-    if (params[key] !== "") searchParams.append(key, params[key]);
+    if (params[key] !== "" && params[key] !== undefined  && params[key] !== 0) searchParams.append(key, params[key]);
   });
 
   return searchParams;
