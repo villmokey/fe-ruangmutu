@@ -1,17 +1,23 @@
-import { 
+import {
   Col,
   Form as AntdForm,
   Row,
   DatePicker,
+  Button,
+  Typography
 } from 'antd';
 
 import { Title } from '../../../atoms/Title/Title';
 import { InputText } from '../../../atoms/InputText/InputText';
 import { Form } from '../../../molecules/Form/Form';
- 
-const { Item } = AntdForm;
+import Textfield from '../../../molecules/Form/Textfield';
+import TextEditor from '../../../molecules/Form/TextEditor';
+import Dragger from 'antd/lib/upload/Dragger';
 
-export const ThirdStep = () => {
+const { Item } = AntdForm;
+const { Text } = Typography
+
+export const ThirdStep = ({ form, setter, histories, historySetter }) => {
   return (
     <>
       <Title level={4} style={{ marginBottom: '1.5rem' }}>
@@ -20,154 +26,87 @@ export const ThirdStep = () => {
 
       <Form layout="vertical">
         <Row gutter={[24]}>
-          <Col md={8} sm={24} xs={24}>
-            <InputText 
+          <Col md={24} sm={24} xs={24}>
+            <Textfield
               label="Nama SOP"
-              name="sopName"
+              name="name"
+              required
+              value={form.name}
               disabled
-              rules={[
-                { required: true, message: 'Nama SOP tidak boleh kosong!' }
-              ]}
             />
 
-            <InputText 
+            <Textfield
+              disabled
               label="No Dokumen"
-              name="docNumber"
-              disabled
-              rules={[
-                { required: true, message: 'Nomor dokumen tidak boleh kosong!' }
-              ]}
+              name="document_number"
+              required
+              value={form.document_number}
             />
 
-            <InputText 
-              label="No Revisi"
-              name="revisionNumber"
+            <Textfield
               disabled
-              rules={[
-                { required: true, message: 'No revisi tidak boleh kosong!' }
-              ]}
+              label="No Revisi"
+              name="revision_number"
+              required
+              value={form.revision_number}
             />
 
             <Item
               label="Tanggal Terbit"
-              name="publishedDate"
-              rules={[
-                { required: true, message: 'Tanggal terbit tidak boleh kosong!' }
-              ]}
+              name="released_date"
+              initialValue={form.released_date}
             >
-              <DatePicker disabled onChange={() => {}} style={{ width: '100%' }} />
+              <DatePicker
+                disabled
+                onChange={(e) => {
+                  setter({ ...form, released_date: e })
+                }}
+                style={{ width: '100%' }} />
             </Item>
-
-            <Row gutter={16}>
-              <Col span={12}>
-                <InputText 
-                  label="Halaman"
-                  name="page"
-                  disabled
-                  rules={[
-                    { required: true, message: 'Halaman tidak boleh kosong!' }
-                  ]}
-                />
-              </Col>
-
-              <Col span={12}>
-                <InputText 
-                  label="Jumlah Halaman"
-                  name="totalPage"
-                  disabled
-                  rules={[
-                    { required: true, message: 'Jumlah halaman tidak boleh kosong!' }
-                  ]}
-                />
-              </Col>
-            </Row>
-          </Col>
-          
-          <Col md={8} sm={24} xs={24}>
-            <InputText 
-              label="Pengertian"
-              name="definition"
-              disabled
-              rules={[
-                { required: true, message: 'Pengertian tidak boleh kosong!' }
-              ]}
-            />
-
-            <InputText 
-              label="Tujuan"
-              name="objective"
-              disabled
-              rules={[
-                { required: true, message: 'Tujuan tidak boleh kosong!' }
-              ]}
-            />
-
-            <InputText 
-              label="Kebijakan"
-              name="policy"
-              disabled
-              rules={[
-                { required: true, message: 'Kebijakan tidak boleh kosong!' }
-              ]}
-            />
-
-            <InputText 
-              label="Referensi"
-              name="reference"
-              disabled
-              rules={[
-                { required: true, message: 'Referensi tidak boleh kosong' }
-              ]}
-            />
-
-            <InputText 
-              label="Alat dan Bahan"
-              name="tools"
-              disabled
-              rules={[
-                { required: true, message: 'Alat dan bahan tidak boleh kosong!' }
-              ]}
-            />
-          </Col>
-
-          <Col md={8} sm={24} xs={24}>
-            <InputText 
-              label="Prosedur/Langkah"
-              name="steps"
-              disabled
-              rules={[
-                { required: true, message: 'Prosedur/langkah tidak boleh kosong!' }
-              ]}
-            />
-            
-            <InputText 
-              label="Diagram Alir"
-              name="flowChart"
-              disabled
-              rules={[
-                { required: true, message: 'Diagram alir tidak boleh kosong!' }
-              ]}
-            />
-
-            <InputText
-              label="Unit Terkait"
-              name="unit"
-              disabled
-              rules={[
-                { required: true, message: 'Unit terkait tidak boleh kosong!' }
-              ]}
-            />
-
-            <InputText
-              label="Catatan Mutu"
-              name="notes"
-              disabled
-              rules={[
-                { required: true, message: 'Catatan mutu tidak boleh kosong!' }
-              ]}
-            />
           </Col>
         </Row>
+        <TextEditor disabled label={'Pengertian'} required value={form.meaning} />
+        <TextEditor disabled label={'Tujuan'} required value={form.goal} />
+        <TextEditor disabled label={'Kebijakan'} required value={form.policy} />
+        <TextEditor disabled label={'Referensi'} required value={form.reference} />
+        <TextEditor disabled label={'Alat & Bahan'} required value={form.tools} />
+        <TextEditor disabled label={'Prosedur/langkah'} required value={form.procedures} />
+        <TextEditor disabled label={'Catatan Mutu'} required value={form.notes} />
+
+        <Title level={5} style={{ fontWeight: 'bold' }}><span style={{ color: 'red' }}>*</span> Flow Diagram</Title>
+        <Dragger
+          maxCount={1}
+          previewFile={false}
+          multiple={false}
+          accept='image/*'
+          disabled
+          fileList={form && form.flow_diagram && form.flow_diagram.fileList ? form.flow_diagram.fileList : undefined}
+          beforeUpload={(e) => false}>
+          <p>Upload Diagram Alir dengan format png/jpeg</p>
+        </Dragger>
+
+        <Title level={5} style={{ fontWeight: 'bold', marginTop: '20px' }}>History Perubahan</Title>
+        {histories && histories.map((history, index) => (
+          <Row gutter={[8, 8]} key={'row-' + index} style={{ marginBottom: '1px solid #757474', marginBottom: '10px' }}>
+            <Col span={8}>
+              <Textfield label={'Yang Dirubah'} value={history.name} disabled></Textfield>
+            </Col>
+            <Col span={8}>
+              <Textfield label={'Isi Perubahan'} value={history.value} disabled></Textfield>
+            </Col>
+            <Col span={8}>
+              <Item
+                label="Tanggal Ditetapkan"
+                name={'publish-' + index + 1}
+                initialValue={history.publish}
+              >
+                <DatePicker
+                  disabled
+                  style={{ width: '100%' }} />
+              </Item>
+            </Col>
+          </Row>
+        ))}
       </Form>
     </>
   )

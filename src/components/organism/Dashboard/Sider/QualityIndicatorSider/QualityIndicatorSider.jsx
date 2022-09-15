@@ -6,6 +6,7 @@ import { QualityYear } from "../../../../molecules/Dropdown/QualityYear/QualityY
 import { UnitService } from "../../../../molecules/Dropdown/UnitService/UnitService";
 import moment from "moment";
 import "moment/locale/id";
+import { useState } from "react";
 const { Sider: AntdSider } = Layout;
 
 export const QualityIndicatorSider = ({
@@ -17,6 +18,13 @@ export const QualityIndicatorSider = ({
   documentTypeValue,
   unitServiceValue,
 }) => {
+
+  const [filter, setFilter] = useState({
+    year: undefined,
+    program_id: undefined,
+    type: undefined,
+  });
+
   return (
     <AntdSider className="sider">
       <div className="sider-content">
@@ -28,8 +36,8 @@ export const QualityIndicatorSider = ({
         <Row style={{ margin: "20px 0px" }}>
           <Col>
             <QualityYear
-              onChange={onChangeQualityYear}
-              value={qualityYearValue}
+              onChange={(v) => setFilter({ ...filter, year: v })}
+              value={filter.year}
             />
           </Col>
         </Row>
@@ -40,8 +48,8 @@ export const QualityIndicatorSider = ({
                 { id: "indicator_profile", name: "Profile Indikator" },
                 { id: "indicator", name: "Indikator Mutu" },
               ]}
-              onChange={onChangeDocumentType}
-              value={documentTypeValue}
+              onChange={(v) => setFilter({ ...filter, type: v })}
+              value={filter.type}
             />
           </Col>
         </Row>
@@ -49,8 +57,8 @@ export const QualityIndicatorSider = ({
           <Col>
             <UnitService
               multiple
-              onChange={onChangeUnitService}
-              value={unitServiceValue}
+              onChange={(v) => setFilter({ ...filter, program_id: v })}
+              value={filter.program_id}
             />
           </Col>
         </Row>
@@ -60,7 +68,9 @@ export const QualityIndicatorSider = ({
         type="primary"
         className="filter-button"
         style={{ width: 170 }}
-        onClick={onFilter}
+        onClick={() => {
+          return onFilter(filter)
+        }}
       >
         Cari Dokumen
       </Button>

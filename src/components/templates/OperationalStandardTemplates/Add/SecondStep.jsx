@@ -1,17 +1,32 @@
-import { 
+import React from 'react'
+import {
   Col,
   Form as AntdForm,
   Row,
   DatePicker,
+  Collapse,
+  Button,
+  Select,
+  Space
 } from 'antd';
 
 import { Title } from '../../../atoms/Title/Title';
 import { InputText } from '../../../atoms/InputText/InputText';
 import { Form } from '../../../molecules/Form/Form';
- 
-const { Item } = AntdForm;
+import { useState, useEffect } from 'react';
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { Text } from '../../../atoms/Text/Text';
+import TextEditor from '../../../molecules/Form/TextEditor';
+import Dragger from 'antd/lib/upload/Dragger';
+import Textfield from '../../../molecules/Form/Textfield';
+import moment from 'moment'
 
-export const SecondStep = () => {
+const { Item } = AntdForm;
+const { Panel } = Collapse;
+const fields = ['Nomor Dokumen', 'Nomor Revisi', 'Pengertian', 'Tujuan', 'Kebijakan', 'Referensi', 'Alat & Bahan', 'Prosedur/Langkah']
+
+export const SecondStep = ({ onFinish, form, setter, histories, historySetter }) => {
   return (
     <>
       <Title level={4} style={{ marginBottom: '1.5rem' }}>
@@ -20,140 +35,119 @@ export const SecondStep = () => {
 
       <Form layout="vertical">
         <Row gutter={[24]}>
-          <Col md={8} sm={24} xs={24}>
-            <InputText 
+          <Col md={24} sm={24} xs={24}>
+            <Textfield
               label="Nama SOP"
-              name="sopName"
-              rules={[
-                { required: true, message: 'Nama SOP tidak boleh kosong!' }
-              ]}
+              name="name"
+              required
+              value={form.name}
+              onChange={(e) => setter({ ...form, name: e.target.value })}
             />
 
-            <InputText 
+            <Textfield
               label="No Dokumen"
-              name="docNumber"
-              rules={[
-                { required: true, message: 'Nomor dokumen tidak boleh kosong!' }
-              ]}
+              name="document_number"
+              required
+              value={form.document_number}
+              onChange={(e) => setter({ ...form, document_number: e.target.value })}
             />
 
-            <InputText 
+            <Textfield
               label="No Revisi"
-              name="revisionNumber"
-              rules={[
-                { required: true, message: 'No revisi tidak boleh kosong!' }
-              ]}
+              name="revision_number"
+              required
+              value={form.revision_number}
+              onChange={(e) => setter({ ...form, revision_number: e.target.value })}
             />
 
             <Item
               label="Tanggal Terbit"
-              name="publishedDate"
+              name="released_date"
+              initialValue={form.released_date}
               rules={[
                 { required: true, message: 'Tanggal terbit tidak boleh kosong!' }
               ]}
             >
-              <DatePicker onChange={() => {}} style={{ width: '100%' }} />
+              <DatePicker
+                value={form.released_date}
+                onChange={(e) => {
+                  setter({ ...form, released_date: e })
+                }}
+                style={{ width: '100%' }} />
             </Item>
-
-            <Row gutter={16}>
-              <Col span={12}>
-                <InputText 
-                  label="Halaman"
-                  name="page"
-                  rules={[
-                    { required: true, message: 'Halaman tidak boleh kosong!' }
-                  ]}
-                />
-              </Col>
-
-              <Col span={12}>
-                <InputText 
-                  label="Jumlah Halaman"
-                  name="totalPage"
-                  rules={[
-                    { required: true, message: 'Jumlah halaman tidak boleh kosong!' }
-                  ]}
-                />
-              </Col>
-            </Row>
-          </Col>
-          
-          <Col md={8} sm={24} xs={24}>
-            <InputText 
-              label="Pengertian"
-              name="definition"
-              rules={[
-                { required: true, message: 'Pengertian tidak boleh kosong!' }
-              ]}
-            />
-
-            <InputText 
-              label="Tujuan"
-              name="objective"
-              rules={[
-                { required: true, message: 'Tujuan tidak boleh kosong!' }
-              ]}
-            />
-
-            <InputText 
-              label="Kebijakan"
-              name="policy"
-              rules={[
-                { required: true, message: 'Kebijakan tidak boleh kosong!' }
-              ]}
-            />
-
-            <InputText 
-              label="Referensi"
-              name="reference"
-              rules={[
-                { required: true, message: 'Referensi tidak boleh kosong' }
-              ]}
-            />
-
-            <InputText 
-              label="Alat dan Bahan"
-              name="tools"
-              rules={[
-                { required: true, message: 'Alat dan bahan tidak boleh kosong!' }
-              ]}
-            />
-          </Col>
-
-          <Col md={8} sm={24} xs={24}>
-            <InputText 
-              label="Prosedur/Langkah"
-              name="steps"
-              rules={[
-                { required: true, message: 'Prosedur/langkah tidak boleh kosong!' }
-              ]}
-            />
-            
-            <InputText 
-              label="Diagram Alir"
-              name="flowChart"
-              rules={[
-                { required: true, message: 'Diagram alir tidak boleh kosong!' }
-              ]}
-            />
-
-            <InputText
-              label="Unit Terkait"
-              name="unit"
-              rules={[
-                { required: true, message: 'Unit terkait tidak boleh kosong!' }
-              ]}
-            />
-
-            <InputText
-              label="Catatan Mutu"
-              name="notes"
-              rules={[
-                { required: true, message: 'Catatan mutu tidak boleh kosong!' }
-              ]}
-            />
           </Col>
         </Row>
+        <TextEditor label={'Pengertian'} required value={form.meaning} onChange={(value) => setter({ ...form, meaning: value })} />
+        <TextEditor label={'Tujuan'} required value={form.goal} onChange={(value) => setter({ ...form, goal: value })} />
+        <TextEditor label={'Kebijakan'} required value={form.policy} onChange={(value) => setter({ ...form, policy: value })} />
+        <TextEditor label={'Referensi'} required value={form.reference} onChange={(value) => setter({ ...form, reference: value })} />
+        <TextEditor label={'Alat & Bahan'} required value={form.tools} onChange={(value) => setter({ ...form, tools: value })} />
+        <TextEditor label={'Prosedur/langkah'} required value={form.procedures} onChange={(value) => setter({ ...form, procedures: value })} />
+        <TextEditor label={'Catatan Mutu'} required value={form.notes} onChange={(value) => setter({ ...form, notes: value })} />
+        <Title level={5} style={{ fontWeight: 'bold' }}>Flow Diagram</Title>
+        <Dragger
+          maxCount={1}
+          previewFile={false}
+          multiple={false}
+          accept='image/*'
+          fileList={form && form.flow_diagram && form.flow_diagram.fileList ? form.flow_diagram.fileList : undefined}
+          beforeUpload={(e) => false}
+          onChange={(e) => setter({ ...form, flow_diagram: e })}>
+          <p>Upload Diagram Alir dengan format png/jpeg</p>
+        </Dragger>
+
+        <div style={{ marginTop: '20px' }}>
+          <Collapse defaultActiveKey={['1']}>
+            <Panel header="Tambah History Perubahan" key="1">
+              {histories && histories.map((history, index) => (
+                <Row gutter={[8, 8]} key={'row-' + index}>
+                  <Col span={6}>
+                    <Text className={'ant-form-item-label'}>Yang Dirubah</Text>
+                    <Select style={{ width: "100%" }} value={history.name} onChange={(value) => {
+                      let temp = [...histories];
+                      temp[index].name = value
+                      historySetter(temp)
+                    }}>
+                      {fields && fields.map((field, itemIndex) => (
+                        <Select.Option value={field} key={'feat-' + itemIndex}>{field}</Select.Option>
+                      ))}
+                    </Select>
+                  </Col>
+                  <Col span={8}>
+                    <Textfield label={'Isi Perubahan'} value={history.value} onChange={(e) => {
+                      let temp = [...histories];
+                      temp[index].value = e.target.value
+                      historySetter(temp)
+                    }}></Textfield>
+                  </Col>
+                  <Col span={4}>
+                    <Text className={'ant-form-item-label'}>Tanggal Diterapkan</Text>
+                    <DatePicker value={history.publish} onChange={(value) => {
+                      let temp = [...histories];
+                      temp[index].publish = value
+                      historySetter(temp)
+                    }}></DatePicker>
+                  </Col>
+                  <Col span={6}>
+                    <div style={{ marginTop: '30px' }}>
+                      <Button type={'primary'} onClick={() => {
+                        historySetter([...histories, { name: '', value: '', publish: '' }])
+                      }}>+</Button>
+                      <Button type={'primary'} style={{ background: '#435454', marginLeft: '10px' }} onClick={() => {
+                        if (histories.length > 1) {
+                          let temp = [...histories];
+                          console.log(index)
+                          temp.splice(index, 1);
+                          historySetter(temp)
+                        }
+                      }}>-</Button>
+                    </div>
+                  </Col>
+                </Row>
+              ))}
+            </Panel>
+          </Collapse>
+        </div>
       </Form>
     </>
   )

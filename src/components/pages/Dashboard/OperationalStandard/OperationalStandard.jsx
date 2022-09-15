@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { Breadcrumb, Layout, Steps, Row, Col, Button } from "antd";
+import { Breadcrumb, Layout, Steps, Row, Col, Button, Form, message } from "antd";
 import { HomeFilled } from '@ant-design/icons';
-
 import { Card } from '../../../atoms/Card/Card';
 import { Text } from "../../../atoms/Text/Text";
 import { Title } from "../../../atoms/Title/Title";
@@ -10,28 +9,98 @@ import { FirstStep as OperationalStandardFirstStep } from "../../../templates/Op
 import { SecondStep as OperationalStandardSecondStep } from "../../../templates/OperationalStandardTemplates/Add/SecondStep";
 import { ThirdStep as OperationalStandardThirdStep } from "../../../templates/OperationalStandardTemplates/Add/ThirdStep";
 
+import { useNavigate } from "react-router-dom";
 import { paths } from "../../../../routing/paths";
-
+import { fetchApiPost } from "../../../../globals/fetchApi";
+import { useAuthToken } from "../../../../globals/useAuthToken";
 import './OperationalStandard.less';
+import moment from 'moment'
+import 'moment/locale/id'
 
 const { Content, Sider: AntdSider } = Layout;
 const { Step } = Steps;
 
 export const OperationalStandard = () => {
+  const navigate = useNavigate()
   const [current, setCurrent] = useState(0);
+  const { getAccessToken } = useAuthToken();
+  const accessToken = getAccessToken();
+  const [relatedPrograms, setRelatedPrograms] = useState([]);
+  const [secondStepOperationalStandardForm] = Form.useForm();
+  const [thirdStepOperationalStandardForm] = Form.useForm();
+
+  const [payload, setPayload] = useState({
+    name: '',
+    document_number: '',
+    revision_number: '',
+    released_date: '',
+    page: '',
+    total_page: '',
+    meaning: '',
+    goal: '',
+    policy: '',
+    reference: '',
+    tools: '',
+    procedures: '',
+    flow_diagram: '',
+    notes: '',
+  })
+
+  const [histories, setHistories] = useState([{ name: 'Tujuan', value: '', publish: '' }])
+
+  const handleSubmit = () => {
+    if (payload.flow_diagram && payload.flow_diagram.file) {
+      let bags = new FormData;
+      bags.append("group_name", "sop_diagram");
+      bags.append("file", payload.flow_diagram.file);
+
+      fetchApiPost("/upload/file", accessToken, bags).then((file) => {
+
+        if (file && file.success) {
+          let history_list = []
+          if (histories.length > 0) {
+            history_list = histories.map((history) => {
+              return {
+                name: history.name,
+                value: history.value,
+                publish: moment(history.publish).format('YYYY-MM-DD')
+              }
+            })
+          }
+
+          fetchApiPost('/operational-standard', accessToken, { ...payload, flow_diagram: file.data.id, released_date: moment(payload.released_date).format('YYYY-MM-DD'), related_program: relatedPrograms.length > 0 ? relatedPrograms.map((x) => x).join(',') : '', histories: history_list }).then((res) => {
+            if (res) {
+              if (res.success) {
+                message.success('Berhasil Menambahkan SOP')
+                navigate('/dashboard/quality-indicator')
+              } else {
+                message.error('Error: ' + res.message)
+              }
+            }
+          }).catch((e) => {
+            if (e && e.response && e.response.data) {
+              message.error(e.response.data.message)
+            }
+          })
+        }
+      })
+    } else {
+      message.warning('Silahkan pilih upload diagram alir terlebih dahulu')
+    }
+  }
 
   const steps = [
     {
       title: 'Tahap 1',
-      content: <OperationalStandardFirstStep onChangeForm={() => {}}/>,
+      content: <OperationalStandardFirstStep defaultValues={relatedPrograms} onChangeForm={(selected) => setRelatedPrograms(selected)} />,
     },
     {
       title: 'Tahap 2',
-      content: <OperationalStandardSecondStep />,
+      content: <OperationalStandardSecondStep form={payload} setter={setPayload} histories={histories} historySetter={setHistories} />,
     },
     {
       title: 'Tahap 3',
-      content: <OperationalStandardThirdStep />,
+      content: <OperationalStandardThirdStep form={payload} histories={histories} historySetter={setHistories} />,
     }
   ];
 
@@ -48,7 +117,7 @@ export const OperationalStandard = () => {
       <AntdSider className="sider">
         <div className="sider-content">
           <Title level={2}>SOP</Title>
-          <Text>Senin, 09 Agustus 2021</Text>
+          <Text>{moment().format('dddd, DD MMMM YYYY')}</Text>
         </div>
       </AntdSider>
 
@@ -65,7 +134,7 @@ export const OperationalStandard = () => {
             SOP
           </Breadcrumb.Item>
         </Breadcrumb>
-        
+
         <Steps current={current}>
           {
             steps.map((item, index) => (
@@ -75,38 +144,39 @@ export const OperationalStandard = () => {
         </Steps>
 
         <Card style={{ margin: '30px 0px 10px' }}>
-          { steps[current].content }
+          {steps[current].content}
         </Card>
 
         <Row>
           <Col style={{ marginRight: 'auto' }}>
-          {
-            current > 0 && (
-              <Button
-                onClick={() => prev()}
-              >
-                Sebelumnya
-              </Button>
-            )
-          }
+            {
+              current > 0 && (
+                <Button
+                  onClick={() => prev()}
+                >
+                  Sebelumnya
+                </Button>
+
+              )
+            }
           </Col>
           <Col style={{ marginLeft: 'auto' }}>
-          {
-            current < steps.length - 1 && (
-              <Button type="primary" onClick={() => next()}>
-                Selanjutnya
-              </Button>
-            )
-          }
+            {
+              current < steps.length - 1 && (
+                <Button type="primary" onClick={() => next()}>
+                  Selanjutnya
+                </Button>
+              )
+            }
           </Col>
           <Col>
-          {
-            current === steps.length - 1 && (
-              <Button type="primary" onClick={() => {}}>
-                Simpan
-              </Button>
-            )
-          }
+            {
+              current === steps.length - 1 && (
+                <Button type="primary" onClick={() => { handleSubmit() }}>
+                  Simpan
+                </Button>
+              )
+            }
           </Col>
 
         </Row>

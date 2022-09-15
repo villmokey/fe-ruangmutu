@@ -81,9 +81,13 @@ export const QualityIndicator = () => {
 
   useEffect(() => {
     fetchPrograms();
-    fetchQuality();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    fetchQuality();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filter]);
 
   useEffect(() => {
     if (!list) return;
@@ -149,12 +153,9 @@ export const QualityIndicator = () => {
   return (
     <Layout>
       <QualityIndicatorSider
-        qualityYearValue={filter.year}
-        onChangeQualityYear={(v) => setFilter({ ...filter, year: v })}
-        unitServiceValue={filter.program_id}
-        onChangeUnitService={(v) => setFilter({ ...filter, program_id: v })}
-        onChangeDocumentType={(v) => setFilter({ ...filter, type: v })}
-        onFilter={() => fetchQuality()}
+        onFilter={(value) => {
+          setFilter(value)
+        }}
       />
       <Content className="main-content">
         <Row justify="center" align="middle" gutter={[24, 16]}>
