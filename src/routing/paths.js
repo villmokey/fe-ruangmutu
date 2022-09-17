@@ -16,4 +16,5 @@ export const paths = {
   QUALITY_CUPBOARD: 'quality-cupboard/',
   APPROVAL_DOCUMENT: 'approval-document/',
   OPERATIONAL_STANDARD: 'operational-standard/',
+  SATISFACTION_SERVICE: 'satisfaction-service/',
 };

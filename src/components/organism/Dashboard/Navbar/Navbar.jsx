@@ -31,11 +31,11 @@ export const Navbar = ({ onLogout }) => {
           title: "STANDAR OPERASIONAL (SOP)",
           url: paths.OPERATIONAL_STANDARD,
         },
-        // {
-        //   key: 'operational_standard',
-        //   title: 'KEPUASAN LAYANAN',
-        //   url: paths.QUALITY_INDICATOR,
-        // }
+        {
+          key: 'satisfaction-service',
+          title: 'KEPUASAN LAYANAN',
+          url: paths.SATISFACTION_SERVICE,
+        }
       ],
     },
     {

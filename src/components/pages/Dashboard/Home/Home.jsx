@@ -16,6 +16,8 @@ import "./Home.less";
 import DetailCupboardPage from "../QualityCupboard/Detail/detail.page";
 
 import styled from 'styled-components'
+import { SatisfactionService } from "../SatisfactionService/SatisfactionService";
+import { AddSatisfaction } from "../SatisfactionService/Add/Add";
 
 const { Content } = Layout;
 const { Text } = Typography;
@@ -75,6 +77,14 @@ export const Home = () => {
             <Route
               path={paths.OPERATIONAL_STANDARD}
               element={<OperationalStandard />}
+            />
+            <Route
+              path={paths.SATISFACTION_SERVICE}
+              element={<SatisfactionService />}
+            />
+            <Route
+              path={paths.SATISFACTION_SERVICE + paths.ADD}
+              element={<AddSatisfaction />}
             />
             <Route
               path="*"
