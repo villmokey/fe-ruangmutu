@@ -142,7 +142,7 @@ export const DocumentTypePage = () => {
               <Table>
                 <thead style={{ fontWeight: "bold" }}>
                   <TableHead>Nama</TableHead>
-                  <TableHead>Icon</TableHead>
+                  {/* <TableHead>Icon</TableHead> */}
                   <TableHead>Tanggal Dibuat</TableHead>
                   <TableHead>Aksi</TableHead>
                 </thead>
@@ -150,12 +150,12 @@ export const DocumentTypePage = () => {
                   programs.map((program) => (
                     <TableRow key={program.id}>
                       <TableData>{program.name}</TableData>
-                      <TableData>
+                      {/* <TableData>
                         {program.sub_programs &&
                           program.sub_programs
                             .map((sub) => sub.name)
                             .join(", ")}
-                      </TableData>
+                      </TableData> */}
                       <TableData>
                         {moment(program.created_at).format(
                           "dddd, DD MMMM YYYY"

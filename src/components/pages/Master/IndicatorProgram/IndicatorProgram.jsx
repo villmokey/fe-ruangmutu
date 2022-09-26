@@ -32,6 +32,7 @@ import { useAuthToken } from "../../../../globals/useAuthToken";
 import { fetchApiDelete, fetchApiGet } from "../../../../globals/fetchApi";
 import { MasterDataSider } from "../../../organism/Dashboard/Sider/MasterData/MasterDataSider";
 import FormAdd from "./Add/Add";
+import AddSubProgramModal from "./Add/AddSubProgramModal";
 
 const { Content } = Layout;
 const { confirm } = Modal;
@@ -42,8 +43,13 @@ export const IndicatorProgram = () => {
   const [programs, setPrograms] = useState([]);
   const [openForm, setOpenForm] = useState(false);
   const [isCreate, setIsCreate] = useState(true);
+  const [subModal, setSubModal] = useState(false);
   const [payload, setPayload] = useState({ id: "", name: "" });
   const [search, setSearch] = useState("");
+  const [subPayload, setSubPayload] = useState({
+    program_id: "",
+    name: "",
+  });
   const [loading, setLoading] = useState(true);
   const [paginationProps, setPaginationProps] = useState({
     count: 0,
@@ -80,8 +86,12 @@ export const IndicatorProgram = () => {
     setPaginationProps({ ...paginationProps, activePage: page });
   };
 
-  const handleAddChildren = () => {
-    // handle add children data
+  const handleAddChildren = (id, name) => {
+    setSubPayload({
+      program_id: id,
+      name: name,
+    });
+    setSubModal(true);
   };
 
   const handleEdit = (id, name, color) => {
@@ -115,6 +125,18 @@ export const IndicatorProgram = () => {
     <Layout>
       <MasterDataSider title={"PROGRAM MUTU"} />
       <Content className="main-content">
+        <AddSubProgramModal
+          open={subModal}
+          programName={subPayload.name}
+          programId={subPayload.program_id}
+          handleOk={() => {
+            fetchPrograms();
+          }}
+          handleCancel={() => {
+            fetchPrograms();
+            setSubModal(false);
+          }}
+        />
         <Row justify="end" style={{ marginTop: 40 }} gutter={[8]}>
           <Col>
             <InputSearch size="large" onSearch={handleSearch} />
@@ -179,7 +201,9 @@ export const IndicatorProgram = () => {
                         <Stack direction={"row"} spacing={1}>
                           <Button
                             type="text"
-                            onClick={() => handleAddChildren()}
+                            onClick={() =>
+                              handleAddChildren(program.id, program.name)
+                            }
                           >
                             <PlusCircleTwoTone />
                           </Button>
