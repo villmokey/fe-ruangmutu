@@ -1,20 +1,43 @@
-import InputUnstyled from '@mui/base/InputUnstyled';
+import InputUnstyled from "@mui/base/InputUnstyled";
 
-const Textfield = ({ value, onChange, label, required, disabled = false, name }) => {
+const Textfield = ({
+  value,
+  onChange,
+  label,
+  required,
+  disabled = false,
+  name,
+  type,
+  style,
+}) => {
   return (
     <div role="row" className="ant-row ant-form-item">
       <div role="cell" className="ant-col ant-form-item-label">
-        <label for={name} className={required ? 'ant-form-item-required' : ''} title={label}>{label}</label>
+        <label
+          for={name}
+          className={required ? "ant-form-item-required" : ""}
+          title={label}
+        >
+          {label}
+        </label>
       </div>
       <div role="cell" className="ant-col ant-form-item-control">
         <div className="ant-form-item-control-input">
           <div className="ant-form-item-control-input-content">
-            <input disabled={disabled} type="text" className="ant-input" id={name} value={value} onChange={onChange} />
+            <input
+              style={style}
+              disabled={disabled}
+              type={type ?? "text"}
+              className="ant-input"
+              id={name}
+              value={value}
+              onChange={onChange}
+            />
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Textfield
+export default Textfield;

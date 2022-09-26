@@ -1,3 +1,4 @@
+const MASTER_PATH = 'master/'
 export const paths = {
   HOME: '/',
   LOGIN: '/login',
@@ -17,4 +18,10 @@ export const paths = {
   APPROVAL_DOCUMENT: 'approval-document/',
   OPERATIONAL_STANDARD: 'operational-standard/',
   SATISFACTION_SERVICE: 'satisfaction-service/',
+
+  USERS: MASTER_PATH + 'users',
+  SERVICE_UNIT: MASTER_PATH + 'service-unit',
+  INDICATOR_PROGRAM: MASTER_PATH + 'program',
+  HEALTH_SERVICE: MASTER_PATH + 'health-service',
+  DOCUMENT_TYPE: MASTER_PATH + 'document-type',
 };

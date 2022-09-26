@@ -15,9 +15,13 @@ import { QualityCupboard } from "../QualityCupboard/QualityCupboard";
 import "./Home.less";
 import DetailCupboardPage from "../QualityCupboard/Detail/detail.page";
 
-import styled from 'styled-components'
+import styled from "styled-components";
 import { SatisfactionService } from "../SatisfactionService/SatisfactionService";
 import { AddSatisfaction } from "../SatisfactionService/Add/Add";
+import { IndicatorProgram } from "../../Master/IndicatorProgram/IndicatorProgram";
+import { HealthServicePage } from "../../Master/HealthService/HealthService";
+import { DocumentTypePage } from "../../Master/DocumentType/DocumentType";
+import { UserPage } from "../../Master/User/User";
 
 const { Content } = Layout;
 const { Text } = Typography;
@@ -47,7 +51,10 @@ export const Home = () => {
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap"
+          rel="stylesheet"
+        />
       </head>
       <Navbar onLogout={handleLogout} />
       <Layout className="dashboard-layout">
@@ -87,6 +94,16 @@ export const Home = () => {
               element={<AddSatisfaction />}
             />
             <Route
+              path={paths.INDICATOR_PROGRAM}
+              element={<IndicatorProgram />}
+            />
+            <Route
+              path={paths.HEALTH_SERVICE}
+              element={<HealthServicePage />}
+            />
+            <Route path={paths.DOCUMENT_TYPE} element={<DocumentTypePage />} />
+            <Route path={paths.USERS} element={<UserPage />} />
+            <Route
               path="*"
               element={
                 <>
@@ -99,16 +116,24 @@ export const Home = () => {
       </Layout>
       <Footer className="footer">
         <Row gutter={[8, 16]}>
-          <Col span={24} style={{ margin: '20px 0 10px 0' }}>
+          <Col span={24} style={{ margin: "20px 0 10px 0" }}>
             <hr />
           </Col>
           <Col xs={24} sm={24} md={12} xl={12}>
-            <Text className="logo-text">RUANG <strong>MUTU</strong></Text><br />
-            <Text className="description-text">Aplikasi Dokumentasi serta Pemantauan Kegiatan Mutu</Text><br />
+            <Text className="logo-text">
+              RUANG <strong>MUTU</strong>
+            </Text>
+            <br />
+            <Text className="description-text">
+              Aplikasi Dokumentasi serta Pemantauan Kegiatan Mutu
+            </Text>
+            <br />
             <Text className="description-text">Puskesmas Kecamatan Gambir</Text>
           </Col>
           <Col xs={24} sm={24} md={12} xl={12}>
-            <Typography.Paragraph className="ft-white ft-bold ft-15">Hubungi Kami</Typography.Paragraph>
+            <Typography.Paragraph className="ft-white ft-bold ft-15">
+              Hubungi Kami
+            </Typography.Paragraph>
             <Row>
               <Col span={12}>
                 <Space direction="vertical">
@@ -146,30 +171,28 @@ export const Home = () => {
           </Col>
         </Row>
       </Footer>
-      <Copyright>
-        PKC Gambir All Rights Reserved.
-      </Copyright>
+      <Copyright>PKC Gambir All Rights Reserved.</Copyright>
     </Layout>
   );
 };
 
 const Copyright = styled.div`
-    background: #E5E5E5;
-    color: #5E6E89;
-    height: 76px;
-    padding: 25px 150px;
+  background: #e5e5e5;
+  color: #5e6e89;
+  height: 76px;
+  padding: 25px 150px;
 
-    @media only screen and (max-width: 720px) {
-      padding: 25px 10px;
-    }
-`
+  @media only screen and (max-width: 720px) {
+    padding: 25px 10px;
+  }
+`;
 
 const Footer = styled.footer`
-    min-height: 300px;
-    background-color: #6A9695;
-    color: white;
+  min-height: 300px;
+  background-color: #6a9695;
+  color: white;
 
-    @media only screen and (max-width: 720px) {
-      padding: 10px;
-    }
+  @media only screen and (max-width: 720px) {
+    padding: 10px;
+  }
 `;
