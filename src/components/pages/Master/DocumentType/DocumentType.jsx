@@ -1,15 +1,4 @@
-import {
-  Button,
-  Col,
-  Layout,
-  Row,
-  Skeleton,
-  Tag,
-  Typography,
-  Modal,
-  message,
-} from "antd";
-import { Title } from "../../../atoms/Title/Title";
+import { Button, Col, Layout, Row, Skeleton, Modal, message } from "antd";
 import {
   TableData,
   TableHead,
@@ -19,12 +8,7 @@ import {
 import { Box, Pagination, Stack } from "@mui/material";
 import "./DocumentType.less";
 import { InputSearch } from "../../../atoms/InputSearch/InputSearch";
-import {
-  DeleteTwoTone,
-  EditTwoTone,
-  PlusCircleTwoTone,
-  PlusOutlined,
-} from "@ant-design/icons";
+import { DeleteTwoTone, EditTwoTone, PlusOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -109,7 +93,7 @@ export const DocumentTypePage = () => {
 
   return (
     <Layout>
-      <MasterDataSider title={"DAFTAR TIPE DOKUMEN"} />
+      <MasterDataSider title={"MASTER DATA TIPE DOKUMEN"} />
       <Content className="main-content">
         <Row justify="end" style={{ marginTop: 40 }} gutter={[8]}>
           <Col>

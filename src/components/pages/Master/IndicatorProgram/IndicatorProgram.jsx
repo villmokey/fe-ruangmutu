@@ -5,11 +5,9 @@ import {
   Row,
   Skeleton,
   Tag,
-  Typography,
   Modal,
   message,
 } from "antd";
-import { Title } from "../../../atoms/Title/Title";
 import {
   TableData,
   TableHead,
@@ -123,7 +121,7 @@ export const IndicatorProgram = () => {
 
   return (
     <Layout>
-      <MasterDataSider title={"PROGRAM MUTU"} />
+      <MasterDataSider title={"MASTER DATA UNIT/PROGRAM"} />
       <Content className="main-content">
         <AddSubProgramModal
           open={subModal}

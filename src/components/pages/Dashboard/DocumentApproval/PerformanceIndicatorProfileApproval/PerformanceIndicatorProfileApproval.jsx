@@ -1,43 +1,41 @@
-import { message, Skeleton } from "antd";
+import { useAuthToken } from "../../../../../globals/useAuthToken";
+import { DocumentApprovalCard } from "../../../../molecules/DocumentApprovalCard/DocumentApprovalCard";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useAuthToken } from "../../../../../globals/useAuthToken";
 import {
-  getAllApprovalQualityIndicator,
-  qualityIndicatorSelector,
-  updateStatusQualityIndicator,
-} from "../../../../../redux/modules/qualityIndicator/action";
-import { DocumentApprovalCard } from "../../../../molecules/DocumentApprovalCard/DocumentApprovalCard";
-import { useNavigate } from "react-router-dom";
+  getAllApprovalProfileQualityIndicator,
+  profileQualityIndicatorSelector,
+  updateStatusProfileQualityIndicator,
+} from "../../../../../redux/modules/profileQualityIndicator/action";
+import { message, Skeleton } from "antd";
 import { Text } from "../../../../atoms/Text/Text";
 
-export const QualityIndicatorApproval = ({ filter }) => {
+export const PerformanceIndicatorProfileApproval = ({ filter }) => {
   const dispatch = useDispatch();
   const { getAccessToken, getUserId } = useAuthToken();
   const accessToken = getAccessToken();
   const userID = getUserId();
-  const navigate = useNavigate();
 
   const {
     data: { approvalList },
-    success: { update: updateStatus },
+    success: { update },
     loading,
-  } = useSelector(qualityIndicatorSelector);
+  } = useSelector(profileQualityIndicatorSelector);
   const [dataSource, setDataSource] = useState(null);
 
   useEffect(() => {
     dispatch(
-      getAllApprovalQualityIndicator(userID, {
+      getAllApprovalProfileQualityIndicator(userID, {
         accessToken,
         param: {
           ...filter,
-          type: "quality",
+          type: "performance",
         },
       })
     );
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [updateStatus, filter]);
+  }, [update, filter]);
 
   useEffect(() => {
     if (!approvalList) return;
@@ -47,11 +45,12 @@ export const QualityIndicatorApproval = ({ filter }) => {
   }, [approvalList]);
 
   useEffect(() => {
-    if (!updateStatus) return;
+    if (!update) return;
     message.info("Berhasil mengubah status!");
-  }, [updateStatus]);
+  }, [update]);
 
   const fetchData = (data) => {
+    console.log(data);
     const fetch = data.map((item, index) => {
       let approval1 = item.signature.filter((item) => item.level === 1)[0];
       let approval2 = item.signature.filter((item) => item.level === 2)[0];
@@ -70,23 +69,12 @@ export const QualityIndicatorApproval = ({ filter }) => {
         );
       }
 
-      let approval3Temp = "";
-      if (approval3.length) {
-        if (approval3[0].signed === 1) {
-          approval3Temp = approval3[0].signed_at;
-        } else {
-          approval3Temp = "Belum disetujui";
-        }
-      } else {
-        approval3Temp = "Tidak ada penanggung jawab 2";
-      }
-
       return {
         id: item.id,
         userID,
         month: item.month,
         isApproved: filterSignature.length ? true : false,
-        title: item.profile_indicator.title,
+        title: item.title,
         createdBy: item.created_by,
         createdAt: new Date(item.created_at).toLocaleDateString(),
         approval1:
@@ -97,7 +85,11 @@ export const QualityIndicatorApproval = ({ filter }) => {
           approval2.signed === 1
             ? new Date(approval2.signed_at).toLocaleDateString()
             : "Belum disetujui",
-        approval3: approval3Temp,
+        approval3: approval3.length
+          ? approval2.signed === 1
+            ? new Date(approval3.signed_at).toLocaleDateString()
+            : "Belum disetujui"
+          : "-",
         status: item.status,
         signature: item.signature,
       };
@@ -108,7 +100,7 @@ export const QualityIndicatorApproval = ({ filter }) => {
 
   const handleReject = async (id) => {
     await dispatch(
-      updateStatusQualityIndicator(id, {
+      updateStatusProfileQualityIndicator(id, {
         accessToken,
         param: {
           user_id: userID,
@@ -116,23 +108,17 @@ export const QualityIndicatorApproval = ({ filter }) => {
         },
       })
     );
-
-    navigate(-1);
-    message.info("Berhasil mengubah status!");
   };
 
   const handleApprove = async (id) => {
     await dispatch(
-      updateStatusQualityIndicator(id, {
+      updateStatusProfileQualityIndicator(id, {
         accessToken,
         param: {
           user_id: userID,
         },
       })
     );
-
-    navigate(-1);
-    message.info("Berhasil mengubah status!");
   };
 
   return !loading ? (
@@ -149,11 +135,12 @@ export const QualityIndicatorApproval = ({ filter }) => {
             documentApproval3Date={item.approval3}
             createdBy={item.createdBy}
             isApproved={item.isApproved}
-            signature={item.signature}
             indicatorID={item.id}
-            type={"indicator"}
+            type={"profile"}
+            signature={item.signature}
             onApprove={handleApprove}
             onReject={handleReject}
+            status={item.status}
           />
         ))
       ) : (

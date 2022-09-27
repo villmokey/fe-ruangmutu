@@ -9,16 +9,7 @@ import "moment/locale/id";
 import { useState } from "react";
 const { Sider: AntdSider } = Layout;
 
-export const QualityIndicatorSider = ({
-  onFilter,
-  onChangeQualityYear,
-  onChangeDocumentType,
-  onChangeUnitService,
-  qualityYearValue,
-  documentTypeValue,
-  unitServiceValue,
-}) => {
-
+export const PerformanceIndicatorSider = ({ onFilter }) => {
   const [filter, setFilter] = useState({
     year: undefined,
     program_id: undefined,
@@ -28,7 +19,7 @@ export const QualityIndicatorSider = ({
   return (
     <AntdSider className="sider">
       <div className="sider-content">
-        <Title level={2}>INDIKATOR MUTU</Title>
+        <Title level={2}>INDIKATOR KINERJA</Title>
         <Text>{moment().format("dddd, DD MMMM YYYY")}</Text>
       </div>
 
@@ -45,8 +36,8 @@ export const QualityIndicatorSider = ({
           <Col>
             <DocumentType
               customList={[
-                { id: "indicator_profile", name: "Profile Indikator" },
-                { id: "indicator", name: "Indikator Mutu" },
+                { id: "indicator_profile", name: "Profile Indikator Kinerja" },
+                { id: "indicator", name: "Indikator Kinerja" },
               ]}
               onChange={(v) => setFilter({ ...filter, document_type: v })}
               value={filter.document_type}
@@ -69,7 +60,7 @@ export const QualityIndicatorSider = ({
         className="filter-button"
         style={{ width: 170 }}
         onClick={() => {
-          return onFilter(filter)
+          return onFilter(filter);
         }}
       >
         Cari Dokumen

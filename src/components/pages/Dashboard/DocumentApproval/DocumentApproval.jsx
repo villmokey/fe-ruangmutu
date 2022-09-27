@@ -1,9 +1,6 @@
 import React from "react";
-import { PlusOutlined } from "@ant-design/icons";
-import { Button, Col, Layout, Row, Space, Tabs, Tag } from "antd";
-import { Link } from "react-router-dom";
+import { Col, Layout, Row, Space, Tabs, Tag } from "antd";
 import { fetchApiGet } from "../../../../globals/fetchApi";
-import { paths } from "../../../../routing/paths";
 import { Card } from "../../../atoms/Card/Card";
 import { InputSearch } from "../../../atoms/InputSearch/InputSearch";
 import { Title } from "../../../atoms/Title/Title";
@@ -11,6 +8,8 @@ import { DocumentApprovalSider } from "../../../organism/Dashboard/Sider/Documen
 import { QualityIndicatorApproval } from "./QualityIndicatorApproval/QualityIndicatorApproval";
 import { QualityIndicatorProfileApproval } from "./QualityIndicatorProfileApproval/QualityIndicatorProfileApproval";
 import { useAuthToken } from "../../../../globals/useAuthToken";
+import { PerformanceIndicatorApproval } from "./PerformanceIndicatorApproval/PerformanceIndicatorApproval";
+import { PerformanceIndicatorProfileApproval } from "./PerformanceIndicatorProfileApproval/PerformanceIndicatorProfileApproval";
 
 const { Content } = Layout;
 
@@ -101,12 +100,18 @@ export const DocumentApproval = () => {
           </Col>
         </Row>
         {/* <div className="document-approval-container"> */}
-        <Tabs defaultActiveKey="1">
+        <Tabs defaultActiveKey="1" destroyInactiveTabPane>
           <TabPane tab="Indikator Mutu" key="1">
             <QualityIndicatorApproval filter={filter} />
           </TabPane>
           <TabPane tab="Profil Indikator Mutu" key="2">
             <QualityIndicatorProfileApproval filter={filter} />
+          </TabPane>
+          <TabPane tab="Indikator Kinerja" key="3">
+            <PerformanceIndicatorApproval filter={filter} />
+          </TabPane>
+          <TabPane tab="Profil Indikator Kinerja" key="4">
+            <PerformanceIndicatorProfileApproval filter={filter} />
           </TabPane>
         </Tabs>
         {/* </div> */}

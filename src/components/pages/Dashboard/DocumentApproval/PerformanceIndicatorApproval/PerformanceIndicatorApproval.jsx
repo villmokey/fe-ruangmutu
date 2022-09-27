@@ -11,7 +11,7 @@ import { DocumentApprovalCard } from "../../../../molecules/DocumentApprovalCard
 import { useNavigate } from "react-router-dom";
 import { Text } from "../../../../atoms/Text/Text";
 
-export const QualityIndicatorApproval = ({ filter }) => {
+export const PerformanceIndicatorApproval = ({ filter }) => {
   const dispatch = useDispatch();
   const { getAccessToken, getUserId } = useAuthToken();
   const accessToken = getAccessToken();
@@ -23,6 +23,7 @@ export const QualityIndicatorApproval = ({ filter }) => {
     success: { update: updateStatus },
     loading,
   } = useSelector(qualityIndicatorSelector);
+
   const [dataSource, setDataSource] = useState(null);
 
   useEffect(() => {
@@ -31,7 +32,7 @@ export const QualityIndicatorApproval = ({ filter }) => {
         accessToken,
         param: {
           ...filter,
-          type: "quality",
+          type: "performance",
         },
       })
     );

@@ -5,7 +5,7 @@ import { fetchApiGet } from "../../../../../globals/fetchApi";
 import { useAuthToken } from "../../../../../globals/useAuthToken";
 import { QualityIndicatorPreview } from "../../../../templates/QualityIndicatorTemplates/Preview/QualityIndicatorPreview";
 
-const QualityIndicatorCardview = ({ filter }) => {
+const PerformanceIndicatorCardview = ({ filter }) => {
   const { getAccessToken } = useAuthToken();
   const accessToken = getAccessToken();
   const [previewVis, setPreviewVis] = useState(false);
@@ -22,7 +22,7 @@ const QualityIndicatorCardview = ({ filter }) => {
     setLoading(true);
     fetchApiGet(
       "/dashboard/indicator/cardlist",
-      { ...filter, type: "quality" },
+      { ...filter, type: "performance" },
       accessToken
     )
       .then((res) => {
@@ -123,4 +123,4 @@ const QualityIndicatorCardview = ({ filter }) => {
   );
 };
 
-export default QualityIndicatorCardview;
+export default PerformanceIndicatorCardview;

@@ -23,6 +23,11 @@ export const Navbar = ({ onLogout }) => {
           url: paths.QUALITY_INDICATOR,
         },
         {
+          key: "performance_indicator",
+          title: "INDIKATOR KINERJA",
+          url: paths.PERFORMANCE_INDICATOR,
+        },
+        {
           key: "approval_document",
           title: "DOKUMEN APPROVAL",
           url: paths.APPROVAL_DOCUMENT,
@@ -69,7 +74,7 @@ export const Navbar = ({ onLogout }) => {
         // },
         {
           key: "program-mutu",
-          title: "PROGRAM MUTU",
+          title: "UNIT/PROGRAM",
           url: paths.INDICATOR_PROGRAM,
         },
         {

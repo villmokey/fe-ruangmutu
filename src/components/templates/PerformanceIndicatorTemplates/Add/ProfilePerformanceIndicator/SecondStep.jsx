@@ -146,7 +146,7 @@ export const SecondStep = ({
 }) => {
   return (
     <>
-      <Title level={4}>Form Profil Indikator Mutu</Title>
+      <Title level={4}>Form Profil Indikator Kinerja</Title>
       <Form form={form} onFinish={onFinish} layout="vertical">
         <Row gutter={[24]}>
           <Col md={8} sm={24} xs={24}>

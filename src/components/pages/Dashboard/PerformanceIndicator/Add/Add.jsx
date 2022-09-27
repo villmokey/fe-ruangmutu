@@ -1,11 +1,11 @@
 import { Button, Col, Layout, message, Row, Steps } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { FirstStep } from "../../../../templates/QualityIndicatorTemplates/Add/FirstStep";
-import { SecondStep as ProfileQualityIndicatorSecondStep } from "../../../../templates/QualityIndicatorTemplates/Add/ProfileQualityIndicator/SecondStep";
-import { ThirdStep as ProfileQualityIndicatorThirdStep } from "../../../../templates/QualityIndicatorTemplates/Add/ProfileQualityIndicator/ThirdStep";
-import { SecondStep as QualityIndicatorSecondStep } from "../../../../templates/QualityIndicatorTemplates/Add/QualityIndicator/SecondStep";
-import { ThirdStep as QualityIndicatorThirdStep } from "../../../../templates/QualityIndicatorTemplates/Add/QualityIndicator/ThirdStep";
+import { FirstStep } from "../../../../templates/PerformanceIndicatorTemplates/Add/FirstStep";
+import { SecondStep as ProfilePerformanceIndicatorSecondStep } from "../../../../templates/PerformanceIndicatorTemplates/Add/ProfilePerformanceIndicator/SecondStep";
+import { ThirdStep as ProfileQualityIndicatorThirdStep } from "../../../../templates/PerformanceIndicatorTemplates/Add/ProfilePerformanceIndicator/ThirdStep";
+import { SecondStep as PerformanceIndicatorSecondStep } from "../../../../templates/PerformanceIndicatorTemplates/Add/PerformanceIndicator/SecondStep";
+import { ThirdStep as PerformanceIndicatorThirdStep } from "../../../../templates/PerformanceIndicatorTemplates/Add/PerformanceIndicator/ThirdStep";
 import { Form } from "antd";
 import { Title } from "../../../../atoms/Title/Title";
 import { Text } from "../../../../atoms/Text/Text";
@@ -34,6 +34,7 @@ import {
   uploadFileAPIQualityIndicator,
 } from "../../../../../redux/modules/qualityIndicator/action";
 // import { fileSelector } from '../../../../../redux/modules/file/action';
+import moment from "moment";
 
 const { Sider, Content } = Layout;
 const { Step } = Steps;
@@ -95,7 +96,7 @@ export const Add = () => {
   useEffect(() => {
     dispatch(getAllProgram());
     dispatch(getAllUser());
-    dispatch(getAllProfileQualityIndicator({ param: { type: "quality" } }));
+    dispatch(getAllProfileQualityIndicator({ param: { type: "performance" } }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -260,7 +261,7 @@ export const Add = () => {
       assign_by: profileQualityIndicatorDataTemp.pembuatDokumen,
       signature,
       document_id: upload.id,
-      type: "quality",
+      type: "performance",
     };
 
     dispatch(
@@ -322,7 +323,7 @@ export const Add = () => {
       signature,
       document_id: uploadQualityIndicator.data.id,
       month_target: qualityIndicatorDataTemp.capaianBulanIni,
-      type: "quality",
+      type: "performance",
     };
 
     dispatch(
@@ -528,7 +529,7 @@ export const Add = () => {
       title: "Tahap 2",
       content:
         documentFormChoosen === 1 ? (
-          <ProfileQualityIndicatorSecondStep
+          <ProfilePerformanceIndicatorSecondStep
             onFinish={handleStepThreeProfileQualityIndicator}
             form={secondStepProfileQualityIndicatorForm}
             programMutuOptions={programMutuOptions}
@@ -537,7 +538,7 @@ export const Add = () => {
             userOptions={userOptions}
           />
         ) : (
-          <QualityIndicatorSecondStep
+          <PerformanceIndicatorSecondStep
             onFinish={handleStepThreeQualityIndicator}
             judulIndikatorChange={handleChangeJudulIndikator}
             form={secondStepQualityIndicatorForm}
@@ -560,7 +561,7 @@ export const Add = () => {
             userOptions={userOptions}
           />
         ) : (
-          <QualityIndicatorThirdStep
+          <PerformanceIndicatorThirdStep
             form={thirdStepQualityIndicatorForm}
             profileOptions={profileQualityOptions}
             programMutuOptions={programMutuOptions}
@@ -576,8 +577,8 @@ export const Add = () => {
     <Layout>
       <Sider className="sider">
         <div className="sider-content">
-          <Title level={2}>INDIKATOR MUTU</Title>
-          <Text>Senin, 09 Agustus 2021</Text>
+          <Title level={2}>INDIKATOR KINERJA</Title>
+          <Text>{moment().format("dddd, DD MMMM YYYY")}</Text>
         </div>
       </Sider>
       <Content className="main-content">

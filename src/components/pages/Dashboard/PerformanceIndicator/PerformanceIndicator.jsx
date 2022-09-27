@@ -1,23 +1,14 @@
-import {
-  Button,
-  Col,
-  Layout,
-  Row,
-  Skeleton,
-  Space,
-  Tag,
-} from "antd";
+import { Button, Col, Layout, Row, Skeleton, Space, Tag } from "antd";
 import { Card } from "../../../atoms/Card/Card";
 import { Title } from "../../../atoms/Title/Title";
 
-import "./QualityIndicator.less";
+import "./PerformanceIndicator.less";
 import { InputSearch } from "../../../atoms/InputSearch/InputSearch";
 import { PlusOutlined } from "@ant-design/icons";
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { paths } from "../../../../routing/paths";
-import { QualityIndicatorSider } from "../../../organism/Dashboard/Sider/QualityIndicatorSider/QualityIndicatorSider";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useAuthToken } from "../../../../globals/useAuthToken";
@@ -32,11 +23,12 @@ import {
 } from "../../../../globals/monthLabel";
 import { FileTextOutlined, BarChartOutlined } from "@ant-design/icons";
 import { fetchApiGet } from "../../../../globals/fetchApi";
-import QualityIndicatorCardview from "./View/Cardview";
+import PerformanceIndicatorCardview from "./View/Cardview";
+import { PerformanceIndicatorSider } from "../../../organism/Dashboard/Sider/PerformanceIndicatorSider/PerformanceIndicatorSider";
 
 const { Content } = Layout;
 
-export const QualityIndicator = () => {
+export const PerformanceIndicator = () => {
   const [viewType, setViewType] = useState(1);
   const dispatch = useDispatch();
   const { getAccessToken } = useAuthToken();
@@ -64,7 +56,7 @@ export const QualityIndicator = () => {
       getAllQualityIndicator({
         accessToken,
         filter: {
-          type: 'quality',
+          type: 'performance',
           year: filter.year !== undefined ? filter.year : "",
           program_id: filter.program_id !== undefined ? filter.program_id : "",
         },
@@ -153,22 +145,22 @@ export const QualityIndicator = () => {
 
   return (
     <Layout>
-      <QualityIndicatorSider
+      <PerformanceIndicatorSider
         onFilter={(value) => {
-          setFilter(value)
+          setFilter(value);
         }}
       />
       <Content className="main-content">
         <Row justify="center" align="middle" gutter={[24, 16]}>
           <Col>
             <Card className="total">
-              <p className="card-title">TOTAL INDIKATOR MUTU</p>
+              <p className="card-title">TOTAL INDIKATOR KINERJA</p>
               <Title className="card-content">{totalResult.all}</Title>
             </Card>
           </Col>
           <Col>
             <Card className="total">
-              <p className="card-title">INDIKATOR MUTU TERPILIH</p>
+              <p className="card-title">INDIKATOR KINERJA TERPILIH</p>
               <Title className="card-content">{totalResult.selected}</Title>
             </Card>
           </Col>
@@ -198,19 +190,26 @@ export const QualityIndicator = () => {
           <Col style={{ marginRight: "auto" }}>
             <Space>
               {filter.program_id ? (
-                programs.map((prog) => (
-                  filter.program_id.some((x) => x === prog.id) && (
-                    <Tag color="#6A9695">
-                      {prog.name}
-                    </Tag>
-                  )
-                ))
+                programs.map(
+                  (prog) =>
+                    filter.program_id.some((x) => x === prog.id) && (
+                      <Tag color="#6A9695">{prog.name}</Tag>
+                    )
+                )
               ) : (
                 <Tag color="#6A9695">SEMUA UNIT</Tag>
               )}
 
               {filter.year && <Tag color="#6A9695">{filter.year}</Tag>}
-              {filter.type && <Tag color="#6A9695">{filter.type === 'indicator_profile' ? 'PROFIL INDIKATOR' : filter.type === 'indicator' ? 'INDIKATOR MUTU' : 'SEMUA DOKUMEN'}</Tag>}
+              {filter.type && (
+                <Tag color="#6A9695">
+                  {filter.type === "indicator_profile"
+                    ? "PROFIL INDIKATOR"
+                    : filter.type === "indicator"
+                    ? "INDIKATOR MUTU"
+                    : "SEMUA DOKUMEN"}
+                </Tag>
+              )}
             </Space>
           </Col>
           <Col style={{ marginLeft: "auto" }}>
@@ -228,7 +227,7 @@ export const QualityIndicator = () => {
         <div className="indikator-mutu-container">
           {!loading ? (
             viewType === 2 ? (
-              <QualityIndicatorCardview filter={filter} />
+              <PerformanceIndicatorCardview filter={filter} />
             ) : (
               <>
                 {chartDataSource &&

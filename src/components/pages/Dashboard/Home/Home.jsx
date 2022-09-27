@@ -9,6 +9,7 @@ import { Navbar } from "../../../organism/Dashboard/Navbar/Navbar";
 import { Calender } from "../Calender/Calender";
 import { QualityIndicator } from "../QualityIndicator/QualityIndicator";
 import { Add as AddQualityIndicator } from "../QualityIndicator/Add/Add";
+import { Add as AddPerformanceIndicator } from "../PerformanceIndicator/Add/Add";
 import { DocumentApproval } from "../DocumentApproval/DocumentApproval";
 import { OperationalStandard } from "../OperationalStandard/OperationalStandard";
 import { QualityCupboard } from "../QualityCupboard/QualityCupboard";
@@ -22,6 +23,7 @@ import { IndicatorProgram } from "../../Master/IndicatorProgram/IndicatorProgram
 import { HealthServicePage } from "../../Master/HealthService/HealthService";
 import { DocumentTypePage } from "../../Master/DocumentType/DocumentType";
 import { UserPage } from "../../Master/User/User";
+import { PerformanceIndicator } from "../PerformanceIndicator/PerformanceIndicator";
 
 const { Content } = Layout;
 const { Text } = Typography;
@@ -67,6 +69,14 @@ export const Home = () => {
             <Route
               path={`${paths.QUALITY_INDICATOR}${paths.ADD}`}
               element={<AddQualityIndicator />}
+            />
+            <Route
+              path={paths.PERFORMANCE_INDICATOR}
+              element={<PerformanceIndicator />}
+            />
+            <Route
+              path={`${paths.PERFORMANCE_INDICATOR}${paths.ADD}`}
+              element={<AddPerformanceIndicator />}
             />
             <Route path={paths.CALENDER} element={<Calender />} />
             <Route

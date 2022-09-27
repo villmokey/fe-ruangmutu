@@ -1,116 +1,14 @@
-import {
-  Checkbox,
-  Col,
-  Form as AntdForm,
-  InputNumber,
-  Row,
-  Select,
-  Upload,
-} from "antd";
-import { Title } from "../../../../atoms/Title/Title";
-import { Form } from "../../../../molecules/Form/Form";
+import { Checkbox, Col, Form as AntdForm, InputNumber, Row, Select, Upload } from "antd";
 import { InputText } from "../../../../atoms/InputText/InputText";
 import { Text } from "../../../../atoms/Text/Text";
-
-import "./SecondStep.less";
+import { Title } from "../../../../atoms/Title/Title";
+import { Form } from "../../../../molecules/Form/Form";
 
 const { Option } = Select;
 const { Item } = AntdForm;
 const { Dragger } = Upload;
 
-export const dimensiMutuOptions = [
-  {
-    label: "Kelayakan",
-    value: "Kelayakan",
-  },
-  {
-    label: "Ketepatan Waktu",
-    value: "Ketepatan Waktu",
-  },
-  {
-    label: "Manfaat",
-    value: "Manfaat",
-  },
-  {
-    label: "Ketersiadaan",
-    value: "Ketersiadaan",
-  },
-  {
-    label: "Keselamatan",
-    value: "Keselamatan",
-  },
-  {
-    label: "Efisiensi",
-    value: "Efisiensi",
-  },
-  {
-    label: "Efektivias",
-    value: "Efektivias",
-  },
-  {
-    label: "Kesinambungan",
-    value: "Kesinambungan",
-  },
-];
-
-export const frekuensiPengumpulanDataOptions = [
-  {
-    label: "Harian",
-    value: "Harian",
-  },
-  {
-    label: "Mingguan",
-    value: "Mingguan",
-  },
-  {
-    label: "Bulan",
-    value: "Bulan",
-  },
-  {
-    label: "Tahunan",
-    value: "Tahunan",
-  },
-];
-
-export const periodeWaktuPelaporanOptions = [
-  {
-    label: "Bulanan",
-    value: "Bulanan",
-  },
-  {
-    label: "Triwulan",
-    value: "Triwulan",
-  },
-  {
-    label: "Semester",
-    value: "Semester",
-  },
-  {
-    label: "Tahunan",
-    value: "Tahunan",
-  },
-];
-
-export const tipeIndikatorOptions = [
-  {
-    label: "Input",
-    value: "Input",
-  },
-  {
-    label: "Proses",
-    value: "Proses",
-  },
-  {
-    label: "Output",
-    value: "Output",
-  },
-  {
-    label: "Outcome",
-    value: "Outcome",
-  },
-];
-
-export const SecondStep = ({
+export const ThirdStep = ({
   form,
   onFinish,
   programMutuChange,
@@ -144,9 +42,101 @@ export const SecondStep = ({
   penanggungJawab1Change,
   penanggungJawab2Change,
 }) => {
+  let dimensiMutuOptions = [
+    {
+      label: "Kelayakan",
+      value: "Kelayakan",
+    },
+    {
+      label: "Ketepatan Waktu",
+      value: "Ketepatan Waktu",
+    },
+    {
+      label: "Manfaat",
+      value: "Manfaat",
+    },
+    {
+      label: "Ketersiadaan",
+      value: "Ketersiadaan",
+    },
+    {
+      label: "Keselamatan",
+      value: "Keselamatan",
+    },
+    {
+      label: "Efisiensi",
+      value: "Efisiensi",
+    },
+    {
+      label: "Efektivias",
+      value: "Efektivias",
+    },
+    {
+      label: "Kesinambungan",
+      value: "Kesinambungan",
+    },
+  ];
+
+  let frekuensiPengumpulanDataOptions = [
+    {
+      label: "Harian",
+      value: "Harian",
+    },
+    {
+      label: "Mingguan",
+      value: "Mingguan",
+    },
+    {
+      label: "Bulan",
+      value: "Bulan",
+    },
+    {
+      label: "Tahunan",
+      value: "Tahunan",
+    },
+  ];
+
+  let periodeWaktuPelaporanOptions = [
+    {
+      label: "Bulanan",
+      value: "Bulanan",
+    },
+    {
+      label: "Triwulan",
+      value: "Triwulan",
+    },
+    {
+      label: "Semester",
+      value: "Semester",
+    },
+    {
+      label: "Tahunan",
+      value: "Tahunan",
+    },
+  ];
+
+  let tipeIndikatorOptions = [
+    {
+      label: "Input",
+      value: "Input",
+    },
+    {
+      label: "Proses",
+      value: "Proses",
+    },
+    {
+      label: "Output",
+      value: "Output",
+    },
+    {
+      label: "Outcome",
+      value: "Outcome",
+    },
+  ];
+
   return (
     <>
-      <Title level={4}>Form Profil Indikator Mutu</Title>
+      <Title level={4}>Tinjau ulang Profil Indikator Kinerja</Title>
       <Form form={form} onFinish={onFinish} layout="vertical">
         <Row gutter={[24]}>
           <Col md={8} sm={24} xs={24}>
@@ -160,6 +150,7 @@ export const SecondStep = ({
               <Select
                 placeholder="Pilih program mutu"
                 onChange={programMutuChange}
+                disabled
               >
                 {programMutuOptions &&
                   programMutuOptions.map((item, index) => (
@@ -179,6 +170,7 @@ export const SecondStep = ({
               <Select
                 placeholder="Pilih Sub program mutu"
                 onChange={subProgramMutuChange}
+                disabled
               >
                 {subProgramMutuOptions &&
                   subProgramMutuOptions.map((item, index) => (
@@ -198,6 +190,7 @@ export const SecondStep = ({
                   message: "Judul Indikator tidak boleh kosong!",
                 },
               ]}
+              disabled
             />
             <InputText
               label="Dasar Pemilihan Indikator"
@@ -209,6 +202,7 @@ export const SecondStep = ({
                   message: "Dasar Pemilihan Indikator tidak boleh kosong!",
                 },
               ]}
+              disabled
             />
 
             <Item
@@ -218,13 +212,17 @@ export const SecondStep = ({
                 { required: true, message: "Dimensi Mutu tidak boleh kosong!" },
               ]}
             >
-              <Checkbox.Group options={dimensiMutuOptions}></Checkbox.Group>
+              <Checkbox.Group
+                options={dimensiMutuOptions}
+                disabled
+              ></Checkbox.Group>
             </Item>
 
             <InputText
               label="Tujuan"
               name="tujuan"
               onChange={tujuanChange}
+              disabled
               rules={[
                 { required: true, message: "Tujuan tidak boleh kosong!" },
               ]}
@@ -234,6 +232,7 @@ export const SecondStep = ({
               label="Definisi Operasional"
               name="definisiOperasional"
               onChange={definisiOperasionalChange}
+              disabled
               rules={[
                 {
                   required: true,
@@ -251,13 +250,17 @@ export const SecondStep = ({
                 },
               ]}
             >
-              <Checkbox.Group options={tipeIndikatorOptions}></Checkbox.Group>
+              <Checkbox.Group
+                options={tipeIndikatorOptions}
+                disabled
+              ></Checkbox.Group>
             </Item>
 
             <InputText
               label="Status Pengukuran"
               name="statusPengukuran"
               onChange={statusPengukuranChange}
+              disabled
               rules={[
                 {
                   required: true,
@@ -270,6 +273,7 @@ export const SecondStep = ({
               label="Numerator"
               name="numerator"
               onChange={numeratorChange}
+              disabled
               rules={[
                 { required: true, message: "Numerator tidak boleh kosong!" },
               ]}
@@ -280,6 +284,7 @@ export const SecondStep = ({
               label="Denominator"
               name="denominator"
               onChange={denominatorChange}
+              disabled
               rules={[
                 { required: true, message: "Denominator tidak boleh kosong!" },
               ]}
@@ -295,12 +300,19 @@ export const SecondStep = ({
                 },
               ]}
             >
-              <InputNumber min={0} max={1000} style={{ width: "100%" }} type={'number'}/>
+              <InputNumber
+                min={0}
+                max={1000}
+                style={{ width: "100%" }}
+                disabled
+                type={'number'}
+              />
             </Item>
             <InputText
               label="Kriteria Inklusi & Ekslusi"
               name="kriteriaInklusiEkslusi"
               onChange={kriteriaInklusiEkslusiChange}
+              disabled
               rules={[
                 { required: true, message: "Kriteria tidak boleh kosong!" },
               ]}
@@ -309,6 +321,7 @@ export const SecondStep = ({
               label="Formula Pengukuran"
               name="formulaPengukuran"
               onChange={formulaPengukuranChange}
+              disabled
               rules={[
                 {
                   required: true,
@@ -320,6 +333,7 @@ export const SecondStep = ({
               label="Pengumpulan Data"
               name="pengumpulanData"
               onChange={pengumpulanDataChange}
+              disabled
               rules={[
                 {
                   required: true,
@@ -331,6 +345,7 @@ export const SecondStep = ({
               label="Sumber Data"
               name="sumberData"
               onChange={sumberDataChange}
+              disabled
               rules={[
                 { required: true, message: "Sumber data tidak boleh kosong!" },
               ]}
@@ -340,6 +355,7 @@ export const SecondStep = ({
               label="Populasi Atau Sampel"
               name="populasiAtauSampel"
               onChange={populasiAtauSampelChange}
+              disabled
               rules={[
                 { required: true, message: "Populasi tidak boleh kosong!" },
               ]}
@@ -357,6 +373,7 @@ export const SecondStep = ({
             >
               <Checkbox.Group
                 options={frekuensiPengumpulanDataOptions}
+                disabled
               ></Checkbox.Group>
             </Item>
 
@@ -372,6 +389,7 @@ export const SecondStep = ({
             >
               <Checkbox.Group
                 options={periodeWaktuPelaporanOptions}
+                disabled
               ></Checkbox.Group>
             </Item>
 
@@ -387,6 +405,7 @@ export const SecondStep = ({
             >
               <Checkbox.Group
                 options={periodeWaktuPelaporanOptions}
+                disabled
               ></Checkbox.Group>
             </Item>
           </Col>
@@ -395,6 +414,7 @@ export const SecondStep = ({
               label="Penyajian Data"
               name="penyajianData"
               onChange={penyajianDataChange}
+              disabled
               rules={[
                 {
                   required: true,
@@ -420,6 +440,7 @@ export const SecondStep = ({
               <Select
                 placeholder="Pilih pembuat dokumen"
                 onChange={pembuatDokumenChange}
+                disabled
               >
                 {userOptions &&
                   userOptions.map((item, index) => (
@@ -442,6 +463,7 @@ export const SecondStep = ({
               <Select
                 placeholder="Pilih penanggung jawab 1"
                 onChange={penanggungJawab1Change}
+                disabled
               >
                 {userOptions &&
                   userOptions.map((item, index) => (
@@ -455,6 +477,7 @@ export const SecondStep = ({
               <Select
                 placeholder="Pilih penanggung jawab 2"
                 onChange={penanggungJawab2Change}
+                disabled
               >
                 {userOptions &&
                   userOptions.map((item, index) => (
@@ -467,12 +490,16 @@ export const SecondStep = ({
             <Item
               label="Dokumen Telusur"
               name="dokumenTelusur"
-              valuePropName="file"
+              valuePropName="fileList"
               rules={[
-                { required: true, message: "Penugas tidak boleh kosong!" },
+                { required: true, message: "Dokumen tidak boleh kosong!" },
               ]}
             >
-              <Dragger beforeUpload={() => false} style={{ height: 200 }}>
+              <Dragger
+                beforeUpload={() => false}
+                style={{ height: 200 }}
+                disabled
+              >
                 <Text>Drag & Drop</Text>
               </Dragger>
             </Item>

@@ -4,12 +4,10 @@ import {
   Layout,
   Row,
   Skeleton,
-  Tag,
   Typography,
   Modal,
   message,
 } from "antd";
-import { Title } from "../../../atoms/Title/Title";
 import {
   TableData,
   TableHead,
@@ -31,8 +29,6 @@ import { useAuthToken } from "../../../../globals/useAuthToken";
 import { fetchApiDelete, fetchApiGet } from "../../../../globals/fetchApi";
 import { MasterDataSider } from "../../../organism/Dashboard/Sider/MasterData/MasterDataSider";
 import FormAdd from "./Add/Add";
-import { paths } from "../../../../routing/paths";
-import { Link } from "react-router-dom";
 import ServiceUnitModal from "./Modal/ServiceUnitModal";
 import AssignServiceUnitModal from "./Modal/AssignServices";
 
@@ -126,7 +122,7 @@ export const HealthServicePage = () => {
 
   return (
     <Layout>
-      <MasterDataSider title={"LAYANAN KESEHATAN"}>
+      <MasterDataSider title={"MASTER DATA FASILITAS KESEHATAN"}>
         <div style={{ marginTop: "20px" }}>
           <Text
             style={{ cursor: "pointer", color: "#5DC8BD" }}

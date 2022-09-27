@@ -7,7 +7,8 @@ import {
   profileQualityIndicatorSelector,
   updateStatusProfileQualityIndicator,
 } from "../../../../../redux/modules/profileQualityIndicator/action";
-import { message } from "antd";
+import { message, Skeleton } from "antd";
+import { Text } from "../../../../atoms/Text/Text";
 
 export const QualityIndicatorProfileApproval = ({ filter }) => {
   const dispatch = useDispatch();
@@ -18,6 +19,7 @@ export const QualityIndicatorProfileApproval = ({ filter }) => {
   const {
     data: { approvalList },
     success: { update },
+    loading,
   } = useSelector(profileQualityIndicatorSelector);
 
   const [dataSource, setDataSource] = useState(null);
@@ -28,6 +30,7 @@ export const QualityIndicatorProfileApproval = ({ filter }) => {
         accessToken,
         param: {
           ...filter,
+          type: "quality",
         },
       })
     );
@@ -121,9 +124,9 @@ export const QualityIndicatorProfileApproval = ({ filter }) => {
     );
   };
 
-  return (
+  return !loading ? (
     <>
-      {dataSource &&
+      {dataSource && dataSource.length > 0 ? (
         dataSource.map((item, index) => (
           <DocumentApprovalCard
             key={index}
@@ -142,7 +145,16 @@ export const QualityIndicatorProfileApproval = ({ filter }) => {
             onReject={handleReject}
             status={item.status}
           />
-        ))}
+        ))
+      ) : (
+        <div style={{ width: "100%", textAlign: "center", margin: "50px 0" }}>
+          <Text>
+            <strong>Oops, </strong>Belum ada data
+          </Text>
+        </div>
+      )}
     </>
+  ) : (
+    <Skeleton />
   );
 };

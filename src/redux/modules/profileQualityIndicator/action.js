@@ -86,7 +86,9 @@ export const getAllProfileQualityIndicator = (bodyData) => {
   return {
     type: "API",
     payload: {
-      url: `${URL_CONFIG.PROFILE_QUALITY_INDICATOR_BASE_URL}?paginate=false`,
+      url: `${URL_CONFIG.PROFILE_QUALITY_INDICATOR_BASE_URL}?paginate=false${
+        bodyData?.param ? "&" + convertToParams(bodyData.param) : ""
+      }`,
       requestParams: {
         method: apiMethod.GET,
         data: bodyData?.param ?? {},

@@ -62,20 +62,20 @@ export const DocumentApprovalCard = ({
     return style;
   };
 
-  const handleGenerate = (id) => {
-    let anchor = document.createElement("a");
-    anchor.target = "_blank";
+  // const handleGenerate = (id) => {
+  //   let anchor = document.createElement("a");
+  //   anchor.target = "_blank";
 
-    if (type === "indicator") {
-      anchor.href = `${process.env.REACT_APP_API_URL}/indicator/generate/${id}`;
-      anchor.click();
-    } else if (type === "profile") {
-      anchor.href = `${process.env.REACT_APP_API_URL}/indicator-profile/generate/${id}`;
-      anchor.click();
-    } else {
-      alert("Terjadi Kesalahan");
-    }
-  };
+  //   if (type === "indicator") {
+  //     anchor.href = `${process.env.REACT_APP_API_URL}/indicator/generate/${id}`;
+  //     anchor.click();
+  //   } else if (type === "profile") {
+  //     anchor.href = `${process.env.REACT_APP_API_URL}/indicator-profile/generate/${id}`;
+  //     anchor.click();
+  //   } else {
+  //     alert("Terjadi Kesalahan");
+  //   }
+  // };
 
   const ApprovedButton = () => {
     return (
@@ -188,7 +188,7 @@ export const DocumentApprovalCard = ({
           </Text>
         </Col>
       </Row>
-      {type === "profile" &&
+      {/* {type === "profile" &&
         signature &&
         !signature.some((sign) => sign.signed === 0) && (
           <Row style={{ margin: "10px 0px" }}>
@@ -202,7 +202,7 @@ export const DocumentApprovalCard = ({
               </Button>
             </Col>
           </Row>
-        )}
+        )} */}
     </Card>
   );
 };

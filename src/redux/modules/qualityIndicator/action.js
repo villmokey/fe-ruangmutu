@@ -87,6 +87,8 @@ export const getAllQualityIndicator = (bodyData) => {
         bodyData.filter ? `` : ""
       }?year=${
         bodyData.filter && bodyData.filter.year ? bodyData.filter.year : ""
+      }&type=${
+        bodyData.filter && bodyData.filter.type ? bodyData.filter.type : ""
       }&program_id=${
         bodyData.filter && bodyData.filter.program_id
           ? bodyData.filter.program_id
