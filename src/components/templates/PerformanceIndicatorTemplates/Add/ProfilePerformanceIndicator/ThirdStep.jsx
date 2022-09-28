@@ -1,4 +1,12 @@
-import { Checkbox, Col, Form as AntdForm, InputNumber, Row, Select, Upload } from "antd";
+import {
+  Checkbox,
+  Col,
+  Form as AntdForm,
+  InputNumber,
+  Row,
+  Select,
+  Upload,
+} from "antd";
 import { InputText } from "../../../../atoms/InputText/InputText";
 import { Text } from "../../../../atoms/Text/Text";
 import { Title } from "../../../../atoms/Title/Title";
@@ -289,25 +297,20 @@ export const ThirdStep = ({
                 { required: true, message: "Denominator tidak boleh kosong!" },
               ]}
             />
-            <Item
+            <InputText
               label="Target Capaian"
-              name="targetCapaian"
+              name="achievement_target"
+              onChange={targetCapaianChange}
               rules={[
                 {
                   required: true,
                   message: "Target capaian tidak boleh kosong!",
-                  max: 1000,
+                  InputNumber: true,
                 },
               ]}
-            >
-              <InputNumber
-                min={0}
-                max={1000}
-                style={{ width: "100%" }}
-                disabled
-                type={'number'}
-              />
-            </Item>
+              disabled
+              type="number"
+            />
             <InputText
               label="Kriteria Inklusi & Ekslusi"
               name="kriteriaInklusiEkslusi"

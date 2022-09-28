@@ -284,19 +284,19 @@ export const SecondStep = ({
                 { required: true, message: "Denominator tidak boleh kosong!" },
               ]}
             />
-            <Item
+            <InputText
               label="Target Capaian"
-              name="targetCapaian"
+              name="achievement_target"
+              onChange={targetCapaianChange}
               rules={[
                 {
                   required: true,
                   message: "Target capaian tidak boleh kosong!",
-                  max: 1000,
+                  InputNumber: true,
                 },
               ]}
-            >
-              <InputNumber min={0} max={1000} style={{ width: "100%" }} type={'number'}/>
-            </Item>
+              type="number"
+            />
             <InputText
               label="Kriteria Inklusi & Ekslusi"
               name="kriteriaInklusiEkslusi"

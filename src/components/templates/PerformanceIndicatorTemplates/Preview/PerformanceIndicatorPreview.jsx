@@ -10,7 +10,7 @@ import {
   monthLowerWithObjID,
   monthAcronymID,
 } from "../../../../globals/monthLabel";
-import "./QualityIndicatorPreview.less";
+import "./PerformanceIndicatorPreview.less";
 import { LogoRuangMutu } from '../../../../assets/images';
 import { QRCode } from 'react-qrcode-logo';
 
@@ -34,7 +34,7 @@ const Footer = () => (
   </Row>
 );
 
-export const QualityIndicatorPreview = ({
+export const PerformanceIndicatorPreview = ({
   chartData = [],
   baseline,
   indicator,
@@ -97,7 +97,7 @@ export const QualityIndicatorPreview = ({
           </Row>
           <div className="preview-title">
             <Title level={4} style={{ color: "#5A7D7C" }}>
-              {isProfile ? 'PROFIL ' : ''}INDIKATOR MUTU PUSKESMAS KECAMATAN GAMBIR
+              {isProfile ? 'PROFIL ' : ''}INDIKATOR KINERJA PUSKESMAS KECAMATAN GAMBIR
             </Title>
           </div>
         </Col>

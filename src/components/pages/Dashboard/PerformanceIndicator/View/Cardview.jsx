@@ -3,7 +3,7 @@ import { Row, Col, Skeleton } from "antd";
 import { QualityIndicatorCard } from "../../../../molecules/QualityIndicatorCard/QualityIndicatorCard";
 import { fetchApiGet } from "../../../../../globals/fetchApi";
 import { useAuthToken } from "../../../../../globals/useAuthToken";
-import { QualityIndicatorPreview } from "../../../../templates/QualityIndicatorTemplates/Preview/QualityIndicatorPreview";
+import { PerformanceIndicatorPreview } from "../../../../templates/PerformanceIndicatorTemplates/Preview/PerformanceIndicatorPreview";
 
 const PerformanceIndicatorCardview = ({ filter }) => {
   const { getAccessToken } = useAuthToken();
@@ -109,7 +109,7 @@ const PerformanceIndicatorCardview = ({ filter }) => {
       )}
 
       {previewVis && (
-        <QualityIndicatorPreview
+        <PerformanceIndicatorPreview
           chartData={chartData.data}
           isProfile={previewData.is_profile_indicator}
           baseline={chartData.profile_target}
