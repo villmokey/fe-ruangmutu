@@ -32,6 +32,8 @@ import { useAuthToken } from "../../../../globals/useAuthToken";
 import { fetchApiDelete, fetchApiGet } from "../../../../globals/fetchApi";
 import { MasterDataSider } from "../../../organism/Dashboard/Sider/MasterData/MasterDataSider";
 import FormAdd from "./Add/Add";
+import PositionModal from "./Modal/PositionModal";
+import { Text } from "../../../atoms/Text/Text";
 
 const { Content } = Layout;
 const { confirm } = Modal;
@@ -41,6 +43,7 @@ export const UserPage = () => {
   const accessToken = getAccessToken();
   const [programs, setPrograms] = useState([]);
   const [openForm, setOpenForm] = useState(false);
+  const [openPositionModal, setOpenPositionModal] = useState(false);
   const [isCreate, setIsCreate] = useState(true);
   const [payload, setPayload] = useState({ id: "", name: "" });
   const [search, setSearch] = useState("");
@@ -80,9 +83,17 @@ export const UserPage = () => {
     setPaginationProps({ ...paginationProps, activePage: page });
   };
 
-  const handleEdit = (id, name, color) => {
+  const handleEdit = (
+    id,
+    email,
+    name,
+    nip,
+    position_id,
+    role_id,
+    signature_id
+  ) => {
     setIsCreate(false);
-    setPayload({ id, name, color });
+    setPayload({ id, email, name, nip, position_id, role_id, signature_id });
     setOpenForm(true);
   };
 
@@ -109,8 +120,24 @@ export const UserPage = () => {
 
   return (
     <Layout>
-      <MasterDataSider title={"DAFTAR PENGGUNA"} />
+      <MasterDataSider title={"DAFTAR PENGGUNA"}>
+        <div
+          style={{ marginTop: "20px" }}
+          onClick={() => {
+            setOpenPositionModal(true);
+          }}
+        >
+          <Text style={{ cursor: "pointer", color: "#5DC8BD" }}>
+            Tambah Master Jabatan
+          </Text>
+        </div>
+      </MasterDataSider>
       <Content className="main-content">
+        <PositionModal
+          open={openPositionModal}
+          handleOk={() => setOpenPositionModal(false)}
+          handleCancel={() => setOpenPositionModal(false)}
+        />
         <Row justify="end" style={{ marginTop: 40 }} gutter={[8]}>
           <Col>
             <InputSearch size="large" onSearch={handleSearch} />
@@ -170,8 +197,12 @@ export const UserPage = () => {
                             onClick={() =>
                               handleEdit(
                                 program.id,
+                                program.email,
                                 program.name,
-                                program.color
+                                program.nip,
+                                program.position_id,
+                                program.role_id,
+                                program.signature_id
                               )
                             }
                           >

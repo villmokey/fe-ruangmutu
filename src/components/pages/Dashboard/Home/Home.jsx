@@ -24,6 +24,7 @@ import { HealthServicePage } from "../../Master/HealthService/HealthService";
 import { DocumentTypePage } from "../../Master/DocumentType/DocumentType";
 import { UserPage } from "../../Master/User/User";
 import { PerformanceIndicator } from "../PerformanceIndicator/PerformanceIndicator";
+import { SquareLogo } from "../../../../assets/images";
 
 const { Content } = Layout;
 const { Text } = Typography;
@@ -130,7 +131,9 @@ export const Home = () => {
             <hr />
           </Col>
           <Col xs={24} sm={24} md={12} xl={12}>
-            <Text className="logo-text">
+            <img style={{ width: "70px" }} src={SquareLogo} alt="Ruang Mutu" />
+            <br />
+            <Text className="logo-text" style={{ margin: "unset" }}>
               RUANG <strong>MUTU</strong>
             </Text>
             <br />

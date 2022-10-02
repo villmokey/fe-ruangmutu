@@ -14,7 +14,7 @@ import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import DetailLoading from "./shimmer";
 import "./detail.cupboard.less";
-import { LogoRuangMutu } from "../../../../../assets/images";
+import { SquareLogo } from "../../../../../assets/images";
 import { QRCode } from "react-qrcode-logo";
 import moment from "moment";
 import "moment/locale/id";
@@ -165,9 +165,9 @@ const DetailQualityCupboard = () => {
                     : "Not Found"
                 }
                 ecLevel={"L"}
-                logoImage={LogoRuangMutu}
-                logoWidth={80}
-                logoHeight={35}
+                logoImage={SquareLogo}
+                logoWidth={40}
+                logoHeight={40}
               />
             </Box>
           </StyledBox>
