@@ -6,11 +6,13 @@ import "./Navbar.less";
 import { Text } from "../../../atoms/Text/Text";
 import { UserOutlined } from "@ant-design/icons";
 import { useAuthToken } from "../../../../globals/useAuthToken";
+import { useNavigate } from "react-router-dom";
 
 const { Header } = Layout;
 
-export const Navbar = ({ onLogout }) => {
+export const Navbar = ({ onLogout, showMenu = true }) => {
   const { getRole } = useAuthToken();
+  const navigate = useNavigate();
   const [menuItems, setMenuItems] = useState([
     {
       key: "submenu_document",
@@ -109,7 +111,6 @@ export const Navbar = ({ onLogout }) => {
   const userMenu = <Menu menuItems={userMenuItem} />;
 
   useEffect(() => {
-    console.log("getRole()", getRole());
     if (getRole() === "admin") {
       if (!menuItems.find((x) => x.key === "master_data_admin")) {
         setMenuItems([...menuItems, ...adminMenu]);
@@ -119,19 +120,29 @@ export const Navbar = ({ onLogout }) => {
 
   return (
     <Header className="navbar-dashboard">
-      <div className="dashboard-logo">
+      <div
+        className="dashboard-logo"
+        style={{ cursor: "pointer" }}
+        onClick={() => navigate("/")}
+      >
         <Text>
           RUANG <strong>MUTU</strong>
         </Text>
       </div>
-      <div className="user-icon">
-        <Dropdown overlay={userMenu}>
-          <UserOutlined
-            style={{ fontSize: "28px", color: "white", cursor: "pointer" }}
-          />
-        </Dropdown>
-      </div>
-      <Menu menuItems={menuItems} mode="horizontal" className="menu" />
+      {showMenu && (
+        <div className="user-icon">
+          <Dropdown overlay={userMenu}>
+            <UserOutlined
+              style={{ fontSize: "28px", color: "white", cursor: "pointer" }}
+            />
+          </Dropdown>
+        </div>
+      )}
+      <Menu
+        menuItems={showMenu ? menuItems : []}
+        mode="horizontal"
+        className="menu"
+      />
     </Header>
   );
 };

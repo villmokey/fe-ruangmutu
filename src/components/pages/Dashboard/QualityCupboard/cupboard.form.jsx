@@ -414,12 +414,12 @@ const QualityCupboardForm = ({ open, onClose, onSuccessSubmit }) => {
                 </Typography>
                 <Dragger
                   beforeUpload={() => false}
-                  accept="application/pdf, image/*"
+                  accept="application/pdf"
                   onChange={({ fileList }) => {
                     setFiles(fileList);
                   }}
                   style={{
-                    minHeight: "367px !important",
+                    minHeight: "200px !important",
                     background: "transparent",
                     border: "1px dashed #000000",
                   }}
@@ -429,7 +429,7 @@ const QualityCupboardForm = ({ open, onClose, onSuccessSubmit }) => {
                     Seret dan lepas pilih file untuk mengunggah file anda.
                   </Typography>
                   <Typography fontSize={"12px"} color={"#416072"}>
-                    format yang didukung pdf, jpeg, jpg, png
+                    format yang didukung pdf
                   </Typography>
                 </Dragger>
                 <Space direction="horizontal">

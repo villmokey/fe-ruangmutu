@@ -155,7 +155,10 @@ export const HealthServicePage = () => {
           </Col>
           <Col>
             <Button
-              onClick={() => setOpenForm(true)}
+              onClick={() => {
+                setIsCreate(true);
+                setOpenForm(true);
+              }}
               type="primary"
               icon={<PlusOutlined />}
               size="large"

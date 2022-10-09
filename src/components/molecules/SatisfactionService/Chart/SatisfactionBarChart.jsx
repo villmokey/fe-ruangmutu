@@ -44,17 +44,18 @@ const IndicatorBarChart = ({ chartData, achievement = 0 }) => {
             domain={[0, achievement + 20]}
           />
           <Tooltip />
-          <ReferenceLine y={achievement} stroke="black" />
+          {/* <ReferenceLine y={achievement} stroke="black" /> */}
           <Bar
             radius={[10, 10, 0, 0]}
-            dataKey="capaian"
+            dataKey="average"
             label={"Capaian Indikator"}
             fill="#82ca9d"
             style={{ borderRadius: "10px" }}
           >
             {chartData &&
               chartData.map((item, index) => (
-                <Cell fill={getBarColor(item.capaian)} />
+                // <Cell fill={getBarColor(item.capaian)} />
+                <Cell fill={"#6CC85D"} />
               ))}
           </Bar>
         </BarChart>

@@ -1,8 +1,8 @@
 import React from "react";
-import { Skeleton } from "@mui/material";
+import { Skeleton } from "antd";
 
 const DetailLoading = () => {
-  return <Skeleton width={"100%"} />;
+  return <Skeleton />;
 };
 
 export default DetailLoading;

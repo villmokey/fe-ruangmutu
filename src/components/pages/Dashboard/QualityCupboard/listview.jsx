@@ -39,7 +39,14 @@ const ListView = ({
           documents.map((doc, index) => (
             <TableRow key={index}>
               <TableData>
-                <a href={doc.file.file_link} target={'_blank'}>
+                <a
+                  href={
+                    doc && doc.file && doc.file.file_link
+                      ? doc.file.file_link
+                      : ""
+                  }
+                  target={"_blank"}
+                >
                   <Box width={"100%"}>
                     {doc.related_program && doc.related_program.length > 0 && (
                       <Stack direction={"row"}>

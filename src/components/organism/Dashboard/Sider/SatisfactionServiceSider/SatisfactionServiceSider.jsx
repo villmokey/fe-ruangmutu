@@ -27,26 +27,14 @@ export const SatisfactionServiceSider = ({
       </div>
 
       <div className="sider-filter">
-        <Row style={{ margin: "20px 0px" }}>
+        {/* <Row style={{ margin: "20px 0px" }}>
           <Col>
             <QualityYear
               onChange={(v) => setFilter({ ...filter, year: v })}
               value={filter.year}
             />
           </Col>
-        </Row>
-        <Row style={{ margin: "20px 0px" }}>
-          <Col>
-            <DocumentType
-              customList={[
-                { id: "indicator_profile", name: "Profile Indikator" },
-                { id: "indicator", name: "Indikator Mutu" },
-              ]}
-              onChange={(v) => setFilter({ ...filter, type: v })}
-              value={filter.type}
-            />
-          </Col>
-        </Row>
+        </Row> */}
         <Row style={{ margin: "20px 0px" }}>
           <Col>
             <UnitService

@@ -4,11 +4,9 @@ import { Card } from "../../../atoms/Card/Card";
 import "./SatisficationServiceCard.less";
 import Thumbnail from "../../../../assets/images/thumbnail.png";
 import { Text } from "../../../atoms/Text/Text";
+import moment from "moment";
 
-export const SatisficationServiceCard = ({
-  onOpenPreview,
-  indicatorData,
-}) => {
+export const SatisficationServiceCard = ({ onOpenPreview, cardData }) => {
   return (
     <>
       <Card className="quality-indicator-card">
@@ -17,18 +15,17 @@ export const SatisficationServiceCard = ({
         </div>
         <div className="tag" style={{ justifyContent: "start" }}>
           <Tag color="#6A9695" style={{ fontSize: 9 }}>
-            {'KELUHAN PELANGGAN'}
-
+            {cardData?.program?.name ?? ""}
           </Tag>
         </div>
         <div className="content">
-          <span title={indicatorData.title}>
+          <span title={cardData.report}>
             <Text className="title" style={{ lineHeight: "10px" }}>
-              Keluhan Pertama
+              {cardData.report.substr(0, 20)}
             </Text>
           </span>
           <p className="info">
-            16 September 2022
+            {moment(cardData.created_at).format("DD MMM YYYY")}
           </p>
         </div>
       </Card>
