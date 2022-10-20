@@ -42,9 +42,9 @@ const EventItem = ({
                   <Button style={{ border: "none" }}>Realisasi</Button>
                 </Popconfirm>
               )}
-              <Button onClick={onEdit} style={{ border: "none" }}>
+              {/* <Button onClick={onEdit} style={{ border: "none" }}>
                 Ubah
-              </Button>
+              </Button> */}
               <Popconfirm
                 title="Anda yakin akan menghapus kegiatan ini?"
                 okText="Ya"

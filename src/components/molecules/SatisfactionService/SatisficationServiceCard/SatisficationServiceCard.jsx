@@ -2,7 +2,7 @@ import { Image, Space, Tag } from "antd";
 import { Card } from "../../../atoms/Card/Card";
 
 import "./SatisficationServiceCard.less";
-import Thumbnail from "../../../../assets/images/thumbnail.png";
+import Thumbnail from "../../../../assets/images/keluhan_pelanggan.png";
 import { Text } from "../../../atoms/Text/Text";
 import moment from "moment";
 
@@ -11,7 +11,12 @@ export const SatisficationServiceCard = ({ onOpenPreview, cardData }) => {
     <>
       <Card className="quality-indicator-card">
         <div className="thumbnail">
-          <Image src={Thumbnail} preview={false} onClick={onOpenPreview} />
+          <Image
+            src={Thumbnail}
+            preview={false}
+            onClick={onOpenPreview}
+            style={{ width: "100px" }}
+          />
         </div>
         <div className="tag" style={{ justifyContent: "start" }}>
           <Tag color="#6A9695" style={{ fontSize: 9 }}>

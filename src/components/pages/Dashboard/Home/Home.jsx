@@ -25,6 +25,7 @@ import { DocumentTypePage } from "../../Master/DocumentType/DocumentType";
 import { UserPage } from "../../Master/User/User";
 import { PerformanceIndicator } from "../PerformanceIndicator/PerformanceIndicator";
 import { SquareLogo } from "../../../../assets/images";
+import { DashboardPage } from "./Dashboard";
 
 const { Content } = Layout;
 const { Text } = Typography;
@@ -40,7 +41,7 @@ export const Home = () => {
       navigate(paths.LOGIN);
       return;
     }
-    navigate(paths.QUALITY_INDICATOR);
+    // navigate(paths.QUALITY_INDICATOR);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -48,6 +49,7 @@ export const Home = () => {
   const handleLogout = () => {
     dispatch(removeAccessToken());
   };
+
 
   return (
     <Layout>
@@ -63,6 +65,10 @@ export const Home = () => {
       <Layout className="dashboard-layout">
         <Content className="dashboard-content">
           <Routes>
+            <Route
+              path={'/'}
+              element={<DashboardPage />}
+            />
             <Route
               path={paths.QUALITY_INDICATOR}
               element={<QualityIndicator />}

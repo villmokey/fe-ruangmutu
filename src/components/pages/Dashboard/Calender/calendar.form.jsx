@@ -460,7 +460,7 @@ const FormCalendar = ({ open, onClose, onSuccessSubmit }) => {
                     setFiles(fileList);
                   }}
                   style={{
-                    minHeight: "367px !important",
+                    height: "200px !important",
                     background: "transparent",
                     border: "1px dashed #000000",
                   }}

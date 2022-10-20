@@ -9,17 +9,15 @@ import "moment/locale/id";
 import { useState } from "react";
 const { Sider: AntdSider } = Layout;
 
-export const QualityIndicatorSider = ({ onFilter }) => {
+export const DashboardSider = ({ onFilter }) => {
   const [filter, setFilter] = useState({
     year: undefined,
-    program_id: undefined,
-    document_type: undefined,
   });
 
   return (
     <AntdSider className="sider">
       <div className="sider-content">
-        <Title level={2}>INDIKATOR MUTU</Title>
+        <Title level={2}>BERANDA</Title>
         <Text>{moment().format("dddd, DD MMMM YYYY")}</Text>
       </div>
 
@@ -29,27 +27,6 @@ export const QualityIndicatorSider = ({ onFilter }) => {
             <QualityYear
               onChange={(v) => setFilter({ ...filter, year: v })}
               value={filter.year}
-            />
-          </Col>
-        </Row>
-        <Row style={{ margin: "20px 0px" }}>
-          <Col>
-            <DocumentType
-              customList={[
-                { id: "indicator_profile", name: "Profile Indikator" },
-                { id: "indicator", name: "Indikator Mutu" },
-              ]}
-              onChange={(v) => setFilter({ ...filter, document_type: v })}
-              value={filter.document_type}
-            />
-          </Col>
-        </Row>
-        <Row style={{ margin: "20px 0px" }}>
-          <Col>
-            <UnitService
-              multiple
-              onChange={(v) => setFilter({ ...filter, program_id: v })}
-              value={filter.program_id}
             />
           </Col>
         </Row>
@@ -63,7 +40,7 @@ export const QualityIndicatorSider = ({ onFilter }) => {
           return onFilter(filter);
         }}
       >
-        Cari Dokumen
+        Pilih
       </Button>
     </AntdSider>
   );

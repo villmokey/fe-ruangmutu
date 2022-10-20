@@ -115,9 +115,7 @@ export const ThirdStep = ({
               name="reported_by"
               initialValue={payload.reported_by}
               placeholder={"Masukan nama pelapor"}
-              rules={[
-                { required: true, message: "Nama pelapor tidak boleh kosong!" },
-              ]}
+              rules={[]}
             >
               <InputText disabled />
             </Item>

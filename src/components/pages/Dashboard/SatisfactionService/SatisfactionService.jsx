@@ -17,8 +17,6 @@ etc:
 import { Button, Col, Layout, Row, Skeleton, Space, Tag } from "antd";
 import { Card } from "../../../atoms/Card/Card";
 import { Title } from "../../../atoms/Title/Title";
-
-import "./SatisfactionService.less";
 import { InputSearch } from "../../../atoms/InputSearch/InputSearch";
 import { OrderedListOutlined, PlusOutlined } from "@ant-design/icons";
 
@@ -27,25 +25,21 @@ import { Link } from "react-router-dom";
 import { paths } from "../../../../routing/paths";
 import { SatisfactionServiceSider } from "../../../organism/Dashboard/Sider/SatisfactionServiceSider/SatisfactionServiceSider";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useAuthToken } from "../../../../globals/useAuthToken";
 import { SatisfactionServiceChart } from "../../../molecules/SatisfactionService/SatisfactionServiceChart";
-import {
-  getAllQualityIndicator,
-  qualityIndicatorSelector,
-} from "../../../../redux/modules/qualityIndicator/action";
+import { qualityIndicatorSelector } from "../../../../redux/modules/qualityIndicator/action";
 import { FileTextOutlined } from "@ant-design/icons";
 import { fetchApiGet } from "../../../../globals/fetchApi";
 import { SatisfactionServiceCardView } from "./View/Cardview";
 import { SatisfactionServiceListView } from "./View/ListView";
-import { monthAcronymID, monthFullID } from "../../../../globals/monthLabel";
+import { monthAcronymID } from "../../../../globals/monthLabel";
 import { Box, Pagination } from "@mui/material";
 
 const { Content } = Layout;
 
 export const SatisfactionService = () => {
   const [viewType, setViewType] = useState(1);
-  const dispatch = useDispatch();
   const { getAccessToken } = useAuthToken();
   const accessToken = getAccessToken();
   const [programs, setPrograms] = useState([]);
@@ -54,9 +48,10 @@ export const SatisfactionService = () => {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
+  const [search, setSearch] = useState("");
   const [totalResult, setTotalResult] = useState({
-    all: "78",
-    selected: "75",
+    in: "0",
+    complete: "0",
   });
   const [filter, setFilter] = useState({
     year: undefined,
@@ -69,22 +64,38 @@ export const SatisfactionService = () => {
 
   const fetchComplaints = () => {
     setLoading(true);
-    fetchApiGet("/complaint", { per_page: 12, page: page }, accessToken).then(
-      (res) => {
-        if (res && res.success) {
-          console.log(res.data);
-          setLoading(false);
-          setTotalPage(res.data.last_page);
-          setComplaints(res.data.data);
+    fetchApiGet(
+      "/complaint",
+      { per_page: 12, page: page, search: search },
+      accessToken
+    ).then((res) => {
+      if (res && res.success) {
+        console.log(res.data);
+        setLoading(false);
+        setTotalPage(res.data.last_page);
+        setComplaints(res.data.data);
+      }
+    });
+  };
+
+  const fetchInformation = () => {
+    setLoading(true);
+    fetchApiGet("/satisfaction/info", {}, accessToken).then((res) => {
+      if (res && res.success) {
+        if (res && res.data) {
+          setTotalResult({
+            in: res.data.complaint_in,
+            complete: res.data.complaint_done,
+          });
         }
       }
-    );
+    });
   };
 
   const fetchPrograms = () => {
     fetchApiGet("/program", { paginate: false }, accessToken).then((res) => {
       if (res && res.success) {
-        setPrograms(res.data.data);
+        setPrograms(res.data);
       }
     });
   };
@@ -144,6 +155,7 @@ export const SatisfactionService = () => {
   };
 
   useEffect(() => {
+    fetchInformation();
     fetchPrograms();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -151,11 +163,11 @@ export const SatisfactionService = () => {
   useEffect(() => {
     fetchComplaints();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filter, page]);
+  }, [filter, page, search]);
 
   useEffect(() => {
     fetchData();
-  }, [list]);
+  }, [list]); //eslint-disable-line
 
   return (
     <Layout>
@@ -169,13 +181,13 @@ export const SatisfactionService = () => {
           <Col>
             <Card className="total">
               <p className="card-title">KELUHAN MASUK</p>
-              <Title className="card-content">{totalResult.all}</Title>
+              <Title className="card-content">{totalResult.in}</Title>
             </Card>
           </Col>
           <Col>
             <Card className="total">
               <p className="card-title">KELUHAN TERTANGANI</p>
-              <Title className="card-content">{totalResult.selected}</Title>
+              <Title className="card-content">{totalResult.complete}</Title>
             </Card>
           </Col>
         </Row>
@@ -196,7 +208,7 @@ export const SatisfactionService = () => {
         </Row>
         <Row justify="end" style={{ marginTop: 40 }} gutter={[8]}>
           <Col>
-            <InputSearch size="large" />
+            <InputSearch size="large" onSearch={(e) => setSearch(e)} />
           </Col>
           <Col>
             <Link to={`${paths.ADD}`}>
@@ -250,7 +262,10 @@ export const SatisfactionService = () => {
         <div className="indikator-mutu-container">
           {!loading ? (
             viewType === 1 ? (
-              <SatisfactionServiceCardView lists={complaints} />
+              <SatisfactionServiceCardView
+                lists={complaints}
+                onRefresh={() => fetchComplaints()}
+              />
             ) : (
               <SatisfactionServiceListView />
             )

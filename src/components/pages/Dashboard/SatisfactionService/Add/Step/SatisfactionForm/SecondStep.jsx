@@ -125,9 +125,7 @@ export const SecondStep = ({
                 payloadSetter({ ...payload, reported_by: e.target.value })
               }
               placeholder={"Masukan nama pelapor"}
-              rules={[
-                { required: true, message: "Nama pelapor tidak boleh kosong!" },
-              ]}
+              rules={[]}
             >
               <InputText />
             </Item>

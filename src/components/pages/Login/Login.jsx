@@ -32,7 +32,7 @@ export const Login = () => {
 
     if (!getIsAuth()) return;
 
-    navigate(paths.DASHBOARD);
+    navigate('/dashboard');
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [called, isAuth])

@@ -4,19 +4,19 @@ import {
   XAxis,
   YAxis,
   Cell,
+  ReferenceLine,
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
 
-const IndicatorBarChart = ({ chartData, achievement = 0 }) => {
-
+const PerformanceChart = ({ chartData }) => {
   const getBarColor = (value) => {
     if (value > 80) {
-      return "#6CC85D";
+      return "#5F5DC8";
     } else if (value > 40) {
       return "#C8BD5D";
     } else {
-      return "#c14141";
+      return "#C85D5D";
     }
   };
 
@@ -42,18 +42,16 @@ const IndicatorBarChart = ({ chartData, achievement = 0 }) => {
             domain={[0, 100]}
           />
           <Tooltip />
-          {/* <ReferenceLine y={achievement} stroke="black" /> */}
           <Bar
             radius={[10, 10, 0, 0]}
             dataKey="average"
-            label={"Capaian Indikator"}
+            label={"Capaian Kinerja"}
             fill="#82ca9d"
             style={{ borderRadius: "10px" }}
           >
             {chartData &&
               chartData.map((item, index) => (
                 <Cell fill={getBarColor(item.average)} />
-                // <Cell fill={"#6CC85D"} />
               ))}
           </Bar>
         </BarChart>
@@ -62,4 +60,4 @@ const IndicatorBarChart = ({ chartData, achievement = 0 }) => {
   );
 };
 
-export default IndicatorBarChart;
+export default PerformanceChart;

@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
+import { Menu as AntdMenu } from "antd";
 import { paths } from "../../../../routing/paths";
 import { Button, Dropdown, Layout } from "antd";
 import { Menu } from "../../../molecules/Menu/Menu";
 import "./Navbar.less";
 import { Text } from "../../../atoms/Text/Text";
-import { UserOutlined } from "@ant-design/icons";
+import { SettingOutlined, UserOutlined } from "@ant-design/icons";
 import { useAuthToken } from "../../../../globals/useAuthToken";
 import { useNavigate } from "react-router-dom";
 
@@ -69,11 +70,6 @@ export const Navbar = ({ onLogout, showMenu = true }) => {
           title: "PENGGUNA",
           url: paths.USERS,
         },
-        // {
-        //   key: "jabatan",
-        //   title: "JABATAN",
-        //   url: paths.SATISFACTION_SERVICE,
-        // },
         {
           key: "program-mutu",
           title: "UNIT/PROGRAM",
@@ -92,6 +88,7 @@ export const Navbar = ({ onLogout, showMenu = true }) => {
       ],
     },
   ];
+
   // for the key, use "_" for submenu
   // e.g submenu_sponsor
 
@@ -108,35 +105,74 @@ export const Navbar = ({ onLogout, showMenu = true }) => {
     },
   ];
 
-  const userMenu = <Menu menuItems={userMenuItem} />;
+  const masterDataItem = [
+    {
+      key: "Pengguna",
+      title: "Pengguna",
+      url: paths.USERS,
+    },
+    {
+      key: "Unit/Program",
+      title: "Unit/Program",
+      url: paths.INDICATOR_PROGRAM,
+    },
+    {
+      key: "Layanan-Kesehatan",
+      title: "Layanan Kesehatan",
+      url: paths.HEALTH_SERVICE,
+    },
+    {
+      key: "tipe-dok",
+      title: "Tipe Dokumen",
+      url: paths.DOCUMENT_TYPE,
+    },
+  ];
 
-  useEffect(() => {
-    if (getRole() === "admin") {
-      if (!menuItems.find((x) => x.key === "master_data_admin")) {
-        setMenuItems([...menuItems, ...adminMenu]);
-      }
-    }
-  }, []);
+  const userMenu = <Menu menuItems={userMenuItem} />;
+  const masterDataMenu = <Menu menuItems={masterDataItem} />;
+
+  // useEffect(() => {
+  //   if (getRole() === "admin") {
+  //     if (!menuItems.find((x) => x.key === "master_data_admin")) {
+  //       setMenuItems([...menuItems, ...adminMenu]);
+  //     }
+  //   }
+  // }, []);
 
   return (
     <Header className="navbar-dashboard">
       <div
         className="dashboard-logo"
         style={{ cursor: "pointer" }}
-        onClick={() => navigate("/")}
+        onClick={() => navigate("/dashboard")}
       >
         <Text>
           RUANG <strong>MUTU</strong>
         </Text>
       </div>
       {showMenu && (
-        <div className="user-icon">
-          <Dropdown overlay={userMenu}>
-            <UserOutlined
-              style={{ fontSize: "28px", color: "white", cursor: "pointer" }}
-            />
-          </Dropdown>
-        </div>
+        <>
+          <div className="user-icon" style={{ marginLeft: "10px" }}>
+            <Dropdown overlay={userMenu}>
+              <UserOutlined
+                style={{ fontSize: "24px", color: "white", cursor: "pointer" }}
+              />
+            </Dropdown>
+          </div>
+          {getRole() === "admin" && (
+            <div className="user-icon">
+              <Dropdown overlay={masterDataMenu}>
+                <SettingOutlined
+                  style={{
+                    fontSize: "24px",
+                    color: "white",
+                    cursor: "pointer",
+                  }}
+                />
+              </Dropdown>
+            </div>
+          )}
+        </>
       )}
       <Menu
         menuItems={showMenu ? menuItems : []}

@@ -36,6 +36,7 @@
     "recharts": "^2.1.10",
     "redux-devtools-extension": "^2.13.9",
     "styled-components": "^5.3.5",
+    "swiper": "^8.4.4",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

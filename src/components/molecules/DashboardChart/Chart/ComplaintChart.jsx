@@ -4,19 +4,21 @@ import {
   XAxis,
   YAxis,
   Cell,
+  ReferenceLine,
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
 
-const IndicatorBarChart = ({ chartData, achievement = 0 }) => {
-
+const ComplaintChart = ({ chartData, achievement = 0 }) => {
   const getBarColor = (value) => {
-    if (value > 80) {
+    if (value > achievement) {
+      return "#5F5DC8";
+    } else if (value === achievement) {
       return "#6CC85D";
-    } else if (value > 40) {
+    } else if (value >= achievement / 2 && value < achievement) {
       return "#C8BD5D";
     } else {
-      return "#c14141";
+      return "#C85D5D";
     }
   };
 
@@ -39,27 +41,27 @@ const IndicatorBarChart = ({ chartData, achievement = 0 }) => {
             axisLine={false}
             tickLine={false}
             type={"number"}
-            domain={[0, 100]}
+            domain={[0, 10]}
           />
           <Tooltip />
-          {/* <ReferenceLine y={achievement} stroke="black" /> */}
           <Bar
             radius={[10, 10, 0, 0]}
-            dataKey="average"
-            label={"Capaian Indikator"}
+            dataKey="done"
+            label={"Telah ditangani"}
             fill="#82ca9d"
             style={{ borderRadius: "10px" }}
-          >
-            {chartData &&
-              chartData.map((item, index) => (
-                <Cell fill={getBarColor(item.average)} />
-                // <Cell fill={"#6CC85D"} />
-              ))}
-          </Bar>
+          ></Bar>
+          <Bar
+            radius={[10, 10, 0, 0]}
+            dataKey="pending"
+            label={"Belum Ditangani"}
+            fill="#4e4e4e"
+            style={{ borderRadius: "10px" }}
+          ></Bar>
         </BarChart>
       </ResponsiveContainer>
     </div>
   );
 };
 
-export default IndicatorBarChart;
+export default ComplaintChart;

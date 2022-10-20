@@ -1,15 +1,12 @@
 import React, { useState } from "react";
 import { Row, Col, Skeleton } from "antd";
-import { useAuthToken } from "../../../../../globals/useAuthToken";
 import { SatisficationServiceCard } from "../../../../molecules/SatisfactionService/SatisficationServiceCard/SatisficationServiceCard";
 import { SatisfactionPreview } from "./Preview";
 
-export const SatisfactionServiceCardView = ({ lists = [] }) => {
-  const { getAccessToken } = useAuthToken();
-  const accessToken = getAccessToken();
+export const SatisfactionServiceCardView = ({ lists = [], onRefresh }) => {
   const [previewVis, setPreviewVis] = useState(false);
   const [previewData, setPreviewData] = useState({});
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false); //eslint-disable-line
   return (
     <>
       {!loading ? (
@@ -21,7 +18,6 @@ export const SatisfactionServiceCardView = ({ lists = [] }) => {
                   previewVisibility={previewVis}
                   onClosePreviewVisibility={() => setPreviewVis(false)}
                   onOpenPreview={() => {
-                    console.log(item);
                     setPreviewData(item);
                     setPreviewVis(true);
                   }}
@@ -41,6 +37,10 @@ export const SatisfactionServiceCardView = ({ lists = [] }) => {
         <SatisfactionPreview
           detail={previewData}
           visibility={previewVis}
+          onUpdateSuccess={() => {
+            setPreviewVis(true);
+            onRefresh();
+          }}
           onClose={() => setPreviewVis(false)}
         />
       )}

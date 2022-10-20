@@ -1,6 +1,6 @@
 import { Button, Col, message, Row } from "antd";
-import { useEffect, useState } from "react";
-import { monthAcronymID, monthFullID } from "../../../globals/monthLabel";
+import { useState } from "react";
+import { monthFullID } from "../../../globals/monthLabel";
 import { Card } from "../../atoms/Card/Card";
 import { Text } from "../../atoms/Text/Text";
 import { Title } from "../../atoms/Title/Title";
@@ -35,49 +35,9 @@ export const SatisfactionServiceChart = ({
       setDetailData([]);
     }
   };
-
-  const rates = [
-    {
-      unit: "Admen",
-      value: "80",
-      max: "100",
-    },
-    {
-      unit: "Gizi",
-      value: "60",
-      max: "100",
-    },
-    {
-      unit: "UKP",
-      value: "40",
-      max: "100",
-    },
-    {
-      unit: "UKM",
-      value: "70",
-      max: "100",
-    },
-    {
-      unit: "FARMASI",
-      value: "70",
-      max: "100",
-    },
-    {
-      unit: "LABORATIORIUM",
-      value: "70",
-      max: "100",
-    },
-    {
-      unit: "BPJS",
-      value: "70",
-      max: "100",
-    },
-  ];
-
-  const months = monthFullID;
-
+  
   return (
-    <Card className={className}>
+    <Card className={className} style={{ margin: "10px 0" }}>
       <Title level={4}>{title}</Title>
       <Title level={5} type="secondary">
         {year}

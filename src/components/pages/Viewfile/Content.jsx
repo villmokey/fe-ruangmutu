@@ -1,8 +1,8 @@
 import React from "react";
-import { Button, Col, Layout, Row, Space } from "antd";
+import { Button, Col, Layout, Row, Space, Tag } from "antd";
 import { FolderOpenOutlined } from "@ant-design/icons";
 import { Box, Typography } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useAuthToken } from "../../../globals/useAuthToken";
 import { fetchApiGet } from "../../../globals/fetchApi";
 import styled from "styled-components";
@@ -34,7 +34,7 @@ const ViewFileContent = ({ id, type }) => {
 
   React.useEffect(() => {
     if (getIsAuth()) requestDetail();
-  }, []);
+  }, [getIsAuth]); //eslint-disable-line
 
   return (
     <Layout>
@@ -60,12 +60,43 @@ const ViewFileContent = ({ id, type }) => {
                 <Box className={"detail-information"}>
                   <table>
                     <tr>
+                      <td>Nomor Dokumen</td>
+                      <td>:</td>
+                      <td>{document.document_number ?? "-"}</td>
+                    </tr>
+                    <tr>
+                      <td>Tipe Dokumen</td>
+                      <td>:</td>
+                      <td>
+                        {document.document_type && document.document_type.name
+                          ? document.document_type.name
+                          : "-"}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Program/Unit Terkait</td>
+                      <td>:</td>
+                      <td>
+                        {document.related_program &&
+                        document.related_program.length
+                          ? document.related_program.map(
+                              (rel) =>
+                                rel.program && (
+                                  <Tag key={rel.id}>{rel.program.name}</Tag>
+                                )
+                            )
+                          : "-"}
+                      </td>
+                    </tr>
+                    <tr>
                       <td>Tanggal Dipublikasi</td>
                       <td>:</td>
                       <td>
-                        {moment(document.publish_date).format(
-                          "dddd, DD MMMM YYYY"
-                        )}
+                        {document.publish_date
+                          ? moment(document.publish_date).format(
+                              "dddd, DD MMMM YYYY"
+                            )
+                          : "-"}
                       </td>
                     </tr>
                     <tr>
