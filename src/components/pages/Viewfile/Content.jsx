@@ -34,7 +34,7 @@ const ViewFileContent = ({ id, type }) => {
 
   React.useEffect(() => {
     if (getIsAuth()) requestDetail();
-  }, [getIsAuth]); //eslint-disable-line
+  }, []); //eslint-disable-line
 
   return (
     <Layout>
