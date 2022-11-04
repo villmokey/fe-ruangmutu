@@ -125,6 +125,7 @@ export const DocumentApprovalCard = ({
             });
           });
 
+          
           setTempChartData(results);
           setTimeout(async () => {
             console.log(chartRef.current.toBase64Image("image/png"));
