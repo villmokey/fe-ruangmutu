@@ -192,9 +192,7 @@ const EventItem = ({
                     <DocumentItem key={"support-doc-" + index}>
                       <a
                         style={{ color: "white" }}
-                        href={
-                          process.env.REACT_APP_API_URL + "/" + rel.file_path
-                        }
+                        href={rel.file_link}
                         target={"_blank"}
                         rel="noreferrer"
                       >
