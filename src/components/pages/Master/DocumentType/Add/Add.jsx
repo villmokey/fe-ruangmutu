@@ -87,6 +87,7 @@ const FormAdd = ({
           value={payload.name}
           onChange={(e) => payloadSetter({ ...payload, name: e.target.value })}
         />
+        <Textfield label="Ikon" type={"file"} />
         <Stack direction={"row"} spacing={1}>
           <Button onClick={onClose} type="ghost">
             Batal

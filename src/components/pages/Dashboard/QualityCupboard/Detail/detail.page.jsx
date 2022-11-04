@@ -183,24 +183,22 @@ const DetailQualityCupboard = () => {
                 </tr>
               </table>
             </Box>
-            <Box
-              width={"100%"}
-              display={"flex"}
-              justifyContent={"start"}
-              margin={"20px 0 0 0"}
-            >
-              <QRCode
-                value={
-                  document.file && document.file.id
-                    ? document.file.id
-                    : "Not Found"
-                }
-                ecLevel={"L"}
-                logoImage={SquareLogo}
-                logoWidth={40}
-                logoHeight={40}
-              />
-            </Box>
+            {document && document.qr_url && (
+              <Box
+                width={"100%"}
+                display={"flex"}
+                justifyContent={"start"}
+                margin={"20px 0 0 0"}
+              >
+                <QRCode
+                  value={document.qr_url}
+                  ecLevel={"H"}
+                  logoImage={SquareLogo}
+                  logoWidth={40}
+                  logoHeight={40}
+                />
+              </Box>
+            )}
           </StyledBox>
         ) : (
           <DetailLoading />

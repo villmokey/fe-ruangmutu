@@ -31,7 +31,7 @@ const FormAdd = ({
   const accessToken = getAccessToken();
   const [positions, setPositions] = useState([]);
   const [roles, setRoles] = useState([]);
-  const [file, setFile] = useState({});
+  const [file, setFile] = useState(undefined);
   const handleSubmit = () => {
     if (isCreate) {
       handleCreate();
@@ -84,6 +84,7 @@ const FormAdd = ({
 
   const handleUpdate = async () => {
     if (file) {
+      console.log(file)
       let formData = new FormData();
       formData.append("file", file);
       formData.append("group_name", "user_signature");
@@ -179,7 +180,7 @@ const FormAdd = ({
       }}
     >
       <Title level={4}>{isCreate ? "TAMBAH" : "EDIT"} PENGGUNA</Title>
-      <Form layout={"vertical"} onFinish={handleSubmit}>
+      <Form layout={"vertical"} onFinish={handleSubmit} autoComplete={"off"}>
         <Row gutter={[8]}>
           <Col md={12} xs={24} sm={24}>
             <Textfield
@@ -199,7 +200,7 @@ const FormAdd = ({
                 payloadSetter({ ...payload, name: e.target.value })
               }
             />
-            <Space direction="vertical" style={{ width: "100%" }}>
+            <Stack direction="column" style={{ width: "100%" }}>
               <div className="ant-form-item-label">
                 <label class="ant-form-item-required" title="Jabatan">
                   Jabatan
@@ -221,8 +222,8 @@ const FormAdd = ({
                     );
                   })}
               </Select>
-            </Space>
-            <Space direction="vertical" style={{ width: "100%" }}>
+            </Stack>
+            <Stack direction="column" sx={{ width: "100%", mt: "20px" }}>
               <div className="ant-form-item-label">
                 <label class="ant-form-item-required" title="Role Akses">
                   Role Akses
@@ -244,7 +245,7 @@ const FormAdd = ({
                     );
                   })}
               </Select>
-            </Space>
+            </Stack>
           </Col>
           <Col md={12} xs={24} sm={24}>
             <Textfield
@@ -268,7 +269,7 @@ const FormAdd = ({
               label="Konfirmasi Password"
               required
               value={payload.password_confirmation}
-              type="password_confirmation"
+              type="password"
               onChange={(e) =>
                 payloadSetter({
                   ...payload,
@@ -276,7 +277,11 @@ const FormAdd = ({
                 })
               }
             />
-            <Text>Tanda Tangan</Text>
+            <div className="ant-form-item-label">
+              <label class="ant-form-item-required" title="Role Akses">
+                Tanda Tangan
+              </label>
+            </div>
             <Upload.Dragger
               accept="image/*"
               maxCount={1}

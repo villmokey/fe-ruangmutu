@@ -3,7 +3,8 @@ import { Button, Col, message, Popconfirm, Row, Space } from "antd";
 import { useRef } from "react";
 import { useState } from "react";
 import { Bar } from "react-chartjs-2";
-import { fetchApiGet } from "../../../globals/fetchApi";
+import ChartAnnotation from "chartjs-plugin-annotation";
+import { fetchApiGet, fetchApiPost } from "../../../globals/fetchApi";
 import {
   monthAcronymID,
   monthLowerWithObjID,
@@ -14,7 +15,7 @@ import { Text } from "../../atoms/Text/Text";
 import { Title } from "../../atoms/Title/Title";
 import { PerformanceIndicatorPreview } from "../../templates/PerformanceIndicatorTemplates/Preview/PerformanceIndicatorPreview";
 import { QualityIndicatorPreview } from "../../templates/QualityIndicatorTemplates/Preview/QualityIndicatorPreview";
-import { BarChart } from "../Chart/Bar/BarChart";
+import { Buffer } from "buffer";
 
 export const DocumentApprovalCard = ({
   documentApprovalTitle,
@@ -60,9 +61,27 @@ export const DocumentApprovalCard = ({
         display: false,
         text: "Chart.js Bar Chart",
       },
+      annotation: {
+        annotations: [
+          {
+            id: "slo",
+            type: "line",
+            mode: "horizontal",
+            value: 50,
+            scaleID: "y",
+            borderWidth: 1,
+            borderDash: [10, 1],
+            label: {
+              enabled: false,
+              position: "start",
+            },
+          },
+        ],
+      },
       beforeDraw: (chart) => {
         const { ctx } = chart;
         ctx.save();
+        ctx.register(ChartAnnotation);
         ctx.globalCompositeOperation = "destination-over";
         ctx.fillStyle = "lightGreen";
         ctx.fillRect(0, 0, chart.width, chart.height);
@@ -125,30 +144,41 @@ export const DocumentApprovalCard = ({
             });
           });
 
-          
           setTempChartData(results);
           setTimeout(async () => {
-            console.log(chartRef.current.toBase64Image("image/png"));
             const link = document.createElement("a");
             link.download = "chart.jpeg";
             link.href = chartRef.current.toBase64Image("image/png");
             link.click();
 
-            await fetchApiGet(
-              `/indicator/${indicatorID}/generate`,
-              {},
-              accessToken
-            )
-              .then((res) => {
-                if (res && res.success) {
-                  message.success(res.message);
-                } else {
-                  message.warning(
-                    res.message ?? "Terjadi kesalahan silahkan coba lagi!"
-                  );
-                }
-              })
-              .catch();
+            let bags = new FormData();
+            bags.set("group_name", "indicator_chart");
+            bags.set("is_base_64", true);
+            bags.set("file", chartRef.current.toBase64Image("image/png"));
+
+            await fetchApiPost("/upload/file", accessToken, {
+              group_name: "indicator_chart",
+              is_base_64: true,
+              file: chartRef.current.toBase64Image("image/png"),
+            }).then(async (file) => {
+              if (file && file.success) {
+                await fetchApiGet(
+                  `/indicator/${indicatorID}/${file.data.id}/generate`,
+                  null,
+                  accessToken
+                )
+                  .then((res) => {
+                    if (res && res.success) {
+                      message.success(res.message);
+                    } else {
+                      message.warning(
+                        res.message ?? "Terjadi kesalahan silahkan coba lagi!"
+                      );
+                    }
+                  })
+                  .catch();
+              }
+            });
           }, 3000);
         }
       })
@@ -157,6 +187,19 @@ export const DocumentApprovalCard = ({
       })
       .finally(() => setLoadingGenerate(false));
   };
+
+  function dataURLtoFile(dataurl, filename) {
+    var arr = dataurl.split(",");
+    var mime = arr[0].match(/:(.*?);/)[1];
+    var bstr = Buffer.from(arr[1], "base64");
+    var n = bstr.length;
+    var u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.toString().charCodeAt(n);
+    }
+
+    return new File([u8arr], filename, { type: mime });
+  }
 
   const fetchIndicatorDetail = async () => {
     await fetchApiGet(`/indicator/${indicatorID}`, {}, accessToken)

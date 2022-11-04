@@ -18,6 +18,7 @@
     "@testing-library/user-event": "^13.5.0",
     "antd": "^4.20.5",
     "axios": "^0.27.2",
+    "buffer": "^6.0.3",
     "chart.js": "3.3.2",
     "chartjs-plugin-annotation": "1.0.2",
     "craco-less": "^2.0.0",

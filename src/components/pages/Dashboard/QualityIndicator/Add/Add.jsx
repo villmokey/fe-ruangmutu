@@ -11,6 +11,8 @@ import { Title } from "../../../../atoms/Title/Title";
 import { Text } from "../../../../atoms/Text/Text";
 import { Card } from "../../../../atoms/Card/Card";
 import { useDispatch, useSelector } from "react-redux";
+import moment from "moment";
+import "moment/locale/id";
 
 import "./Add.less";
 import {
@@ -577,7 +579,7 @@ export const Add = () => {
       <Sider className="sider">
         <div className="sider-content">
           <Title level={2}>INDIKATOR MUTU</Title>
-          <Text>Senin, 09 Agustus 2021</Text>
+          <Text>{moment().format("dddd, DD MMMM YYYY")}</Text>
         </div>
       </Sider>
       <Content className="main-content">

@@ -1,12 +1,4 @@
-import {
-  Button,
-  Col,
-  Layout,
-  Row,
-  Skeleton,
-  Modal,
-  message,
-} from "antd";
+import { Button, Col, Layout, Row, Skeleton, Modal, message } from "antd";
 import {
   TableData,
   TableHead,
@@ -17,6 +9,8 @@ import { Box, Pagination, Stack } from "@mui/material";
 import "./User.less";
 import { InputSearch } from "../../../atoms/InputSearch/InputSearch";
 import {
+  ArrowDownOutlined,
+  ArrowUpOutlined,
   DeleteTwoTone,
   EditTwoTone,
   PlusOutlined,
@@ -43,6 +37,7 @@ export const UserPage = () => {
   const [payload, setPayload] = useState({ id: "", name: "" });
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
+  const [sorting, setSorting] = useState("ASC");
   const [paginationProps, setPaginationProps] = useState({
     count: 0,
     activePage: 1,
@@ -55,6 +50,7 @@ export const UserPage = () => {
       {
         page: paginationProps.activePage,
         per_page: 10,
+        sort: sorting,
         search: search ?? undefined,
       },
       accessToken
@@ -111,7 +107,7 @@ export const UserPage = () => {
 
   useEffect(() => {
     fetchPrograms();
-  }, [paginationProps.activePage, search]);
+  }, [paginationProps.activePage, search, sorting]);
 
   return (
     <Layout>
@@ -175,7 +171,19 @@ export const UserPage = () => {
             <>
               <Table>
                 <thead style={{ fontWeight: "bold" }}>
-                  <TableHead>Nama</TableHead>
+                  <TableHead
+                    style={{ cursor: "pointer" }}
+                    onClick={() =>
+                      setSorting((prev) => (prev === "ASC" ? "DESC" : "ASC"))
+                    }
+                  >
+                    Nama{" "}
+                    {sorting === "ASC" ? (
+                      <ArrowUpOutlined />
+                    ) : (
+                      <ArrowDownOutlined />
+                    )}{" "}
+                  </TableHead>
                   <TableHead>Email</TableHead>
                   <TableHead>Jabatan</TableHead>
                   <TableHead>Role Akses</TableHead>

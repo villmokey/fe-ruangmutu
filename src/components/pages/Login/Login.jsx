@@ -1,6 +1,6 @@
 import { Card } from "../../atoms/Card/Card";
 import { Form } from "../../molecules/Form/Form";
-import { Col, Form as AntdForm, message, Row } from "antd";
+import { Col, Form as AntdForm, message, Modal, Row } from "antd";
 import "./Login.less";
 import { InputText } from "../../atoms/InputText/InputText";
 import { SubmitButton } from "../../atoms/SubmitButton/SubmitButton";
@@ -8,10 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { authSelector, loginApi } from "../../../redux/modules/auth/action";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  LogoGambir,
-  SquareLogo,
-} from "../../../assets/images";
+import { LogoGambir, SquareLogo } from "../../../assets/images";
 import { useAuthToken } from "../../../globals/useAuthToken";
 import { Text } from "../../atoms/Text/Text";
 import styled from "styled-components";
@@ -30,6 +27,20 @@ export const Login = () => {
   const { loading, error, called, isAuth } = useSelector(authSelector);
 
   const [form] = AntdForm.useForm();
+
+  const InfoModal = () => {
+    Modal.info({
+      title: "Lupa Password?",
+      content: (
+        <div>
+          <p>
+            Silahkan hubungi admin Ruang Mutu untuk melakukan perubahan password
+          </p>
+        </div>
+      ),
+      onOk() {},
+    });
+  };
 
   useEffect(() => {
     if (!getIsAuth()) return;
@@ -118,13 +129,12 @@ export const Login = () => {
                 alignItems={"center"}
                 sx={{ margin: "0 0 20px 0" }}
               >
-                <a href="/" style={{ color: "#2C5282" }}>
-                  Ingat Saya
-                </a>
-
-                <a href="/" style={{ color: "#2C5282" }}>
+                <div
+                  style={{ color: "#2C5282", cursor: "pointer" }}
+                  onClick={InfoModal}
+                >
                   Lupa Password
-                </a>
+                </div>
               </Stack>
 
               <SubmitButton

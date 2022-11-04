@@ -37,6 +37,7 @@ export const OperationalStandard = () => {
   const [relatedPrograms, setRelatedPrograms] = useState([]);
   const [secondStepOperationalStandardForm] = Form.useForm();
   const [thirdStepOperationalStandardForm] = Form.useForm();
+  const [loading, setLoading] = useState(false);
 
   const [payload, setPayload] = useState({
     name: "",
@@ -61,50 +62,54 @@ export const OperationalStandard = () => {
 
   const handleSubmit = () => {
     if (payload.flow_diagram && payload.flow_diagram.file) {
+      setLoading(true);
       let bags = new FormData();
       bags.append("group_name", "sop_diagram");
       bags.append("file", payload.flow_diagram.file);
 
-      fetchApiPost("/upload/file", accessToken, bags).then((file) => {
-        if (file && file.success) {
-          let history_list = [];
-          if (histories.length > 0) {
-            history_list = histories.map((history) => {
-              return {
-                name: history.name,
-                value: history.value,
-                publish: moment(history.publish).format("YYYY-MM-DD"),
-              };
-            });
-          }
+      fetchApiPost("/upload/file", accessToken, bags)
+        .then((file) => {
+          if (file && file.success) {
+            let history_list = [];
+            if (histories.length > 0) {
+              history_list = histories.map((history) => {
+                return {
+                  name: history.name,
+                  value: history.value,
+                  publish: moment(history.publish).format("YYYY-MM-DD"),
+                };
+              });
+            }
 
-          fetchApiPost("/operational-standard", accessToken, {
-            ...payload,
-            flow_diagram: file.data.id,
-            released_date: moment(payload.released_date).format("YYYY-MM-DD"),
-            related_program:
-              relatedPrograms.length > 0
-                ? relatedPrograms.map((x) => x).join(",")
-                : "",
-            histories: history_list,
-          })
-            .then((res) => {
-              if (res) {
-                if (res.success) {
-                  message.success("Berhasil Menambahkan SOP");
-                  navigate("/dashboard/quality-indicator");
-                } else {
-                  message.error("Error: " + res.message);
-                }
-              }
+            fetchApiPost("/operational-standard", accessToken, {
+              ...payload,
+              flow_diagram: file.data.id,
+              released_date: moment(payload.released_date).format("YYYY-MM-DD"),
+              related_program:
+                relatedPrograms.length > 0
+                  ? relatedPrograms.map((x) => x).join(",")
+                  : "",
+              histories: history_list,
             })
-            .catch((e) => {
-              if (e && e.response && e.response.data) {
-                message.error(e.response.data.message);
-              }
-            });
-        }
-      });
+              .then((res) => {
+                if (res) {
+                  if (res.success) {
+                    message.success("Berhasil Menambahkan SOP");
+                    window.location.reload();
+                  } else {
+                    message.error("Error: " + res.message);
+                  }
+                }
+              })
+              .catch((e) => {
+                if (e && e.response && e.response.data) {
+                  message.warning(e.response.data.message);
+                }
+              })
+              .finally(() => setLoading(false));
+          }
+        })
+        .catch();
     } else {
       message.warning("Silahkan pilih upload diagram alir terlebih dahulu");
     }
@@ -162,10 +167,7 @@ export const OperationalStandard = () => {
 
       <Content className="main-content operational-standard">
         <Breadcrumb separator=">" className="breadcrumb">
-          <Breadcrumb.Item
-            href={'/dashboard'}
-            className="breadcrumb__item"
-          >
+          <Breadcrumb.Item href={"/dashboard"} className="breadcrumb__item">
             <HomeFilled className="icon icon--default" />
             <span>Home</span>
           </Breadcrumb.Item>
@@ -198,6 +200,7 @@ export const OperationalStandard = () => {
           <Col>
             {current === steps.length - 1 && (
               <Button
+                loading={loading}
                 type="primary"
                 onClick={() => {
                   handleSubmit();

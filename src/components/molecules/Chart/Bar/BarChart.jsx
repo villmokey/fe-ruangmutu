@@ -38,7 +38,7 @@ export const BarChart = ({
   chartData = [],
   labels,
   barColor,
-  indicatorLineValue = 0,
+  indicatorLineValue = 40,
   options,
   ref,
 }) => {
