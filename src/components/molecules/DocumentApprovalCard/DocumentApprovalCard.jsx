@@ -126,12 +126,28 @@ export const DocumentApprovalCard = ({
           });
 
           setTempChartData(results);
-          setTimeout(() => {
+          setTimeout(async () => {
             console.log(chartRef.current.toBase64Image("image/png"));
             const link = document.createElement("a");
             link.download = "chart.jpeg";
             link.href = chartRef.current.toBase64Image("image/png");
             link.click();
+
+            await fetchApiGet(
+              `/indicator/${indicatorID}/generate`,
+              {},
+              accessToken
+            )
+              .then((res) => {
+                if (res && res.success) {
+                  message.success(res.message);
+                } else {
+                  message.warning(
+                    res.message ?? "Terjadi kesalahan silahkan coba lagi!"
+                  );
+                }
+              })
+              .catch();
           }, 3000);
         }
       })
