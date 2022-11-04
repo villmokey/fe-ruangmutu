@@ -41,8 +41,7 @@ const FormAdd = ({
   };
 
   const handleCreate = async () => {
-    console.log(payload);
-    if (file && file.id) {
+    if (file) {
       let formData = new FormData();
       formData.append("file", file);
       formData.append("group_name", "user_signature");
@@ -81,52 +80,72 @@ const FormAdd = ({
     } else {
       message.info("Silahkan unggah tanda tangan pengguna");
     }
-    return false;
-    fetchApiPost("/user", accessToken, {
-      name: payload.name,
-    })
-      .then((res) => {
-        if (res && res.code === 200) {
-          message.success("Berhasil menambahkan data pengguna");
-          if (onSuccess) {
-            onSuccess();
-          }
-          if (onClose) {
-            onClose();
-          }
-        } else {
-          if (res && res.response && res.response.data) {
-            message.warning(res.response.data.message);
-          }
-        }
-      })
-      .catch();
   };
 
-  const handleUpdate = () => {
-    fetchApiPut("/user/" + payload.id, accessToken, {
-      email: payload.email,
-      name: payload.name,
-      nip: payload.nip,
-      position_id: payload.position_id,
-      role_id: payload.role_id,
-    })
-      .then((res) => {
-        if (res && res.code === 200) {
-          message.success("Berhasil mengubah data pengguna");
-          if (onSuccess) {
-            onSuccess();
-          }
-          if (onClose) {
-            onClose();
-          }
-        } else {
-          if (res && res.response && res.response.data) {
-            message.warning(res.response.data.message);
+  const handleUpdate = async () => {
+    if (file) {
+      let formData = new FormData();
+      formData.append("file", file);
+      formData.append("group_name", "user_signature");
+      await fetchApiPost("/upload/file", accessToken, formData).then(
+        async (f) => {
+          if (f && f.code === 200 && f.data.id) {
+            await fetchApiPut("/user/" + payload.id, accessToken, {
+              email: payload.email,
+              name: payload.name,
+              nip: payload.nip,
+              position_id: payload.position_id,
+              role_id: payload.role_id,
+              signature_id: f.data.id,
+              password: payload.password,
+              password_confirmation: payload.password_confirmation,
+            })
+              .then((res) => {
+                if (res && res.code === 200) {
+                  message.success("Berhasil mengubah data pengguna");
+                  if (onSuccess) {
+                    onSuccess();
+                  }
+                  if (onClose) {
+                    onClose();
+                  }
+                } else {
+                  if (res && res.response && res.response.data) {
+                    message.warning(res.response.data.message);
+                  }
+                }
+              })
+              .catch();
           }
         }
+      );
+    } else {
+      await fetchApiPut("/user/" + payload.id, accessToken, {
+        email: payload.email,
+        name: payload.name,
+        nip: payload.nip,
+        position_id: payload.position_id,
+        role_id: payload.role_id,
       })
-      .catch();
+        .then((res) => {
+          if (res && res.code === 200) {
+            message.success("Berhasil mengubah data pengguna");
+            if (onSuccess) {
+              onSuccess();
+            }
+            if (onClose) {
+              onClose();
+            }
+          } else {
+            if (res && res.response && res.response.data) {
+              message.warning(res.response.data.message);
+            }
+          }
+        })
+        .catch();
+    }
+
+    // ====
   };
 
   const fetchPosition = () => {

@@ -5,10 +5,11 @@ import {
   CollapseOpenIcon,
   SettingIcon,
 } from "../../../../assets/icons";
-import { Dropdown, Button, Popconfirm } from "antd";
-import { Stack, Box, Typography } from "@mui/material";
+import { Dropdown, Button, Popconfirm, Tag } from "antd";
+import { Stack, Box, Typography, Grid } from "@mui/material";
 import moment from "moment";
 import "moment/locale/id";
+import { useAuthToken } from "../../../../globals/useAuthToken";
 
 const EventItem = ({
   title,
@@ -26,78 +27,80 @@ const EventItem = ({
   otherFiles = [],
 }) => {
   const [open, setOpen] = useState(false);
+  const { getRole } = useAuthToken();
   return (
     <EventContainer>
-      <Dropdown
-        overlay={
-          <Box sx={{ background: "white" }}>
-            <Stack direction={"column"}>
-              {!realized && (
-                <Popconfirm
-                  title="Anda yakin akan mengubah status kegiatan menjadi terealisasi?"
-                  okText="Ya"
-                  cancelText="Tidak"
-                  onConfirm={onRealized}
-                >
-                  <Button style={{ border: "none" }}>Realisasi</Button>
-                </Popconfirm>
-              )}
-              {/* <Button onClick={onEdit} style={{ border: "none" }}>
+      {getRole() === "Super Admin" && (
+        <Dropdown
+          overlay={
+            <Box sx={{ background: "white" }}>
+              <Stack direction={"column"}>
+                {!realized && (
+                  <Popconfirm
+                    title="Anda yakin akan mengubah status kegiatan menjadi terealisasi?"
+                    okText="Ya"
+                    cancelText="Tidak"
+                    onConfirm={onRealized}
+                  >
+                    <Button style={{ border: "none" }}>Realisasi</Button>
+                  </Popconfirm>
+                )}
+                {/* <Button onClick={onEdit} style={{ border: "none" }}>
                 Ubah
               </Button> */}
-              <Popconfirm
-                title="Anda yakin akan menghapus kegiatan ini?"
-                okText="Ya"
-                cancelText="Tidak"
-                onConfirm={onDelete}
-              >
-                <Button style={{ border: "none" }}>Hapus</Button>
-              </Popconfirm>
-            </Stack>
-          </Box>
-        }
-      >
-        <Icon src={SettingIcon} alt={"ic_setting"} />
-      </Dropdown>
-      <Box width={"100%"}>
-        <Stack
-          direction={"row"}
-          justifyContent={"space-between"}
-          alignItems={"end"}
-        >
-          <Stack direction={"row"} alignItems={"center"} spacing={1}>
-            <ImageBox
-              src={
-                "https://via.placeholder.com/100/6A9695/FFFFFF?text=" +
-                (user.name ? user.name[0] : "Unkown")
-              }
-              alt={"placeholder"}
-            />
-
-            <Stack direction={"column"}>
-              <Typography fontWeight={"bold"} fontSize={"18px"}>
-                {user && user.name ? user.name : "Unknown"}
-              </Typography>
-              <Typography fontWeight={"bold"} color={"#959595"} fontSize={12}>
-                {moment(date).format("DD MMMM YYYY, HH:mm")}
-              </Typography>
-            </Stack>
-          </Stack>
-          {programs && (
-            <Box>
-              <Stack direction={"row"}>
-                {programs.map((program, index) => (
-                  <Badge
-                    key={"program-" + index + 1}
-                    style={{ background: program.program.color }}
-                  >
-                    {program.program.name}
-                  </Badge>
-                ))}
+                <Popconfirm
+                  title="Anda yakin akan menghapus kegiatan ini?"
+                  okText="Ya"
+                  cancelText="Tidak"
+                  onConfirm={onDelete}
+                >
+                  <Button style={{ border: "none" }}>Hapus</Button>
+                </Popconfirm>
               </Stack>
             </Box>
-          )}
-        </Stack>
+          }
+        >
+          <Icon src={SettingIcon} alt={"ic_setting"} />
+        </Dropdown>
+      )}
+      <Box width={"100%"}>
+        <Grid container justifyContent={"space-between"} alignItems={"center"}>
+          <Grid item xs={12} sm={12} md={6}>
+            <Stack direction={"row"} alignItems={"center"} spacing={1}>
+              <ImagePlaceholder>
+                {user && user.name ? user.name.substr(0, 2) : "Unkown"}
+              </ImagePlaceholder>
+
+              <Stack direction={"column"}>
+                <Typography fontWeight={"bold"} fontSize={"18px"}>
+                  {user && user.name ? user.name : "Unknown"}
+                </Typography>
+                <Typography fontWeight={"bold"} color={"#959595"} fontSize={12}>
+                  {moment(date).format("DD MMMM YYYY, HH:mm")}
+                </Typography>
+              </Stack>
+            </Stack>
+          </Grid>
+          <Grid item xs={12} sm={12} md={6}>
+            {programs && (
+              <Box sx={{ float: "right" }}>
+                <Stack direction={"row"}>
+                  {programs.map((program, index) => (
+                    <Tag
+                      key={"program-" + index + 1}
+                      style={{
+                        background: program.program.color,
+                        color: "white",
+                      }}
+                    >
+                      {program.program.name}
+                    </Tag>
+                  ))}
+                </Stack>
+              </Box>
+            )}
+          </Grid>
+        </Grid>
 
         <ContentBox>
           {open ? (
@@ -120,15 +123,16 @@ const EventItem = ({
                 >
                   Unit Layanan
                 </Typography>
-                <Badge
+                <Tag
                   style={{
                     maxWidth: "100px",
                     marginBottom: "10px",
                     background: programOwnerColor,
+                    color: "white",
                   }}
                 >
                   {programOwner}
-                </Badge>
+                </Tag>
               </Stack>
             </>
           )}
@@ -160,11 +164,7 @@ const EventItem = ({
                     <DocumentItem key={"Document- " + index}>
                       <a
                         style={{ color: "white" }}
-                        href={
-                          process.env.REACT_APP_API_URL +
-                          "/" +
-                          rel.related.file.file_path
-                        }
+                        href={rel.related.file.file_link}
                         target={"_blank"}
                         rel="noreferrer"
                       >
@@ -232,19 +232,12 @@ const EventContainer = styled.div`
   border: 2px solid #e5e5e5;
   padding: 25px;
   margin-bottom: 10px;
-`;
+  min-width: 500px;
 
-const Badge = styled.div`
-  background: #6a9695;
-  border-radius: 65px;
-  height: fit-content;
-  padding: 4px 10px;
-  min-width: 100px;
-  text-align: center;
-  font-size: 12px;
-  color: white;
-  margin: 0 5px;
-  text-transform: uppercase;
+  @media only screen and (max-width: 700px) {
+    min-width: unset !important;
+    width: 100%;
+  }
 `;
 
 const Icon = styled.img`
@@ -276,10 +269,17 @@ const Collapse = styled.img`
   }
 `;
 
-const ImageBox = styled.img`
-  width: 74px;
-  height: 74px;
+const ImagePlaceholder = styled.div`
+  width: 50px;
+  height: 50px;
   border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #6a9695;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
 `;
 
 const ContentBox = styled.div`

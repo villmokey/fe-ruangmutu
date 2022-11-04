@@ -3,7 +3,6 @@ import { Col, Image, Input, Modal, Row, Tag, Space, Checkbox } from "antd";
 import { LogoIcon } from "../../../atoms/Icons/LogoIcon";
 import { Text } from "../../../atoms/Text/Text";
 import { Title } from "../../../atoms/Title/Title";
-import TTDKepala from "../../../../assets/images/ttd-kepala.png";
 import { BarChart } from "../../../molecules/Chart/Bar/BarChart";
 import {
   dimensiMutuOptions,
@@ -17,19 +16,22 @@ import {
 } from "../../../../globals/monthLabel";
 import "./QualityIndicatorPreview.less";
 import { SquareLogo } from "../../../../assets/images";
-import { QRCode } from "react-qrcode-logo";
+// import { SquareLogo } from "../../../../assets/images";
+// import { QRCode } from "react-qrcode-logo";
 
-const Footer = () => (
+const Footer = ({ hideQr = false }) => (
   <Row>
-    <Col span={24} style={{ textAlign: "left" }}>
-      <QRCode
-        value="7a390d5f-09db-497e-95d9-6adff76cc224"
-        logoImage={SquareLogo}
-        logoWidth={40}
-        logoHeight={40}
-        size={100}
-      />
-    </Col>
+    {/* {!hideQr ? (
+      <Col span={24} style={{ textAlign: "left" }}>
+        <QRCode
+          value="7a390d5f-09db-497e-95d9-6adff76cc224"
+          logoImage={SquareLogo}
+          logoWidth={40}
+          logoHeight={40}
+          size={100}
+        />
+      </Col>
+    ) : null} */}
     <Col span={12} style={{ textAlign: "left" }}>
       <Text style={{ fontSize: "12px" }}>
         Dilarang menduplikat dokumen tanpa izin Manajemen Mutu
@@ -49,6 +51,7 @@ export const QualityIndicatorPreview = ({
   indicator,
   detail,
   isProfile,
+  hideQr = false,
   visibility = false,
   onClose,
 }) => {
@@ -57,23 +60,22 @@ export const QualityIndicatorPreview = ({
     if (chartData) {
       let monthList = monthLowerWithObjID;
       let monthsTarget = [];
-      chartData.map((item) => {
-        monthList.forEach((month, index) => {
-          // if month does not exist, push the unexisting month
-          if (month.month === item.month) {
-            monthsTarget.push({
-              month: month.month,
-              order: month.order,
-              value: item.value,
-            });
-          } else {
-            monthsTarget.push({
-              month: month.month,
-              order: month.order,
-              value: 0,
-            });
-          }
-        });
+
+      monthList.forEach((m) => {
+        let finder = chartData.find((c) => c.month === m.month);
+        if (finder) {
+          monthsTarget.push({
+            month: m.month,
+            order: m.order,
+            value: finder.value,
+          });
+        } else {
+          monthsTarget.push({
+            month: m.month,
+            order: m.order,
+            value: 0,
+          });
+        }
       });
 
       let results = [];
@@ -94,13 +96,13 @@ export const QualityIndicatorPreview = ({
       onCancel={onClose}
       centered
       width={800}
-      footer={[<Footer />]}
+      footer={[<Footer hideQr={hideQr} />]}
     >
       <Tag color="#6A9695">
         RUANG <span style={{ fontWeight: "bold" }}>MUTU</span>
       </Tag>
       <Row justify="center">
-        <Col span={10}>
+        <Col span={12}>
           <Row justify="center">
             <Col>
               <LogoIcon />
@@ -108,8 +110,16 @@ export const QualityIndicatorPreview = ({
           </Row>
           <div className="preview-title">
             <Title level={4} style={{ color: "#5A7D7C" }}>
-              {isProfile ? "PROFIL " : ""}INDIKATOR MUTU PUSKESMAS KECAMATAN
-              GAMBIR
+              {isProfile ? "PROFIL " : ""}INDIKATOR MUTU
+            </Title>
+            <Title
+              level={4}
+              style={{
+                color: "#5A7D7C",
+                marginTop: "-10px",
+              }}
+            >
+              PUSKESMAS KECAMATAN GAMBIR
             </Title>
           </div>
         </Col>
@@ -124,6 +134,7 @@ export const QualityIndicatorPreview = ({
                   <Input
                     value={
                       indicator &&
+                      detail &&
                       detail.profile_indicator &&
                       detail.profile_indicator.title
                         ? detail.profile_indicator.title
@@ -135,7 +146,10 @@ export const QualityIndicatorPreview = ({
                   <Text>PROGRAM MUTU</Text>
                   <Input
                     value={
-                      indicator && detail.program && detail.program.name
+                      indicator &&
+                      detail &&
+                      detail.program &&
+                      detail.program.name
                         ? detail.program.name
                         : "-"
                     }
@@ -145,7 +159,10 @@ export const QualityIndicatorPreview = ({
                   <Text>SUB PROGRAM</Text>
                   <Input
                     value={
-                      indicator && detail.sub_program && detail.sub_program.name
+                      indicator &&
+                      detail &&
+                      detail.sub_program &&
+                      detail.sub_program.name
                         ? detail.sub_program.name
                         : "-"
                     }
@@ -156,12 +173,12 @@ export const QualityIndicatorPreview = ({
                 <Space direction="vertical">
                   <Text>BULAN</Text>
                   <Input
-                    value={detail.month ? detail.month.toUpperCase() : ""}
+                    value={detail?.month ? detail.month.toUpperCase() : ""}
                   />
                 </Space>
                 <Space direction="vertical">
                   <Text>Sasaran Mutu</Text>
-                  <Input value={detail.quality_goal} />
+                  <Input value={detail?.quality_goal} />
                 </Space>
               </Col>
             </Row>
@@ -194,29 +211,29 @@ export const QualityIndicatorPreview = ({
               <Col span={12}>
                 <Space direction="vertical">
                   <Text>MANUSIA</Text>
-                  <Input value={detail.human} />
+                  <Input value={detail?.human} />
                 </Space>
                 <Space direction="vertical">
                   <Text>ALAT</Text>
-                  <Input value={detail.tools} />
+                  <Input value={detail?.tools} />
                 </Space>
                 <Space direction="vertical">
                   <Text>METODE</Text>
-                  <Input value={detail.method} />
+                  <Input value={detail?.method} />
                 </Space>
               </Col>
               <Col span={12}>
                 <Space direction="vertical">
                   <Text>KEBIJAKAN</Text>
-                  <Input value={detail.policy} />
+                  <Input value={detail?.policy} />
                 </Space>
                 <Space direction="vertical">
                   <Text>LINGKUNGAN</Text>
-                  <Input value={detail.environment} />
+                  <Input value={detail?.environment} />
                 </Space>
                 <Space direction="vertical">
                   <Text>RENCANA TINDAK LANJUT</Text>
-                  <Input value={detail.next_plan} />
+                  <Input value={detail?.next_plan} />
                 </Space>
               </Col>
             </Row>
@@ -227,19 +244,19 @@ export const QualityIndicatorPreview = ({
               <Col span={12}>
                 <Space direction="vertical">
                   <Text>PROGRAM MUTU</Text>
-                  <Input value={detail.program.name} />
+                  <Input value={detail?.program?.name} />
                 </Space>
                 <Space direction="vertical">
                   <Text>SUB PROGRAM</Text>
-                  <Input value={detail.sub_program.name} />
+                  <Input value={detail?.sub_program?.name} />
                 </Space>
                 <Space direction="vertical">
                   <Text>JUDUL INDIKATOR</Text>
-                  <Input value={detail.title} />
+                  <Input value={detail?.title} />
                 </Space>
                 <Space direction="vertical">
                   <Text>DASAR PEMILIHAN INDIKATOR</Text>
-                  <Input value={detail.indicator_selection_based} />
+                  <Input value={detail?.indicator_selection_based} />
                 </Space>
                 <Space direction="vertical">
                   <Text>DIMENSI MUTU</Text>
@@ -249,7 +266,7 @@ export const QualityIndicatorPreview = ({
                         <Col span={8} key={index}>
                           <Checkbox
                             style={{ fontSize: "10px" }}
-                            checked={detail.quality_dimension.some(
+                            checked={detail?.quality_dimension?.some(
                               (x) => x.name === item.label
                             )}
                           >
@@ -262,11 +279,11 @@ export const QualityIndicatorPreview = ({
                 </Space>
                 <Space direction="vertical">
                   <Text>TUJUAN</Text>
-                  <Input value={detail.objective} />
+                  <Input value={detail?.objective} />
                 </Space>
                 <Space direction="vertical">
                   <Text>DEFINISI OPERASIONAL</Text>
-                  <Input value={detail.operational_definition} />
+                  <Input value={detail?.operational_definition} />
                 </Space>
                 <Space direction="vertical">
                   <Text>TIPE INDIKATOR</Text>
@@ -276,7 +293,7 @@ export const QualityIndicatorPreview = ({
                         <Col span={8} key={index}>
                           <Checkbox
                             style={{ fontSize: "10px" }}
-                            checked={detail.indicator_type.some(
+                            checked={detail?.indicator_type?.some(
                               (x) => x.name === item.label
                             )}
                           >
@@ -289,41 +306,41 @@ export const QualityIndicatorPreview = ({
                 </Space>
                 <Space direction="vertical">
                   <Text>STATUS PENGUKURAN</Text>
-                  <Input value={detail.measurement_status} />
+                  <Input value={detail?.measurement_status} />
                 </Space>
                 <Space direction="vertical">
                   <Text>NUMERATOR</Text>
-                  <Input value={detail.numerator} />
+                  <Input value={detail?.numerator} />
                 </Space>
                 <Space direction="vertical">
                   <Text>DENOMINATOR</Text>
-                  <Input value={detail.denominator} />
+                  <Input value={detail?.denominator} />
                 </Space>
               </Col>
               <Col span={12}>
                 <Space direction="vertical">
                   <Text>TARGET CAPAIAN</Text>
-                  <Input value={detail.achievement_target} />
+                  <Input value={detail?.achievement_target} />
                 </Space>
                 <Space direction="vertical">
                   <Text>KRITERIA INKLUSI & EKSKLUSI</Text>
-                  <Input value={detail.criteria} />
+                  <Input value={detail?.criteria} />
                 </Space>
                 <Space direction="vertical">
                   <Text>FORMULA PENGUKURAN</Text>
-                  <Input value={detail.measurement_formula} />
+                  <Input value={detail?.measurement_formula} />
                 </Space>
                 <Space direction="vertical">
                   <Text>PENGUMPULAN DATA</Text>
-                  <Input value={detail.data_collection_design} />
+                  <Input value={detail?.data_collection_design} />
                 </Space>
                 <Space direction="vertical">
                   <Text>SUMBER DATA</Text>
-                  <Input value={detail.data_source} />
+                  <Input value={detail?.data_source} />
                 </Space>
                 <Space direction="vertical">
                   <Text>POPULASI ATAU SAMPEL</Text>
-                  <Input value={detail.population} />
+                  <Input value={detail?.population} />
                 </Space>
                 <Space direction="vertical">
                   <Text>FREKUENSI PENGUMPULAN DATA</Text>
@@ -333,7 +350,7 @@ export const QualityIndicatorPreview = ({
                         <Col span={8} key={index}>
                           <Checkbox
                             style={{ fontSize: "10px" }}
-                            checked={detail.data_frequency.some(
+                            checked={detail?.data_frequency?.some(
                               (x) => x.name === item.label
                             )}
                           >
@@ -352,7 +369,7 @@ export const QualityIndicatorPreview = ({
                         <Col span={8} key={index}>
                           <Checkbox
                             style={{ fontSize: "10px" }}
-                            checked={detail.data_period.some(
+                            checked={detail?.data_period?.some(
                               (x) => x.name === item.label
                             )}
                           >
@@ -371,7 +388,7 @@ export const QualityIndicatorPreview = ({
                         <Col span={8} key={index}>
                           <Checkbox
                             style={{ fontSize: "10px" }}
-                            checked={detail.analyst_period.some(
+                            checked={detail?.analyst_period?.some(
                               (x) => x.name === item.label
                             )}
                           >
@@ -384,11 +401,11 @@ export const QualityIndicatorPreview = ({
                 </Space>
                 <Space direction="vertical">
                   <Text>PENYAJIAN DATA</Text>
-                  <Input value={detail.data_presentation} />
+                  <Input value={detail?.data_presentation} />
                 </Space>
                 <Space direction="vertical">
                   <Text>PENANGGUNG JAWAB INDIKATOR</Text>
-                  <Input value={detail.first_pic.name} />
+                  <Input value={detail?.first_pic?.name} />
                 </Space>
               </Col>
             </Row>
@@ -400,7 +417,7 @@ export const QualityIndicatorPreview = ({
           {detail &&
             detail.signature &&
             detail.signature.map((sign, index) => (
-              <Col span={12} key={index}>
+              <Col span={8} key={index}>
                 <Space direction="vertical" align="center">
                   <Text style={{ margin: "20px 0 0 0" }}>
                     {sign.level === 1 ? "Pembuat Dokumen" : "Penanggung Jawab"}
@@ -417,7 +434,7 @@ export const QualityIndicatorPreview = ({
                         sign.user.signature &&
                         sign.user.signature.file_link
                           ? sign.user.signature.file_link
-                          : ""
+                          : SquareLogo
                       }
                       alt={`${
                         sign.user && sign.user.name ? sign.user.name : ""

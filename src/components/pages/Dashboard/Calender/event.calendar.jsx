@@ -1,12 +1,30 @@
 import React from "react";
-import FullCalendar, { formatDate } from "@fullcalendar/react";
+import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import Box from "@mui/material/Box";
 import styled from "styled-components";
 import "./Calendar.less";
+import { Dialog } from "@mui/material";
+import EventItem from "./event.item";
+import { fetchApiGet } from "../../../../globals/fetchApi";
 
-const EventCalendar = ({ events = [] }) => {
+const EventCalendar = ({
+  events = [],
+  handleRealize,
+  handleEdit,
+  handleRemove,
+}) => {
   const [mapped, setMapped] = React.useState([]);
+  const [open, setOpen] = React.useState(false);
+  const [detail, setDetail] = React.useState({});
+
+  const onEventClick = (event) => {
+    fetchApiGet("/event/" + event.publicId, {}).then((res) => {
+      setOpen(true);
+      setDetail(res.data);
+    });
+  };
+
   React.useEffect(() => {
     if (events) {
       let temp = events.map((event) => {
@@ -14,7 +32,7 @@ const EventCalendar = ({ events = [] }) => {
           id: event.id,
           title: event.name,
           start: event.start_date + " 00:00",
-          end: event.end_date + " 23:59:59",
+          end: event.end_date + " 00:00",
           color:
             event.program && event.program.color
               ? event.program.color
@@ -25,26 +43,54 @@ const EventCalendar = ({ events = [] }) => {
     }
   }, [events]);
   return (
-    <Container sx={{ background: "white" }} className={"event-calendar"}>
-      {events && mapped && (
-        <FullCalendar
-          plugins={[dayGridPlugin]}
-          headerToolbar={{
-            left: "prev",
-            center: "title",
-            right: "next",
-          }}
-          initialView="dayGridMonth"
-          editable={true}
-          selectable={true}
-          timeHint={false}
-          selectMirror={true}
-          eventTimeFormat={false}
-          dayMaxEvents={true}
-          events={mapped}
-        />
-      )}
-    </Container>
+    <>
+      <Dialog open={open} onClose={() => setOpen(false)}>
+        <div style={{ padding: "10px" }}>
+          <EventItem
+            title={detail.name}
+            date={detail.created_at}
+            desc={detail.description}
+            programs={detail.related_program}
+            user={detail.user}
+            realized={detail.is_realized}
+            files={detail.related_file}
+            programOwner={
+              detail.program && detail.program.name ? detail.program.name : ""
+            }
+            programOwnerColor={
+              detail.program && detail.program.color
+                ? detail.program.color
+                : "transparent"
+            }
+            otherFiles={detail.other_files}
+            onRealized={() => handleRealize(detail.id)}
+            onEdit={() => handleEdit(detail.id)}
+            onDelete={() => handleRemove(detail.id)}
+          />
+        </div>
+      </Dialog>
+      <Container sx={{ background: "white" }} className={"event-calendar"}>
+        {events && mapped && (
+          <FullCalendar
+            plugins={[dayGridPlugin]}
+            headerToolbar={{
+              left: "prev",
+              center: "title",
+              right: "next",
+            }}
+            initialView="dayGridMonth"
+            editable={true}
+            selectable={true}
+            timeHint={false}
+            selectMirror={true}
+            eventClick={(e) => onEventClick(e.event._def)}
+            eventTimeFormat={false}
+            dayMaxEvents={true}
+            events={mapped}
+          />
+        )}
+      </Container>
+    </>
   );
 };
 

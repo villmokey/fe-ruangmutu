@@ -10,13 +10,16 @@ import {
 import { DocumentApprovalCard } from "../../../../molecules/DocumentApprovalCard/DocumentApprovalCard";
 import { useNavigate } from "react-router-dom";
 import { Text } from "../../../../atoms/Text/Text";
+import { Box, Pagination } from "@mui/material";
 
-export const QualityIndicatorApproval = ({ filter }) => {
+export const QualityIndicatorApproval = ({ filter, search }) => {
   const dispatch = useDispatch();
   const { getAccessToken, getUserId } = useAuthToken();
   const accessToken = getAccessToken();
   const userID = getUserId();
   const navigate = useNavigate();
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
 
   const {
     data: { approvalList },
@@ -32,12 +35,15 @@ export const QualityIndicatorApproval = ({ filter }) => {
         param: {
           ...filter,
           type: "quality",
+          search: search,
+          limit: 10,
+          page: page,
         },
       })
     );
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [updateStatus, filter]);
+  }, [updateStatus, filter, search, page]);
 
   useEffect(() => {
     if (!approvalList) return;
@@ -51,11 +57,15 @@ export const QualityIndicatorApproval = ({ filter }) => {
     message.info("Berhasil mengubah status!");
   }, [updateStatus]);
 
-  const fetchData = (data) => {
-    const fetch = data.map((item, index) => {
+  const fetchData = (data = { data: [] }) => {
+    setTotalPage(data.last_page ?? 1);
+    const fetch = data.data.map((item, index) => {
       let approval1 = item.signature.filter((item) => item.level === 1)[0];
       let approval2 = item.signature.filter((item) => item.level === 2)[0];
       let approval3 = item.signature.filter((item) => item.level === 3);
+      let user1 = item.signature.filter((item) => item.level === 1)[0];
+      let user2 = item.signature.filter((item) => item.level === 2)[0];
+      let user3 = item.signature.filter((item) => item.level === 3)[0];
 
       // -1 Ditolak
       // 0 belum disetujui siapapun
@@ -83,12 +93,16 @@ export const QualityIndicatorApproval = ({ filter }) => {
 
       return {
         id: item.id,
+        profile_id: item?.profile_indicator?.id ?? "",
         userID,
         month: item.month,
         isApproved: filterSignature.length ? true : false,
         title: item.profile_indicator.title,
         createdBy: item.created_by,
         createdAt: new Date(item.created_at).toLocaleDateString(),
+        user1: user1,
+        user2: user2,
+        user3: user3,
         approval1:
           approval1.signed === 1
             ? new Date(approval1.signed_at).toLocaleDateString()
@@ -138,24 +152,40 @@ export const QualityIndicatorApproval = ({ filter }) => {
   return !loading ? (
     <>
       {dataSource && dataSource.length > 0 ? (
-        dataSource.map((item, index) => (
-          <DocumentApprovalCard
-            key={index}
-            month={item.month}
-            documentApprovalTitle={item.title}
-            documentApprovalCreatedAt={item.createdAt}
-            documentApproval1Date={item.approval1}
-            documentApproval2Date={item.approval2}
-            documentApproval3Date={item.approval3}
-            createdBy={item.createdBy}
-            isApproved={item.isApproved}
-            signature={item.signature}
-            indicatorID={item.id}
-            type={"indicator"}
-            onApprove={handleApprove}
-            onReject={handleReject}
-          />
-        ))
+        <>
+          {dataSource.map((item, index) => (
+            <DocumentApprovalCard
+              key={index}
+              module={"quality"}
+              month={item.month}
+              documentApprovalTitle={item.title}
+              documentApprovalCreatedAt={item.createdAt}
+              user1={item.user1?.user?.name ?? ""}
+              user2={item.user2?.user?.name ?? ""}
+              user3={item.user3?.user?.name ?? ""}
+              documentApproval1Date={item.approval1}
+              documentApproval2Date={item.approval2}
+              documentApproval3Date={item.approval3}
+              createdBy={item.createdBy}
+              isApproved={item.isApproved}
+              signature={item.signature}
+              indicatorID={item.id}
+              profileId={item.profile_id}
+              type={"indicator"}
+              onApprove={handleApprove}
+              onReject={handleReject}
+            />
+          ))}
+          <Box display={"flex"} justifyContent={"right"}>
+            <Pagination
+              page={page}
+              count={totalPage}
+              onChange={(e, p) => {
+                setPage(p);
+              }}
+            />
+          </Box>
+        </>
       ) : (
         <div style={{ width: "100%", textAlign: "center", margin: "50px 0" }}>
           <Text>

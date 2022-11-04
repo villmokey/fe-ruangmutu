@@ -34,9 +34,15 @@ const defaultProps = {
   barColor: "#5DC8BDE5",
 };
 
-export const BarChart = ({ chartData = [], labels, barColor, indicatorLineValue = 0, options }) => {
+export const BarChart = ({
+  chartData = [],
+  labels,
+  barColor,
+  indicatorLineValue = 0,
+  options,
+  ref,
+}) => {
   const chartOptions = {
-    responsive: true,
     plugins: {
       legend: {
         position: "top",
@@ -44,7 +50,6 @@ export const BarChart = ({ chartData = [], labels, barColor, indicatorLineValue 
       },
       title: {
         display: false,
-        text: "Chart.js Bar Chart",
       },
       annotation: {
         annotations: [
@@ -75,31 +80,24 @@ export const BarChart = ({ chartData = [], labels, barColor, indicatorLineValue 
   };
 
   const optionss = {
-    scales: {
-      y: {
-        type: "linear",
-        grace: "5%",
-        beginAtZero: true,
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top",
+        display: false,
+      },
+      title: {
+        display: false,
+        text: "Chart.js Bar Chart",
       },
     },
-    plugins: {
-      annotation: {
-        annotations: [
-          {
-            id: "slo",
-            type: "line",
-            mode: "horizontal",
-            value: 10,
-            scaleID: "y",
-            borderWidth: 1,
-            borderDash: [10, 1],
-            label: {
-              enabled: true,
-              content: `SLO:`,
-              position: "start",
-            },
-          },
-        ],
+    scales: {
+      y: {
+        min: 0,
+        max: 100,
+        ticks: {
+          stepSize: 25,
+        },
       },
     },
   };
@@ -117,7 +115,7 @@ export const BarChart = ({ chartData = [], labels, barColor, indicatorLineValue 
     ],
   };
 
-  return <Bar options={chartOptions} data={data} />;
+  return <Bar ref={ref} options={optionss} data={data} />;
   // return <Line data={data} options={optionss} />;
 };
 

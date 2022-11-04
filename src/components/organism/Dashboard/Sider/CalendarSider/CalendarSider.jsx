@@ -13,9 +13,9 @@ const { Sider: AntdSider } = Layout;
 
 export const CalendarSider = ({ onFilter }) => {
   const [filter, setFilter] = React.useState({
-    year: "",
-    month: "",
-    program_id: "",
+    year: undefined,
+    month: undefined,
+    program_id: undefined,
   });
 
   return (
@@ -46,6 +46,7 @@ export const CalendarSider = ({ onFilter }) => {
         <Row style={{ margin: "20px 0px" }}>
           <Col>
             <UnitService
+              multiple
               onChange={(e) => setFilter({ ...filter, program_id: e })}
               value={filter.program_id}
             />

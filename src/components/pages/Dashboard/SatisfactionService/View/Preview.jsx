@@ -221,7 +221,7 @@ export const SatisfactionPreview = ({
               <td className="content">Tidak Ada</td>
             </tr>
           </table>
-          {getRole() === "admin" && detail.status === "PENDING" && (
+          {getRole() === "Super Admin" && detail.status === "PENDING" && (
             <Button
               type={isEdit ? "default" : "primary"}
               style={{ marginRight: "10px" }}

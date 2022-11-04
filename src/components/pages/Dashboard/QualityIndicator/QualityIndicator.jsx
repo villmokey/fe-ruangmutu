@@ -1,4 +1,5 @@
 import {
+  Breadcrumb,
   Button,
   Col,
   Layout,
@@ -33,6 +34,8 @@ import {
 import { FileTextOutlined, BarChartOutlined } from "@ant-design/icons";
 import { fetchApiGet } from "../../../../globals/fetchApi";
 import QualityIndicatorCardview from "./View/Cardview";
+import { HomeFilled } from "@ant-design/icons";
+import { Box } from "@mui/material";
 
 const { Content } = Layout;
 
@@ -42,6 +45,7 @@ export const QualityIndicator = () => {
   const { getAccessToken } = useAuthToken();
   const accessToken = getAccessToken();
   const [programs, setPrograms] = useState([]);
+  const [search, setSearch] = useState(undefined);
   const [totalResult, setTotalResult] = useState({
     all: "",
     selected: "",
@@ -64,9 +68,10 @@ export const QualityIndicator = () => {
       getAllQualityIndicator({
         accessToken,
         filter: {
-          type: 'quality',
+          type: "quality",
           year: filter.year !== undefined ? filter.year : "",
           program_id: filter.program_id !== undefined ? filter.program_id : "",
+          search: search,
         },
       })
     );
@@ -88,7 +93,7 @@ export const QualityIndicator = () => {
   useEffect(() => {
     fetchQuality();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filter]);
+  }, [filter, search]);
 
   useEffect(() => {
     if (!list) return;
@@ -155,33 +160,45 @@ export const QualityIndicator = () => {
     <Layout>
       <QualityIndicatorSider
         onFilter={(value) => {
-          setFilter(value)
+          setFilter(value);
         }}
       />
       <Content className="main-content">
+        <Breadcrumb separator=">" className="breadcrumb">
+          <Breadcrumb.Item href={"/dashboard"} className="breadcrumb__item">
+            <HomeFilled className="icon icon--default" />
+            <span>Home</span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item className="breadcrumb__item breadcrumb__item--active">
+            Indikator Mutu
+          </Breadcrumb.Item>
+        </Breadcrumb>
         <Row justify="center" align="middle" gutter={[24, 16]}>
           <Col>
             <Card className="total">
-              <p className="card-title">TOTAL INDIKATOR MUTU</p>
+              <p className="card-title">TOTAL INDIKATOR</p>
+              <p className="card-title">MUTU</p>
               <Title className="card-content">{totalResult.all}</Title>
             </Card>
           </Col>
           <Col>
             <Card className="total">
-              <p className="card-title">INDIKATOR MUTU TERPILIH</p>
+              <p className="card-title">INDIKATOR MUTU</p>
+              <p className="card-title">TERPILIH</p>
               <Title className="card-content">{totalResult.selected}</Title>
             </Card>
           </Col>
           <Col>
             <Card className="total">
-              <p className="card-title">BELUM TERCAPAI</p>
+              <p className="card-title">BELUM</p>
+              <p className="card-title">TERCAPAI</p>
               <Title className="card-content">{totalResult.unreached}</Title>
             </Card>
           </Col>
         </Row>
         <Row justify="end" style={{ marginTop: 40 }} gutter={[8]}>
           <Col>
-            <InputSearch size="large" />
+            <InputSearch size="large" onSearch={(value) => setSearch(value)} />
           </Col>
           <Col>
             <Link to={`${paths.ADD}`}>
@@ -198,19 +215,26 @@ export const QualityIndicator = () => {
           <Col style={{ marginRight: "auto" }}>
             <Space>
               {filter.program_id ? (
-                programs.map((prog) => (
-                  filter.program_id.some((x) => x === prog.id) && (
-                    <Tag color="#6A9695">
-                      {prog.name}
-                    </Tag>
-                  )
-                ))
+                programs.map(
+                  (prog) =>
+                    filter.program_id.some((x) => x === prog.id) && (
+                      <Tag color="#6A9695">{prog.name}</Tag>
+                    )
+                )
               ) : (
                 <Tag color="#6A9695">SEMUA UNIT</Tag>
               )}
 
               {filter.year && <Tag color="#6A9695">{filter.year}</Tag>}
-              {filter.type && <Tag color="#6A9695">{filter.type === 'indicator_profile' ? 'PROFIL INDIKATOR' : filter.type === 'indicator' ? 'INDIKATOR MUTU' : 'SEMUA DOKUMEN'}</Tag>}
+              {filter.type && (
+                <Tag color="#6A9695">
+                  {filter.type === "indicator_profile"
+                    ? "PROFIL INDIKATOR"
+                    : filter.type === "indicator"
+                    ? "INDIKATOR MUTU"
+                    : "SEMUA DOKUMEN"}
+                </Tag>
+              )}
             </Space>
           </Col>
           <Col style={{ marginLeft: "auto" }}>
@@ -228,10 +252,10 @@ export const QualityIndicator = () => {
         <div className="indikator-mutu-container">
           {!loading ? (
             viewType === 2 ? (
-              <QualityIndicatorCardview filter={filter} />
+              <QualityIndicatorCardview filter={filter} search={search} />
             ) : (
               <>
-                {chartDataSource &&
+                {chartDataSource && chartDataSource.length > 0 ? (
                   chartDataSource.map((item, index) => (
                     <QualityIndicatorChart
                       key={index}
@@ -242,7 +266,12 @@ export const QualityIndicator = () => {
                       className="indikator-mutu"
                       data={item.monthlyData}
                     />
-                  ))}
+                  ))
+                ) : (
+                  <Box margin={"40px 0"} textAlign={"center"}>
+                    <p>Oops, Belum ada data</p>
+                  </Box>
+                )}
               </>
             )
           ) : (

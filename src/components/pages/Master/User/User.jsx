@@ -4,12 +4,9 @@ import {
   Layout,
   Row,
   Skeleton,
-  Tag,
-  Typography,
   Modal,
   message,
 } from "antd";
-import { Title } from "../../../atoms/Title/Title";
 import {
   TableData,
   TableHead,
@@ -22,10 +19,8 @@ import { InputSearch } from "../../../atoms/InputSearch/InputSearch";
 import {
   DeleteTwoTone,
   EditTwoTone,
-  PlusCircleTwoTone,
   PlusOutlined,
 } from "@ant-design/icons";
-import moment from "moment";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useAuthToken } from "../../../../globals/useAuthToken";
@@ -145,6 +140,15 @@ export const UserPage = () => {
           <Col>
             <Button
               onClick={() => {
+                setPayload({
+                  id: "",
+                  nip: "",
+                  name: "",
+                  email: "",
+                  position_id: "",
+                  role_id: "",
+                  signature_id: "",
+                });
                 setIsCreate(true);
                 setOpenForm(true);
               }}
@@ -173,8 +177,8 @@ export const UserPage = () => {
                 <thead style={{ fontWeight: "bold" }}>
                   <TableHead>Nama</TableHead>
                   <TableHead>Email</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Tanggal Dibuat</TableHead>
+                  <TableHead>Jabatan</TableHead>
+                  <TableHead>Role Akses</TableHead>
                   <TableHead>Aksi</TableHead>
                 </thead>
                 {programs &&
@@ -182,13 +186,15 @@ export const UserPage = () => {
                     <TableRow key={program.id}>
                       <TableData>{program.name}</TableData>
                       <TableData>{program.email}</TableData>
-                      <TableData>
-                        {program.status === "active" ? "ACTIVE" : "INACTIVE"}
+                      <TableData style={{ textTransform: "uppercase" }}>
+                        {program.position && program.position.name
+                          ? program.position.name
+                          : "-"}
                       </TableData>
-                      <TableData>
-                        {moment(program.created_at).format(
-                          "dddd, DD MMMM YYYY"
-                        )}
+                      <TableData style={{ textTransform: "uppercase" }}>
+                        {program.roles && program.roles.length > 0
+                          ? program.roles.map((r) => r.name).join(", ")
+                          : "-"}
                       </TableData>
                       <TableData width={"10%"}>
                         <Stack direction={"row"} spacing={1}>
@@ -201,7 +207,9 @@ export const UserPage = () => {
                                 program.name,
                                 program.nip,
                                 program.position_id,
-                                program.role_id,
+                                program.roles.length > 0
+                                  ? program.roles[0].id
+                                  : null,
                                 program.signature_id
                               )
                             }

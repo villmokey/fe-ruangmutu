@@ -1,4 +1,4 @@
-import { Col, Layout, Row, Skeleton } from "antd";
+import { Breadcrumb, Col, Layout, Row, Skeleton } from "antd";
 import { Card } from "../../../atoms/Card/Card";
 import { Title } from "../../../atoms/Title/Title";
 import { useState } from "react";
@@ -16,9 +16,11 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 // import required modules
-import { Pagination } from "swiper";
+import { Pagination, Autoplay } from "swiper";
 import { Text } from "../../../atoms/Text/Text";
 import Documents from "./Component/Documents";
+import { HomeFilled } from '@ant-design/icons';
+
 const { Content } = Layout;
 
 export const DashboardPage = () => {
@@ -214,6 +216,12 @@ export const DashboardPage = () => {
         }}
       />
       <Content className="main-content">
+        <Breadcrumb separator=">" className="breadcrumb">
+          <Breadcrumb.Item className="breadcrumb__item breadcrumb__item--active">
+            <HomeFilled className="icon icon--default" />
+            <span>Home</span>
+          </Breadcrumb.Item>
+        </Breadcrumb>
         <Row justify="center" align="middle" gutter={[24, 16]}>
           {realized && realized.length > 0 && (
             <Col>
@@ -224,7 +232,11 @@ export const DashboardPage = () => {
                 <Card className="total">
                   <Swiper
                     pagination={true}
-                    modules={[Pagination]}
+                    autoplay={{
+                      delay: 15000,
+                      disableOnInteraction: false,
+                    }}
+                    modules={[Pagination, Autoplay]}
                     className="mySwiper"
                   >
                     {realized &&
@@ -259,8 +271,12 @@ export const DashboardPage = () => {
               </Link>
               <Card className="total">
                 <Swiper
+                  autoplay={{
+                    delay: 15000,
+                    disableOnInteraction: false,
+                  }}
                   pagination={true}
-                  modules={[Pagination]}
+                  modules={[Pagination, Autoplay]}
                   className="mySwiper"
                 >
                   <SwiperSlide>
@@ -305,8 +321,12 @@ export const DashboardPage = () => {
                 </Link>
                 <Card className="total">
                   <Swiper
+                    autoplay={{
+                      delay: 15000,
+                      disableOnInteraction: false,
+                    }}
                     pagination={true}
-                    modules={[Pagination]}
+                    modules={[Pagination, Autoplay]}
                     className="mySwiper"
                   >
                     {upcoming &&
@@ -352,6 +372,7 @@ export const DashboardPage = () => {
           {!loading ? (
             <>
               <DashboardChart
+                year={filter.year}
                 chartData={performances}
                 title={"Capaian Indikator Kinerja"}
                 moduleName={"performance"}
@@ -360,6 +381,7 @@ export const DashboardPage = () => {
               />
 
               <DashboardChart
+                year={filter.year}
                 chartData={indicators}
                 moduleName={"indicator"}
                 description={"Rekap Hasil Pencapaian Indikator Mutu Bulanan"}
@@ -368,6 +390,7 @@ export const DashboardPage = () => {
               />
 
               <DashboardChart
+                year={filter.year}
                 chartData={complaints}
                 title={"Keluhan Pelanggan"}
                 moduleName={"complaint"}
@@ -376,6 +399,7 @@ export const DashboardPage = () => {
               />
 
               <DashboardChart
+                year={filter.year}
                 chartData={satisfactions}
                 title={"Tingkat Kepuasan Layanan"}
                 moduleName={"satisfaction"}

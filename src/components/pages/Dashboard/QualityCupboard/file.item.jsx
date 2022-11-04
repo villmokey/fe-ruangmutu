@@ -91,6 +91,7 @@ const FileItem = ({
   publish,
   created,
   file,
+  number,
   docId,
 }) => {
   return (
@@ -123,6 +124,11 @@ const FileItem = ({
             }}
           >
             <span title={name}>{titleSplitter(name)}</span>
+          </Typography>
+          <Typography
+            style={{ fontSize: "12px", fontWeight: "400", color: "#7E7E7E" }}
+          >
+            {number}
           </Typography>
           <Typography
             style={{ fontSize: "12px", fontWeight: "400", color: "#7E7E7E" }}

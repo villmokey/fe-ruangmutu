@@ -310,7 +310,7 @@ export const SecondStep = ({
                 { required: true, message: "Dokumen tidak boleh kosong!" },
               ]}
             >
-              <Dragger beforeUpload={() => false} style={{ height: 200 }}>
+              <Dragger beforeUpload={() => false} style={{ height: 200 }} accept={"image/*, application/pdf"}>
                 <Text>Drag & Drop</Text>
               </Dragger>
             </Item>

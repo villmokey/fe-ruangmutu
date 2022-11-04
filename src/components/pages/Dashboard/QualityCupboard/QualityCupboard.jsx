@@ -18,14 +18,17 @@ import QualityCupboardForm from "./cupboard.form";
 import Navigation from "../../../organism/Dashboard/Breadcrumb";
 import { toast, ToastContainer } from "react-toastify";
 import { fetchApiGet } from "../../../../globals/fetchApi";
+import { useAuthToken } from "../../../../globals/useAuthToken";
 
 const { Content } = Layout;
 
 export const QualityCupboard = () => {
-
   const [viewType, setViewType] = useState(1);
   const [formOpen, setFormOpen] = useState(false);
+  const { getAccessToken } = useAuthToken();
+  const accessToken = getAccessToken();
   const [loading, setLoading] = useState(false);
+  const [programs, setPrograms] = useState([]);
 
   const [total, setTotal] = useState({
     countAll: 0,
@@ -35,7 +38,8 @@ export const QualityCupboard = () => {
   const [totalPage, setTotalPage] = useState(0);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
-  const [sorting, setSorting] = useState("ASC");
+  const [sorting, setSorting] = useState("DESC");
+  const [sortBy, setSortBy] = useState("created_at");
   const [documents, setDocuments] = useState([]);
   const [filter, setFilter] = useState({
     year: "",
@@ -43,19 +47,19 @@ export const QualityCupboard = () => {
     programs: [],
   });
 
-  const handleFilter = () => {
+  const handleFilter = (filters) => {
     let params = {};
 
-    if (filter.year) {
-      params.year = filter.year;
+    if (filters.year) {
+      params.year = filters.year;
     }
 
-    if (filter.type) {
-      params.type = filter.type;
+    if (filters.type) {
+      params.type = filters.type;
     }
 
-    if (filter.programs && filter.programs.length > 0) {
-      params.programs = filter.programs
+    if (filters.programs && filters.programs.length > 0) {
+      params.programs = filters.programs
         .map((item) => {
           return item;
         })
@@ -67,7 +71,7 @@ export const QualityCupboard = () => {
       page: page,
       search: search,
       sort: sorting,
-      sort_by: "name",
+      sort_by: sortBy,
       ...params,
     }).then((res) => {
       if (res && res.success) {
@@ -89,7 +93,7 @@ export const QualityCupboard = () => {
       page: page,
       search: search,
       sort: sorting,
-      sort_by: "name",
+      sort_by: sortBy,
     })
       .then((res) => {
         if (res && res.success) {
@@ -106,6 +110,18 @@ export const QualityCupboard = () => {
       .finally(() => setLoading(false));
   };
 
+  const fetchPrograms = () => {
+    fetchApiGet("/program", { paginate: false }, accessToken).then((res) => {
+      if (res && res.success) {
+        setPrograms(res.data ?? []);
+      }
+    });
+  };
+
+  React.useEffect(() => {
+    fetchPrograms();
+  }, []); //eslint-disable-line
+
   React.useEffect(() => {
     fetchDocuments();
   }, [page, search, sorting]); //eslint-disable-line
@@ -114,10 +130,10 @@ export const QualityCupboard = () => {
     <Layout>
       <ToastContainer />
       <QualityCupboardSider
-        onChangeQualityYear={(e) => setFilter({ ...filter, year: e })}
-        onChangeDocumentType={(e) => setFilter({ ...filter, type: e })}
-        onChangeUnitService={(e) => setFilter({ ...filter, programs: e })}
-        onFilter={() => handleFilter()}
+        onFilter={(filters) => {
+          setFilter({ ...filters });
+          handleFilter(filters);
+        }}
       />
       <Content className="main-content">
         <Navigation
@@ -197,9 +213,18 @@ export const QualityCupboard = () => {
         <Row style={{ marginTop: 40, marginBottom: 20 }}>
           <Col style={{ marginRight: "auto" }}>
             <Space>
-              <Tag color="#6A9695">SOP</Tag>
-              <Tag color="#6A9695">PPI</Tag>
-              <Tag color="#6A9695">MUTU</Tag>
+              {filter.programs && filter.programs.length > 0 ? (
+                programs.map(
+                  (prog) =>
+                    filter.programs.some((x) => x === prog.id) && (
+                      <Tag color="#6A9695">{prog.name}</Tag>
+                    )
+                )
+              ) : (
+                <Tag color="#6A9695">SEMUA UNIT</Tag>
+              )}
+
+              {filter.year && <Tag color="#6A9695">{filter.year}</Tag>}
             </Space>
           </Col>
           <Col style={{ marginLeft: "auto" }}>
@@ -222,7 +247,10 @@ export const QualityCupboard = () => {
             onPageChange={(p) => setPage(p)}
             sort={sorting}
             loading={loading}
-            onSort={() => setSorting(sorting === "ASC" ? "DESC" : "ASC")}
+            onSort={() => {
+              setSortBy("name");
+              setSorting(sorting === "ASC" ? "DESC" : "ASC");
+            }}
           />
         ) : (
           <ListView
@@ -231,7 +259,10 @@ export const QualityCupboard = () => {
             activePage={page}
             sort={sorting}
             loading={loading}
-            onSort={() => setSorting(sorting === "ASC" ? "DESC" : "ASC")}
+            onSort={() => {
+              setSortBy("name");
+              setSorting(sorting === "ASC" ? "DESC" : "ASC");
+            }}
             onPageChange={(p) => setPage(p)}
           />
         )}

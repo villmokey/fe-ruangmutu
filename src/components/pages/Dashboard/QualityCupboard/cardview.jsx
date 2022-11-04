@@ -33,9 +33,9 @@ const CardView = ({
           <ArrowDownOutlined color="#ABAFB3" />
         )}
       </Stack>
-      <Grid container spacing={1}>
-        {documents &&
-          documents.map((doc, index) => (
+      {documents && documents.length > 0 ? (
+        <Grid container spacing={1}>
+          {documents.map((doc, index) => (
             <Grid key={index} item xs={12} sm={4} md={2.4} lg={2.4}>
               <FileItem
                 docId={doc.id}
@@ -44,6 +44,7 @@ const CardView = ({
                 type={doc.document_type.name}
                 publish={doc.publish_date}
                 created={doc.created_at}
+                number={doc.document_number}
                 file={
                   doc.file && doc.file.file_link && doc.file.file_link
                     ? doc.file.file_link
@@ -52,7 +53,12 @@ const CardView = ({
               />
             </Grid>
           ))}
-      </Grid>
+        </Grid>
+      ) : (
+        <Box margin={"40px 0"} textAlign={"center"}>
+          <p>Oops, Belum ada data</p>
+        </Box>
+      )}
       <Box width={"100%"} display={"flex"} justifyContent={"end"}>
         <Pagination
           sx={{ marginTop: "20px" }}

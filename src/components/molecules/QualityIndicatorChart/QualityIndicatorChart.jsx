@@ -28,7 +28,6 @@ export const QualityIndicatorChart = ({
   onChangeMonth,
   dataID,
 }) => {
-  console.log("chartData", chartData);
   const [isExpand, setIsExpand] = useState(false);
   const [stringData, setStringData] = useState({
     human: "-",

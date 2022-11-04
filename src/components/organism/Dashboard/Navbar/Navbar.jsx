@@ -21,19 +21,14 @@ export const Navbar = ({ onLogout, showMenu = true }) => {
       url: paths.DASHBOARD,
       children: [
         {
-          key: "quality_indicator",
-          title: "INDIKATOR MUTU",
-          url: paths.QUALITY_INDICATOR,
-        },
-        {
           key: "performance_indicator",
           title: "INDIKATOR KINERJA",
           url: paths.PERFORMANCE_INDICATOR,
         },
         {
-          key: "approval_document",
-          title: "DOKUMEN APPROVAL",
-          url: paths.APPROVAL_DOCUMENT,
+          key: "quality_indicator",
+          title: "INDIKATOR MUTU",
+          url: paths.QUALITY_INDICATOR,
         },
         {
           key: "operational_standard",
@@ -44,6 +39,11 @@ export const Navbar = ({ onLogout, showMenu = true }) => {
           key: "satisfaction-service",
           title: "KEPUASAN LAYANAN",
           url: paths.SATISFACTION_SERVICE,
+        },
+        {
+          key: "approval_document",
+          title: "DOKUMEN APPROVAL",
+          url: paths.APPROVAL_DOCUMENT,
         },
       ],
     },
@@ -131,14 +131,6 @@ export const Navbar = ({ onLogout, showMenu = true }) => {
   const userMenu = <Menu menuItems={userMenuItem} />;
   const masterDataMenu = <Menu menuItems={masterDataItem} />;
 
-  // useEffect(() => {
-  //   if (getRole() === "admin") {
-  //     if (!menuItems.find((x) => x.key === "master_data_admin")) {
-  //       setMenuItems([...menuItems, ...adminMenu]);
-  //     }
-  //   }
-  // }, []);
-
   return (
     <Header className="navbar-dashboard">
       <div
@@ -159,7 +151,7 @@ export const Navbar = ({ onLogout, showMenu = true }) => {
               />
             </Dropdown>
           </div>
-          {getRole() === "admin" && (
+          {getRole() === "Super Admin" && (
             <div className="user-icon">
               <Dropdown overlay={masterDataMenu}>
                 <SettingOutlined

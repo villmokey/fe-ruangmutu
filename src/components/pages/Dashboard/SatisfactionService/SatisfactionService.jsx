@@ -14,7 +14,16 @@ etc:
 --Sub Program
 */
 
-import { Button, Col, Layout, Row, Skeleton, Space, Tag } from "antd";
+import {
+  Breadcrumb,
+  Button,
+  Col,
+  Layout,
+  Row,
+  Skeleton,
+  Space,
+  Tag,
+} from "antd";
 import { Card } from "../../../atoms/Card/Card";
 import { Title } from "../../../atoms/Title/Title";
 import { InputSearch } from "../../../atoms/InputSearch/InputSearch";
@@ -34,6 +43,7 @@ import { fetchApiGet } from "../../../../globals/fetchApi";
 import { SatisfactionServiceCardView } from "./View/Cardview";
 import { SatisfactionServiceListView } from "./View/ListView";
 import { monthAcronymID } from "../../../../globals/monthLabel";
+import { HomeFilled } from "@ant-design/icons";
 import { Box, Pagination } from "@mui/material";
 
 const { Content } = Layout;
@@ -70,7 +80,6 @@ export const SatisfactionService = () => {
       accessToken
     ).then((res) => {
       if (res && res.success) {
-        console.log(res.data);
         setLoading(false);
         setTotalPage(res.data.last_page);
         setComplaints(res.data.data);
@@ -177,6 +186,15 @@ export const SatisfactionService = () => {
         }}
       />
       <Content className="main-content">
+        <Breadcrumb separator=">" className="breadcrumb">
+          <Breadcrumb.Item href={"/dashboard"} className="breadcrumb__item">
+            <HomeFilled className="icon icon--default" />
+            <span>Home</span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item className="breadcrumb__item breadcrumb__item--active">
+            Kepuasan Layanan
+          </Breadcrumb.Item>
+        </Breadcrumb>
         <Row justify="center" align="middle" gutter={[24, 16]}>
           <Col>
             <Card className="total">
@@ -267,7 +285,10 @@ export const SatisfactionService = () => {
                 onRefresh={() => fetchComplaints()}
               />
             ) : (
-              <SatisfactionServiceListView />
+              <SatisfactionServiceListView
+                satisafactions={complaints}
+                onPageChange={(p) => console.log(p)}
+              />
             )
           ) : (
             <Skeleton style={{ textAlign: "center" }}>Loading</Skeleton>

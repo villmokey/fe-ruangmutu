@@ -36,13 +36,25 @@ const Documents = () => {
   return (
     <Row>
       <Col span={24}>
-        <CardView
-          documents={documents}
-          pages={totalPage}
-          activePage={page}
-          onPageChange={(p) => setPage(p)}
-          loading={loading}
-        />
+        {documents && documents.length > 0 ? (
+          <CardView
+            documents={documents}
+            pages={totalPage}
+            activePage={page}
+            onPageChange={(p) => setPage(p)}
+            loading={loading}
+          />
+        ) : (
+          <p
+            style={{
+              textAlign: "center",
+              margin: "50px 0",
+              fontStyle: "italic",
+            }}
+          >
+            Belum ada dokumen terbaru, dokumen terbaru akan muncul disini.
+          </p>
+        )}
       </Col>
     </Row>
   );

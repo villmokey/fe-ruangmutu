@@ -1,4 +1,13 @@
-import { Button, Col, Layout, Row, Skeleton, Space, Tag } from "antd";
+import {
+  Breadcrumb,
+  Button,
+  Col,
+  Layout,
+  Row,
+  Skeleton,
+  Space,
+  Tag,
+} from "antd";
 import { Card } from "../../../atoms/Card/Card";
 import { Title } from "../../../atoms/Title/Title";
 
@@ -21,10 +30,12 @@ import {
   monthLowerWithObjID,
   monthAcronymID,
 } from "../../../../globals/monthLabel";
+import { HomeFilled } from "@ant-design/icons";
 import { FileTextOutlined, BarChartOutlined } from "@ant-design/icons";
 import { fetchApiGet } from "../../../../globals/fetchApi";
 import PerformanceIndicatorCardview from "./View/Cardview";
 import { PerformanceIndicatorSider } from "../../../organism/Dashboard/Sider/PerformanceIndicatorSider/PerformanceIndicatorSider";
+import { Box } from "@mui/material";
 
 const { Content } = Layout;
 
@@ -34,6 +45,7 @@ export const PerformanceIndicator = () => {
   const { getAccessToken } = useAuthToken();
   const accessToken = getAccessToken();
   const [programs, setPrograms] = useState([]);
+  const [search, setSearch] = useState(undefined);
   const [totalResult, setTotalResult] = useState({
     all: "",
     selected: "",
@@ -56,9 +68,10 @@ export const PerformanceIndicator = () => {
       getAllQualityIndicator({
         accessToken,
         filter: {
-          type: 'performance',
+          type: "performance",
           year: filter.year !== undefined ? filter.year : "",
           program_id: filter.program_id !== undefined ? filter.program_id : "",
+          search: search,
         },
       })
     );
@@ -80,7 +93,7 @@ export const PerformanceIndicator = () => {
   useEffect(() => {
     fetchQuality();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filter]);
+  }, [filter, search]);
 
   useEffect(() => {
     if (!list) return;
@@ -151,29 +164,41 @@ export const PerformanceIndicator = () => {
         }}
       />
       <Content className="main-content">
+        <Breadcrumb separator=">" className="breadcrumb">
+          <Breadcrumb.Item href={"/dashboard"} className="breadcrumb__item">
+            <HomeFilled className="icon icon--default" />
+            <span>Home</span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item className="breadcrumb__item breadcrumb__item--active">
+            Indikator Kinerja
+          </Breadcrumb.Item>
+        </Breadcrumb>
         <Row justify="center" align="middle" gutter={[24, 16]}>
           <Col>
             <Card className="total">
-              <p className="card-title">TOTAL INDIKATOR KINERJA</p>
+              <p className="card-title">TOTAL INDIKATOR</p>
+              <p className="card-title">KINERJA</p>
               <Title className="card-content">{totalResult.all}</Title>
             </Card>
           </Col>
           <Col>
             <Card className="total">
-              <p className="card-title">INDIKATOR KINERJA TERPILIH</p>
+              <p className="card-title">INDIKATOR KINERJA</p>
+              <p className="card-title">TERPILIH</p>
               <Title className="card-content">{totalResult.selected}</Title>
             </Card>
           </Col>
           <Col>
             <Card className="total">
-              <p className="card-title">BELUM TERCAPAI</p>
+              <p className="card-title">BELUM</p>
+              <p className="card-title">TERCAPAI</p>
               <Title className="card-content">{totalResult.unreached}</Title>
             </Card>
           </Col>
         </Row>
         <Row justify="end" style={{ marginTop: 40 }} gutter={[8]}>
           <Col>
-            <InputSearch size="large" />
+            <InputSearch size="large" onSearch={(value) => setSearch(value)} />
           </Col>
           <Col>
             <Link to={`${paths.ADD}`}>
@@ -227,10 +252,10 @@ export const PerformanceIndicator = () => {
         <div className="indikator-mutu-container">
           {!loading ? (
             viewType === 2 ? (
-              <PerformanceIndicatorCardview filter={filter} />
+              <PerformanceIndicatorCardview filter={filter} search={search} />
             ) : (
               <>
-                {chartDataSource &&
+                {chartDataSource && chartDataSource.length > 0 ? (
                   chartDataSource.map((item, index) => (
                     <QualityIndicatorChart
                       key={index}
@@ -241,7 +266,12 @@ export const PerformanceIndicator = () => {
                       className="indikator-mutu"
                       data={item.monthlyData}
                     />
-                  ))}
+                  ))
+                ) : (
+                  <Box margin={"40px 0"} textAlign={"center"}>
+                    <p>Oops, Belum ada data</p>
+                  </Box>
+                )}
               </>
             )
           ) : (

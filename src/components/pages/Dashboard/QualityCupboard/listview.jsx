@@ -4,6 +4,7 @@ import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 import moment from "moment";
 import "moment/locale/id";
+import { paths } from "../../../../routing/paths";
 
 const ListView = ({
   documents = [],
@@ -16,37 +17,60 @@ const ListView = ({
 }) => {
   return !loading ? (
     <Box width={"100%"}>
-      <Stack
-        direction={"row"}
-        spacing={0.5}
-        alignItems={"center"}
-        margin={"0 0 10px 0"}
-      >
-        <Typography
-          style={{ color: "#95A0AB", fontWeight: "500", cursor: "pointer" }}
-          onClick={onSort}
-        >
-          Nama
-        </Typography>
-        {sort === "ASC" ? (
-          <ArrowUpOutlined color="#ABAFB3" />
-        ) : (
-          <ArrowDownOutlined color="#ABAFB3" />
-        )}
-      </Stack>
       <Table>
-        {documents &&
+        <thead>
+          <th>
+            <Stack
+              direction={"row"}
+              spacing={0.5}
+              alignItems={"center"}
+              margin={"0 0 10px 0"}
+            >
+              <Typography
+                style={{
+                  color: "#95A0AB",
+                  fontWeight: "500",
+                  cursor: "pointer",
+                }}
+                onClick={onSort}
+              >
+                Nama
+              </Typography>
+              {sort === "ASC" ? (
+                <ArrowUpOutlined color="#ABAFB3" />
+              ) : (
+                <ArrowDownOutlined color="#ABAFB3" />
+              )}
+            </Stack>
+          </th>
+          <th>
+            <Typography
+              style={{
+                color: "#95A0AB",
+                fontWeight: "500",
+                textAlign: "left",
+              }}
+            >
+              Tanggal Publikasi
+            </Typography>
+          </th>
+          <th>
+            <Typography
+              style={{
+                color: "#95A0AB",
+                fontWeight: "500",
+                textAlign: "left",
+              }}
+            >
+              Tanggal Unggah
+            </Typography>
+          </th>
+        </thead>
+        {documents && documents.length > 0 ? (
           documents.map((doc, index) => (
             <TableRow key={index}>
               <TableData>
-                <a
-                  href={
-                    doc && doc.file && doc.file.file_link
-                      ? doc.file.file_link
-                      : ""
-                  }
-                  target={"_blank"}
-                >
+                <a href={`${doc.id}/${paths.VIEW}`}>
                   <Box width={"100%"}>
                     {doc.related_program && doc.related_program.length > 0 && (
                       <Stack direction={"row"}>
@@ -67,6 +91,9 @@ const ListView = ({
                     >
                       {doc.name}
                     </Typography>
+                    <Typography style={{ fontSize: "10px" }}>
+                      {doc.document_number}
+                    </Typography>
                     <Typography style={{ fontSize: "10px", fontWeight: "300" }}>
                       {doc.document_type &&
                       doc.document_type &&
@@ -84,7 +111,16 @@ const ListView = ({
                 {moment(doc.created_at).format("dddd, DD MMMM YYYY")}
               </TableData>
             </TableRow>
-          ))}
+          ))
+        ) : (
+          <TableRow>
+            <TableData colSpan={3}>
+              <Box margin={"40px 0"} textAlign={"center"}>
+                <p>Oops, Belum ada data</p>
+              </Box>
+            </TableData>
+          </TableRow>
+        )}
       </Table>
       <Box width={"100%"} display={"flex"} justifyContent={"end"}>
         <Pagination

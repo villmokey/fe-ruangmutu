@@ -4,8 +4,9 @@ import { QualityIndicatorCard } from "../../../../molecules/QualityIndicatorCard
 import { fetchApiGet } from "../../../../../globals/fetchApi";
 import { useAuthToken } from "../../../../../globals/useAuthToken";
 import { PerformanceIndicatorPreview } from "../../../../templates/PerformanceIndicatorTemplates/Preview/PerformanceIndicatorPreview";
+import { Box } from "@mui/material";
 
-const PerformanceIndicatorCardview = ({ filter }) => {
+const PerformanceIndicatorCardview = ({ filter, search }) => {
   const { getAccessToken } = useAuthToken();
   const accessToken = getAccessToken();
   const [previewVis, setPreviewVis] = useState(false);
@@ -22,7 +23,7 @@ const PerformanceIndicatorCardview = ({ filter }) => {
     setLoading(true);
     fetchApiGet(
       "/dashboard/indicator/cardlist",
-      { ...filter, type: "performance" },
+      { ...filter, type: "performance", search: search },
       accessToken
     )
       .then((res) => {
@@ -78,32 +79,41 @@ const PerformanceIndicatorCardview = ({ filter }) => {
 
   React.useEffect(() => {
     fetchIndicator();
+    console.log("PerformanceIndicatorPreview", chartData);
   }, [filter]);
 
   return (
     <>
       {!loading ? (
-        <Row gutter={[24, 8]}>
-          {indicatorList &&
-            indicatorList.map((item, index) => (
-              <Col key={index}>
-                <QualityIndicatorCard
-                  previewVisibility={previewVis}
-                  onClosePreviewVisibility={() => null}
-                  onOpenPreview={() => {
-                    fetchDetail(
-                      item.id,
-                      item.indicator_id,
-                      item.is_profile_indicator
-                    );
-                    setPreviewData(item);
-                  }}
-                  indicatorData={item}
-                  key={index}
-                />
-              </Col>
-            ))}
-        </Row>
+        <>
+          {indicatorList && indicatorList.length > 0 ? (
+            <Row gutter={[24, 8]}>
+              {indicatorList.map((item, index) => (
+                <Col key={index}>
+                  <QualityIndicatorCard
+                    isPerformance
+                    previewVisibility={previewVis}
+                    onClosePreviewVisibility={() => null}
+                    onOpenPreview={() => {
+                      fetchDetail(
+                        item.id,
+                        item.indicator_id,
+                        item.is_profile_indicator
+                      );
+                      setPreviewData(item);
+                    }}
+                    indicatorData={item}
+                    key={index}
+                  />
+                </Col>
+              ))}
+            </Row>
+          ) : (
+            <Box margin={"40px 0"} textAlign={"center"}>
+              <p>Oops, Belum ada data</p>
+            </Box>
+          )}
+        </>
       ) : (
         <Skeleton />
       )}

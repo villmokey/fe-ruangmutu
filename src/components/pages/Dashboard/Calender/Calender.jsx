@@ -25,9 +25,9 @@ const { Content } = Layout;
 
 export const Calender = () => {
   const [filterPayload, setFilterPayload] = React.useState({
-    year: "",
-    month: "",
-    program_id: "",
+    year: undefined,
+    month: undefined,
+    program_id: undefined,
   });
   const { getAccessToken } = useAuthToken();
   const accessToken = getAccessToken();

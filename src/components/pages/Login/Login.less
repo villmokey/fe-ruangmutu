@@ -1,17 +1,27 @@
 .container {
   background-color: #5A7D7C; /* For browsers that do not support gradients */
   background: linear-gradient(148.37deg, #5A7D7C 39.15%, rgba(255, 255, 255, 0) 109.52%);
+  background: url('../../../assets/images/login-bg.png');
   width: 100%;
   height: 100vh;
+
 }
 
 .login-container {
   margin-left: auto !important;
-  width: 50%;
+  width: 40%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  
+  .ant-card-body {
+    padding: unset;
+  }
+}
+
+.login-logo {
+  width: 60px;
 }
 
 .ant-card-body {
@@ -27,12 +37,47 @@
 }
 
 .form-title {
-  font-size: 30px;
+  font-size: 20px;
   font-weight: 700;
 }
 
 .button {
   height: 50px !important;
+}
+
+.logo-text {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 59px;
+  color: #5A7D7C;
+}
+
+.description-text {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  /* or 142% */
+  letter-spacing: 1px;
+  color: #FFFFFF;
+}
+
+.header-login-box {
+  text-align: center;
+}
+
+.welcome-text {
+  margin-top: 10px;
+}
+
+.login-footer {
+  position: fixed;
+  bottom: 0;
+  background: #E5E5E5;
+  text-align: left;
+  width: 40%;
+  padding: 10px;
 }
 
 @media (max-width: 768px) {
@@ -44,6 +89,12 @@
 
 @media (max-width: 576px) {
   .login-container {
+    padding: unset;
+    position: relative;
+    width: 100%;
+  }
+
+  .login-footer {
     width: 100%;
   }
 

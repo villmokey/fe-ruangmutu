@@ -16,6 +16,29 @@ section.ant-layout {
   background: transparent !important;
 }
 
+.sider .sider-content h2 {
+  font-weight: bold;
+}
+
+.icon {
+  &--default {
+    color: #5DC8BD !important;
+    margin-right: 1rem;
+  }
+}
+
+.breadcrumb {
+  margin-bottom: 4.875rem;
+
+  &__item {
+    font-weight: 500;
+
+    &--active {
+      color: #5DC8BD;
+    }
+  }
+}
+
 .dashboard-layout {
   height: 100%;
 
@@ -136,6 +159,9 @@ section.ant-layout {
   
       .link-to {
         color: rgb(232, 232, 232);
+        font-size: 12px;
+        text-transform: uppercase;
+        font-weight: bold;
       }
   }
 
@@ -174,6 +200,8 @@ section.ant-layout {
 
     .card-title {
       font-size: 20px;
+      font-weight: bold;
+      text-transform: uppercase;
     }
 
     .card-date {

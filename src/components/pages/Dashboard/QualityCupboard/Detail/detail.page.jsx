@@ -1,21 +1,21 @@
 import React from "react";
 import { Button, Col, Layout, Row, Space, Tag } from "antd";
 import { PrinterOutlined, FolderOpenOutlined } from "@ant-design/icons";
-import { Box, Typography, Skeleton, Grid } from "@mui/material";
-import { useState, useEffect } from "react";
+import { Box, Typography } from "@mui/material";
+import { useState } from "react";
 import { paths } from "../../../../../routing/paths";
 import { QualityCupboardSider } from "../../../../organism/Dashboard/Sider/QualityCupboardSider/QualityCupboardSider";
-import { useDispatch } from "react-redux";
 import { useAuthToken } from "../../../../../globals/useAuthToken";
 import Navigation from "../../../../organism/Dashboard/Breadcrumb";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { fetchApiGet } from "../../../../../globals/fetchApi";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import DetailLoading from "./shimmer";
 import "./detail.cupboard.less";
 import { SquareLogo } from "../../../../../assets/images";
 import { QRCode } from "react-qrcode-logo";
+import { EyeOutlined } from "@ant-design/icons";
 import moment from "moment";
 import "moment/locale/id";
 
@@ -148,6 +148,37 @@ const DetailQualityCupboard = () => {
                   <td>:</td>
                   <td>
                     {moment(document.created_at).format("dddd, DD MMMM YYYY")}
+                  </td>
+                </tr>
+                <tr>
+                  <td>Dokumen Terkait</td>
+                  <td>:</td>
+                  <td>
+                    {document.related_file &&
+                    document.related_file.length > 0 ? (
+                      document.related_file.map((rel) => (
+                        <div
+                          key={rel.id}
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                          }}
+                        >
+                          {rel.related.name}
+                          <div style={{ marginLeft: "10px" }}>
+                            <a
+                              target={"_blank"}
+                              href={rel.related.file.file_link}
+                            >
+                              <EyeOutlined />
+                            </a>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <p>-</p>
+                    )}
                   </td>
                 </tr>
               </table>

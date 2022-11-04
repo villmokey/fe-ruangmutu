@@ -93,7 +93,10 @@ export const getAllQualityIndicator = (bodyData) => {
         bodyData.filter && bodyData.filter.program_id
           ? bodyData.filter.program_id
           : ""
-      }`,
+      }&search=${
+        bodyData.filter && bodyData.filter.search
+          ? bodyData.filter.search
+          : ""}`,
       requestParams: {
         method: apiMethod.GET,
         data: bodyData?.param ?? {},

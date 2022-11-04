@@ -6,18 +6,21 @@ import { QualityYear } from "../../../../molecules/Dropdown/QualityYear/QualityY
 import { UnitService } from "../../../../molecules/Dropdown/UnitService/UnitService";
 import moment from "moment";
 import "moment/locale/id";
+import { useState } from "react";
 
 const { Sider: AntdSider } = Layout;
 
 export const QualityCupboardSider = ({
   onFilter,
-  onChangeQualityYear,
-  onChangeDocumentType,
-  onChangeUnitService,
   qualityYearValue,
   documentTypeValue,
   unitServiceValue,
 }) => {
+  const [filter, setFilter] = useState({
+    year: "",
+    type: "",
+    programs: [],
+  });
   return (
     <AntdSider className="sider">
       <div className="sider-content">
@@ -29,7 +32,7 @@ export const QualityCupboardSider = ({
         <Row style={{ margin: "20px 0px" }}>
           <Col>
             <QualityYear
-              onChange={onChangeQualityYear}
+              onChange={(e) => setFilter({ ...filter, year: e })}
               value={qualityYearValue}
             />
           </Col>
@@ -37,7 +40,7 @@ export const QualityCupboardSider = ({
         <Row style={{ margin: "20px 0px" }}>
           <Col>
             <DocumentType
-              onChange={onChangeDocumentType}
+              onChange={(e) => setFilter({ ...filter, type: e })}
               value={documentTypeValue}
             />
           </Col>
@@ -46,7 +49,7 @@ export const QualityCupboardSider = ({
           <Col>
             <UnitService
               multiple={true}
-              onChange={onChangeUnitService}
+              onChange={(e) => setFilter({ ...filter, programs: e })}
               value={unitServiceValue}
             />
           </Col>
@@ -57,7 +60,9 @@ export const QualityCupboardSider = ({
         type="primary"
         className="filter-button"
         style={{ width: 170 }}
-        onClick={onFilter}
+        onClick={() => {
+          return onFilter(filter);
+        }}
       >
         Cari Dokumen
       </Button>

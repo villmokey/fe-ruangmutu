@@ -6,11 +6,11 @@ import moment from "moment";
 import "moment/locale/id";
 
 export const SatisfactionServiceListView = ({
-  documents = [],
+  satisafactions = [],
   pages = 10,
   activePage = 1,
   onPageChange,
-  sort = 'ASC',
+  sort = "ASC",
   onSort,
   loading,
 }) => {
@@ -35,156 +35,36 @@ export const SatisfactionServiceListView = ({
         )}
       </Stack>
       <Table>
-        <TableRow>
-          <TableData>
-            <Box width={"100%"}>
-
-              <Stack direction={"row"}>
-                <Tag
-                  style={{ color: "white", background: "#6A9695" }}
-                >
-                  KELUHAN PELANGGAN
-                </Tag>
-              </Stack>
-              <Typography
-                style={{ fontSize: "14px", fontWeight: "bold" }}
-              >
-                Keluhan Pertama
-              </Typography>
-            </Box>
-          </TableData>
-          <TableData>
-            {moment('2022-12-12').format("dddd, DD MMMM YYYY")}
-          </TableData>
-          <TableData>
-            {moment('2022-12-12').format("dddd, DD MMMM YYYY")}
-          </TableData>
-        </TableRow>
-        <TableRow>
-          <TableData>
-            <Box width={"100%"}>
-
-              <Stack direction={"row"}>
-                <Tag
-                  style={{ color: "white", background: "#6A9695" }}
-                >
-                  KELUHAN PELANGGAN
-                </Tag>
-              </Stack>
-              <Typography
-                style={{ fontSize: "14px", fontWeight: "bold" }}
-              >
-                Keluhan Pertama
-              </Typography>
-            </Box>
-          </TableData>
-          <TableData>
-            {moment('2022-12-12').format("dddd, DD MMMM YYYY")}
-          </TableData>
-          <TableData>
-            {moment('2022-12-12').format("dddd, DD MMMM YYYY")}
-          </TableData>
-        </TableRow>
-        <TableRow>
-          <TableData>
-            <Box width={"100%"}>
-
-              <Stack direction={"row"}>
-                <Tag
-                  style={{ color: "white", background: "#6A9695" }}
-                >
-                  KELUHAN PELANGGAN
-                </Tag>
-              </Stack>
-              <Typography
-                style={{ fontSize: "14px", fontWeight: "bold" }}
-              >
-                Keluhan Pertama
-              </Typography>
-            </Box>
-          </TableData>
-          <TableData>
-            {moment('2022-12-12').format("dddd, DD MMMM YYYY")}
-          </TableData>
-          <TableData>
-            {moment('2022-12-12').format("dddd, DD MMMM YYYY")}
-          </TableData>
-        </TableRow>
-        <TableRow>
-          <TableData>
-            <Box width={"100%"}>
-
-              <Stack direction={"row"}>
-                <Tag
-                  style={{ color: "white", background: "#6A9695" }}
-                >
-                  KELUHAN PELANGGAN
-                </Tag>
-              </Stack>
-              <Typography
-                style={{ fontSize: "14px", fontWeight: "bold" }}
-              >
-                Keluhan Pertama
-              </Typography>
-            </Box>
-          </TableData>
-          <TableData>
-            {moment('2022-12-12').format("dddd, DD MMMM YYYY")}
-          </TableData>
-          <TableData>
-            {moment('2022-12-12').format("dddd, DD MMMM YYYY")}
-          </TableData>
-        </TableRow>
-        <TableRow>
-          <TableData>
-            <Box width={"100%"}>
-
-              <Stack direction={"row"}>
-                <Tag
-                  style={{ color: "white", background: "#6A9695" }}
-                >
-                  KELUHAN PELANGGAN
-                </Tag>
-              </Stack>
-              <Typography
-                style={{ fontSize: "14px", fontWeight: "bold" }}
-              >
-                Keluhan Pertama
-              </Typography>
-            </Box>
-          </TableData>
-          <TableData>
-            {moment('2022-12-12').format("dddd, DD MMMM YYYY")}
-          </TableData>
-          <TableData>
-            {moment('2022-12-12').format("dddd, DD MMMM YYYY")}
-          </TableData>
-        </TableRow>
-        <TableRow>
-          <TableData>
-            <Box width={"100%"}>
-
-              <Stack direction={"row"}>
-                <Tag
-                  style={{ color: "white", background: "#6A9695" }}
-                >
-                  KELUHAN PELANGGAN
-                </Tag>
-              </Stack>
-              <Typography
-                style={{ fontSize: "14px", fontWeight: "bold" }}
-              >
-                Keluhan Pertama
-              </Typography>
-            </Box>
-          </TableData>
-          <TableData>
-            {moment('2022-12-12').format("dddd, DD MMMM YYYY")}
-          </TableData>
-          <TableData>
-            {moment('2022-12-12').format("dddd, DD MMMM YYYY")}
-          </TableData>
-        </TableRow>
+        {satisafactions && satisafactions.length > 0 ? (
+          <TableRow>
+            <TableData>
+              <Box width={"100%"}>
+                <Stack direction={"row"}>
+                  <Tag style={{ color: "white", background: "#6A9695" }}>
+                    KELUHAN PELANGGAN
+                  </Tag>
+                </Stack>
+                <Typography style={{ fontSize: "14px", fontWeight: "bold" }}>
+                  Keluhan Pertama
+                </Typography>
+              </Box>
+            </TableData>
+            <TableData>
+              {moment("2022-12-12").format("dddd, DD MMMM YYYY")}
+            </TableData>
+            <TableData>
+              {moment("2022-12-12").format("dddd, DD MMMM YYYY")}
+            </TableData>
+          </TableRow>
+        ) : (
+          <TableRow>
+            <TableData colSpan={3}>
+              <Box margin={"40px 0"} textAlign={"center"}>
+                <p>Oops, Belum ada data</p>
+              </Box>
+            </TableData>
+          </TableRow>
+        )}
       </Table>
       <Box width={"100%"} display={"flex"} justifyContent={"end"}>
         <Pagination

@@ -8,6 +8,7 @@ import { Text } from "../../atoms/Text/Text";
 export const QualityIndicatorCard = ({
   onOpenPreview,
   indicatorData,
+  isPerformance = false,
 }) => {
   return (
     <>
@@ -17,15 +18,15 @@ export const QualityIndicatorCard = ({
         </div>
         <div className="tag" style={{ justifyContent: "start" }}>
           <Tag color="#6A9695" style={{ fontSize: 9 }}>
-            {indicatorData.is_profile_indicator ? 'PROFILE INDIKATOR MUTU' : 'INDIKATOR MUTU'}
-
+            {indicatorData.is_profile_indicator
+              ? `PROFILE INDIKATOR ${isPerformance ? "KINERJA" : "MUTU"}`
+              : `INDIKATOR ${isPerformance ? "KINERJA" : "MUTU"}`}
           </Tag>
         </div>
         <div className="content">
           <span title={indicatorData.title}>
             <Text className="title" style={{ lineHeight: "10px" }}>
-              {indicatorData.title &&
-                indicatorData.title.length > 35
+              {indicatorData.title && indicatorData.title.length > 35
                 ? indicatorData.title.substr(0, 35) + "..."
                 : indicatorData.title}
             </Text>
