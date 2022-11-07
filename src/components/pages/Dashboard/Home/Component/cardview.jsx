@@ -1,5 +1,6 @@
 import { Box, Grid, Pagination, Skeleton } from "@mui/material";
 import React from "react";
+import { DefaultThumbnail } from "../../../../../assets/images";
 import FileItem from "./file.item";
 
 const CardView = ({
@@ -24,6 +25,14 @@ const CardView = ({
                 type={doc.document_type.name}
                 publish={doc.publish_date}
                 created={doc.created_at}
+                thumbnail={
+                  doc &&
+                  doc.document_type &&
+                  doc.document_type.thumbnail &&
+                  doc.document_type.thumbnail.file_link
+                    ? doc.document_type.thumbnail.file_link
+                    : DefaultThumbnail
+                }
                 file={
                   doc.file && doc.file.file_link && doc.file.file_link
                     ? doc.file.file_link

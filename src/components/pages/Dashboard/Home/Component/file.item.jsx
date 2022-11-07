@@ -2,7 +2,6 @@ import { Stack } from "@mui/material";
 import { Typography, Tag } from "antd";
 import React from "react";
 import styled from "styled-components";
-import { PDFIcon } from "../../../../../assets/icons";
 import { CloudUploadOutlined } from "@ant-design/icons";
 import moment from "moment";
 import "moment/locale/id";
@@ -91,19 +90,13 @@ const FileItem = ({
   publish,
   created,
   file,
+  thumbnail,
   docId,
 }) => {
   return (
     <Link to={`/dashboard/quality-cupboard/${docId}/${paths.VIEW}`}>
       <Container>
-        <ExtensionLogo
-          src={
-            documentTypeLogos.find((logo) => logo.key === type)
-              ? documentTypeLogos.find((logo) => logo.key === type).image
-              : PDFIcon
-          }
-          alt={"icon"}
-        />
+        <ExtensionLogo src={thumbnail} alt={"icon"} />
         <DetailContainer>
           {programs && programs.length > 0 && (
             <Stack direction={"row"}>
