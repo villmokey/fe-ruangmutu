@@ -1,11 +1,4 @@
-import {
-  Checkbox,
-  Col,
-  Form as AntdForm,
-  Row,
-  Select,
-  Upload,
-} from "antd";
+import { Checkbox, Col, Form as AntdForm, Row, Select, Upload } from "antd";
 import { Title } from "../../../../atoms/Title/Title";
 import { Form } from "../../../../molecules/Form/Form";
 import { InputText } from "../../../../atoms/InputText/InputText";
@@ -471,7 +464,12 @@ export const SecondStep = ({
                 { required: true, message: "Penugas tidak boleh kosong!" },
               ]}
             >
-              <Dragger beforeUpload={() => false} style={{ height: 200 }}>
+              <Dragger
+                multiple={false}
+                accept="images/*, application/pdf"
+                beforeUpload={() => false}
+                style={{ height: 200 }}
+              >
                 <Text>Drag & Drop</Text>
               </Dragger>
             </Item>

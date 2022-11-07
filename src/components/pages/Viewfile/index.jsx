@@ -18,6 +18,7 @@ export const ViewFilePage = () => {
 
   return (
     <Layout>
+      {/* eslint-disable-next-line */}
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />

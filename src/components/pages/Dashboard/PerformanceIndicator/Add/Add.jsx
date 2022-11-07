@@ -23,18 +23,17 @@ import {
   userSelector,
 } from "../../../../../redux/modules/user/action";
 import {
-  addProfileQualityIndicator,
   getAllProfileQualityIndicator,
   profileQualityIndicatorSelector,
   uploadFileAPIProfileQualityIndicator,
 } from "../../../../../redux/modules/profileQualityIndicator/action";
 import {
-  addQualityIndicator,
   qualityIndicatorSelector,
   uploadFileAPIQualityIndicator,
 } from "../../../../../redux/modules/qualityIndicator/action";
 // import { fileSelector } from '../../../../../redux/modules/file/action';
 import moment from "moment";
+import { fetchApiPost } from "../../../../../globals/fetchApi";
 
 const { Sider, Content } = Layout;
 const { Step } = Steps;
@@ -51,21 +50,18 @@ export const Add = () => {
   } = useSelector(userSelector);
 
   const {
-    called,
     data: { upload, list: profileList },
-    success: { add },
   } = useSelector(profileQualityIndicatorSelector);
 
   const {
-    called: calledQualityIndicator,
     data: { upload: uploadQualityIndicator },
-    success: { add: addQualityIndicatorSuccess },
   } = useSelector(qualityIndicatorSelector);
 
   const dispatch = useDispatch();
   const { getAccessToken, getName } = useAuthToken();
   const accessToken = getAccessToken();
   const navigate = useNavigate();
+  const [createLoading, setCreateLoading] = useState(false);
 
   const [secondStepProfileQualityIndicatorForm] = Form.useForm();
   const [thirdStepProfileQualityIndicatorForm] = Form.useForm();
@@ -113,22 +109,6 @@ export const Add = () => {
 
     setProgramMutuOptions(fetch);
   }, [programList]);
-
-  useEffect(() => {
-    if (!(add && called)) return;
-    message.success("Berhasil membuat profil indikator mutu!");
-    navigate(-1);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [add, called]);
-
-  useEffect(() => {
-    if (!(addQualityIndicatorSuccess && calledQualityIndicator)) return;
-    message.success("Berhasil membuat indikator mutu!");
-    navigate(-1);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [addQualityIndicatorSuccess, calledQualityIndicator]);
 
   useEffect(() => {
     if (!profileList) return;
@@ -264,15 +244,19 @@ export const Add = () => {
       type: "performance",
     };
 
-    dispatch(
-      addProfileQualityIndicator({
-        accessToken,
-        param: finalData,
+    setCreateLoading(true);
+    fetchApiPost("/indicator-profile", accessToken, finalData)
+      .then((res) => {
+        if (res && res.success) {
+          message.success("Berhasil membuat profile indikator kinerja");
+          navigate("/dashboard/performance-indicator/");
+        } else {
+          if (res && res.response && res.response.data)
+            message.error(res.response.data.message);
+        }
       })
-    );
-
-    message.success("Berhasil membuat profile indikator mutu");
-    navigate(-1);
+      .catch()
+      .finally(() => setCreateLoading(false));
 
     setProfileQualityIndicatorIsUploading(false);
 
@@ -326,15 +310,29 @@ export const Add = () => {
       type: "performance",
     };
 
-    dispatch(
-      addQualityIndicator({
-        accessToken,
-        param: finalData,
-      })
-    );
+    // dispatch(
+    //   addQualityIndicator({
+    //     accessToken,
+    //     param: finalData,
+    //   })
+    // );
 
-    message.success("Berhasil membuat indikator mutu");
-    navigate(-1);
+    // message.success("Berhasil membuat indikator mutu");
+    // navigate(-1);
+
+    setCreateLoading(true);
+    fetchApiPost("/indicator", accessToken, finalData)
+      .then((res) => {
+        if (res && res.success) {
+          message.success("Berhasil menambahkan indikator kinerja");
+          navigate("/dashboard/performance-indicator/");
+        } else {
+          if (res && res.response && res.response.data)
+            message.error(res.response.data.message);
+        }
+      })
+      .catch()
+      .finally(() => setCreateLoading(false));
 
     setQualityIndicatorIsUploading(false);
 
@@ -481,6 +479,7 @@ export const Add = () => {
   };
 
   const handleSubmitFormProfileQualityIndicator = async (value) => {
+    setCreateLoading(true);
     const formData = new FormData();
     formData.append("file", value.dokumenTelusur[0].originFileObj);
     formData.append("group_name", "document_profile_indicator_performance");
@@ -497,6 +496,7 @@ export const Add = () => {
   };
 
   const handleSubmitFormQualityIndicator = async (value) => {
+    setCreateLoading(true);
     const formData = new FormData();
     formData.append("file", value.dokumenTelusur[0].originFileObj);
     formData.append("group_name", "document_quality_indicator");
@@ -603,7 +603,11 @@ export const Add = () => {
           </Col>
           <Col>
             {current === steps.length - 1 && (
-              <Button type="primary" onClick={() => handleSave()}>
+              <Button
+                loading={createLoading}
+                type="primary"
+                onClick={() => handleSave()}
+              >
                 Simpan
               </Button>
             )}

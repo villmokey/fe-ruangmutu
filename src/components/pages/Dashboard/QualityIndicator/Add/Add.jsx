@@ -25,16 +25,15 @@ import {
   userSelector,
 } from "../../../../../redux/modules/user/action";
 import {
-  addProfileQualityIndicator,
   getAllProfileQualityIndicator,
   profileQualityIndicatorSelector,
   uploadFileAPIProfileQualityIndicator,
 } from "../../../../../redux/modules/profileQualityIndicator/action";
 import {
-  addQualityIndicator,
   qualityIndicatorSelector,
   uploadFileAPIQualityIndicator,
 } from "../../../../../redux/modules/qualityIndicator/action";
+import { fetchApiPost } from "../../../../../globals/fetchApi";
 // import { fileSelector } from '../../../../../redux/modules/file/action';
 
 const { Sider, Content } = Layout;
@@ -50,17 +49,13 @@ export const Add = () => {
     // called: calledUser,
     data: { list: userList },
   } = useSelector(userSelector);
-
+  const [createLoading, setCreateLoading] = useState(false);
   const {
-    called,
     data: { upload, list: profileList },
-    success: { add },
   } = useSelector(profileQualityIndicatorSelector);
 
   const {
-    called: calledQualityIndicator,
     data: { upload: uploadQualityIndicator },
-    success: { add: addQualityIndicatorSuccess },
   } = useSelector(qualityIndicatorSelector);
 
   const dispatch = useDispatch();
@@ -114,22 +109,6 @@ export const Add = () => {
 
     setProgramMutuOptions(fetch);
   }, [programList]);
-
-  useEffect(() => {
-    if (!(add && called)) return;
-    message.success("Berhasil membuat profil indikator mutu!");
-    navigate(-1);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [add, called]);
-
-  useEffect(() => {
-    if (!(addQualityIndicatorSuccess && calledQualityIndicator)) return;
-    message.success("Berhasil membuat indikator mutu!");
-    navigate(-1);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [addQualityIndicatorSuccess, calledQualityIndicator]);
 
   useEffect(() => {
     if (!profileList) return;
@@ -265,15 +244,19 @@ export const Add = () => {
       type: "quality",
     };
 
-    dispatch(
-      addProfileQualityIndicator({
-        accessToken,
-        param: finalData,
+    setCreateLoading(true);
+    fetchApiPost("/indicator-profile", accessToken, finalData)
+      .then((res) => {
+        if (res && res.success) {
+          message.success("Berhasil membuat profile indikator mutu");
+          navigate("/dashboard/quality-indicator/");
+        } else {
+          if (res && res.response && res.response.data)
+            message.error(res.response.data.message);
+        }
       })
-    );
-
-    message.success("Berhasil membuat profile indikator mutu");
-    navigate(-1);
+      .catch()
+      .finally(() => setCreateLoading(false));
 
     setProfileQualityIndicatorIsUploading(false);
 
@@ -327,15 +310,19 @@ export const Add = () => {
       type: "quality",
     };
 
-    dispatch(
-      addQualityIndicator({
-        accessToken,
-        param: finalData,
+    setCreateLoading(true);
+    fetchApiPost("/indicator", accessToken, finalData)
+      .then((res) => {
+        if (res && res.success) {
+          message.success("Berhasil menambahkan indikator mutu");
+          navigate("/dashboard/quality-indicator/");
+        } else {
+          if (res && res.response && res.response.data)
+            message.error(res.response.data.message);
+        }
       })
-    );
-
-    message.success("Berhasil membuat indikator mutu");
-    navigate(-1);
+      .catch()
+      .finally(() => setCreateLoading(false));
 
     setQualityIndicatorIsUploading(false);
 
@@ -482,7 +469,7 @@ export const Add = () => {
   };
 
   const handleSubmitFormProfileQualityIndicator = async (value) => {
-
+    setCreateLoading(true);
     const formData = new FormData();
     formData.append("file", value.dokumenTelusur[0].originFileObj);
     formData.append("group_name", "document_profile_indicator");
@@ -493,7 +480,7 @@ export const Add = () => {
         param: formData,
       })
     );
-    
+
     setProfileQualityIndicatorDataTemp(value);
     setProfileQualityIndicatorIsUploading(true);
   };
@@ -605,7 +592,11 @@ export const Add = () => {
           </Col>
           <Col>
             {current === steps.length - 1 && (
-              <Button type="primary" onClick={() => handleSave()}>
+              <Button
+                loading={createLoading}
+                type="primary"
+                onClick={() => handleSave()}
+              >
                 Simpan
               </Button>
             )}

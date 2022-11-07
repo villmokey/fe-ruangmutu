@@ -34,7 +34,6 @@ const DetailQualityCupboard = () => {
       .then((res) => {
         if (res && res.success) {
           setDocument(res.data);
-          console.log(res.data);
         }
       })
       .finally(() => setLoading(false));
@@ -108,80 +107,85 @@ const DetailQualityCupboard = () => {
             </Row>
             <Box className={"detail-information"}>
               <table>
-                <tr>
-                  <td>Nomor Dokumen</td>
-                  <td>:</td>
-                  <td>{document.document_number}</td>
-                </tr>
-                <tr>
-                  <td>Tipe Dokumen</td>
-                  <td>:</td>
-                  <td>
-                    {document.document_type && document.document_type.name
-                      ? document.document_type.name
-                      : "-"}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Program/Unit Terkait</td>
-                  <td>:</td>
-                  <td>
-                    {document.related_program && document.related_program.length
-                      ? document.related_program.map(
-                          (rel) =>
-                            rel.program && (
-                              <Tag key={rel.id}>{rel.program.name}</Tag>
-                            )
-                        )
-                      : "-"}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Tanggal Dipublikasi</td>
-                  <td>:</td>
-                  <td>
-                    {moment(document.publish_date).format("dddd, DD MMMM YYYY")}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Diunggah Pada</td>
-                  <td>:</td>
-                  <td>
-                    {moment(document.created_at).format("dddd, DD MMMM YYYY")}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Dokumen Terkait</td>
-                  <td>:</td>
-                  <td>
-                    {document.related_file &&
-                    document.related_file.length > 0 ? (
-                      document.related_file.map((rel) => (
-                        <div
-                          key={rel.id}
-                          style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                          }}
-                        >
-                          {rel.related.name}
-                          <div style={{ marginLeft: "10px" }}>
-                            <a
-                              rel="noreferrer"
-                              target={"_blank"}
-                              href={rel.related.file.file_link}
-                            >
-                              <EyeOutlined />
-                            </a>
+                <tbody>
+                  <tr>
+                    <td>Nomor Dokumen</td>
+                    <td>:</td>
+                    <td>{document.document_number}</td>
+                  </tr>
+                  <tr>
+                    <td>Tipe Dokumen</td>
+                    <td>:</td>
+                    <td>
+                      {document.document_type && document.document_type.name
+                        ? document.document_type.name
+                        : "-"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Program/Unit Terkait</td>
+                    <td>:</td>
+                    <td>
+                      {document.related_program &&
+                      document.related_program.length
+                        ? document.related_program.map(
+                            (rel) =>
+                              rel.program && (
+                                <Tag key={rel.id}>{rel.program.name}</Tag>
+                              )
+                          )
+                        : "-"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Tanggal Dipublikasi</td>
+                    <td>:</td>
+                    <td>
+                      {moment(document.publish_date).format(
+                        "dddd, DD MMMM YYYY"
+                      )}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Diunggah Pada</td>
+                    <td>:</td>
+                    <td>
+                      {moment(document.created_at).format("dddd, DD MMMM YYYY")}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Dokumen Terkait</td>
+                    <td>:</td>
+                    <td>
+                      {document.related_file &&
+                      document.related_file.length > 0 ? (
+                        document.related_file.map((rel) => (
+                          <div
+                            key={rel.id}
+                            style={{
+                              display: "flex",
+                              flexDirection: "row",
+                              alignItems: "center",
+                            }}
+                          >
+                            {rel.related.name}
+                            <div style={{ marginLeft: "10px" }}>
+                              <a
+                                rel="noreferrer"
+                                target={"_blank"}
+                                href={rel.related.file.file_link}
+                              >
+                                <EyeOutlined />
+                              </a>
+                            </div>
                           </div>
-                        </div>
-                      ))
-                    ) : (
-                      <p>-</p>
-                    )}
-                  </td>
-                </tr>
+                        ))
+                      ) : (
+                        <p>-</p>
+                      )}
+                    </td>
+                  </tr>
+                </tbody>
               </table>
             </Box>
             {document && document.qr_url && (

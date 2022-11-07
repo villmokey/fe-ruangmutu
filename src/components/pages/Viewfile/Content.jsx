@@ -26,7 +26,6 @@ const ViewFileContent = ({ id, type }) => {
       .then((res) => {
         if (res && res.success) {
           setDocument(res.data ?? {});
-          console.log(res.data);
         }
       })
       .finally(() => setLoading(false));
@@ -59,55 +58,57 @@ const ViewFileContent = ({ id, type }) => {
                 </Row>
                 <Box className={"detail-information"}>
                   <table>
-                    <tr>
-                      <td>Nomor Dokumen</td>
-                      <td>:</td>
-                      <td>{document.document_number ?? "-"}</td>
-                    </tr>
-                    <tr>
-                      <td>Tipe Dokumen</td>
-                      <td>:</td>
-                      <td>
-                        {document.document_type && document.document_type.name
-                          ? document.document_type.name
-                          : "-"}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Program/Unit Terkait</td>
-                      <td>:</td>
-                      <td>
-                        {document.related_program &&
-                        document.related_program.length
-                          ? document.related_program.map(
-                              (rel) =>
-                                rel.program && (
-                                  <Tag key={rel.id}>{rel.program.name}</Tag>
-                                )
-                            )
-                          : "-"}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Tanggal Dipublikasi</td>
-                      <td>:</td>
-                      <td>
-                        {document.publish_date
-                          ? moment(document.publish_date).format(
-                              "dddd, DD MMMM YYYY"
-                            )
-                          : "-"}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Diunggah Pada</td>
-                      <td>:</td>
-                      <td>
-                        {moment(document.created_at).format(
-                          "dddd, DD MMMM YYYY"
-                        )}
-                      </td>
-                    </tr>
+                    <tbody>
+                      <tr>
+                        <td>Nomor Dokumen</td>
+                        <td>:</td>
+                        <td>{document.document_number ?? "-"}</td>
+                      </tr>
+                      <tr>
+                        <td>Tipe Dokumen</td>
+                        <td>:</td>
+                        <td>
+                          {document.document_type && document.document_type.name
+                            ? document.document_type.name
+                            : "-"}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Program/Unit Terkait</td>
+                        <td>:</td>
+                        <td>
+                          {document.related_program &&
+                          document.related_program.length
+                            ? document.related_program.map(
+                                (rel) =>
+                                  rel.program && (
+                                    <Tag key={rel.id}>{rel.program.name}</Tag>
+                                  )
+                              )
+                            : "-"}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Tanggal Dipublikasi</td>
+                        <td>:</td>
+                        <td>
+                          {document.publish_date
+                            ? moment(document.publish_date).format(
+                                "dddd, DD MMMM YYYY"
+                              )
+                            : "-"}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Diunggah Pada</td>
+                        <td>:</td>
+                        <td>
+                          {moment(document.created_at).format(
+                            "dddd, DD MMMM YYYY"
+                          )}
+                        </td>
+                      </tr>
+                    </tbody>
                   </table>
                   {document.file && document.file.file_link && (
                     <a
@@ -143,8 +144,9 @@ const ViewFileContent = ({ id, type }) => {
             }}
           >
             <h3>
-              Silahkan <Link to="/login">Login</Link> terlebih dahulu dan scan
-              ulang qr code pada dokumen
+              Silahkan{" "}
+              <Link to={`/login?redirect=/view-file/doc/${id}`}>Login</Link>{" "}
+              terlebih dahulu dan scan ulang qr code pada dokumen
             </h3>
           </div>
         )}

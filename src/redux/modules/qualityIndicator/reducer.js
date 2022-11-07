@@ -52,8 +52,10 @@ export const qualityIndicatorReducer = (state = initialState, action) => {
 			return { ...state };
 	
 		case qualityIndicatorActionType.CREATE_QUALITY_INDICATOR:
+			console.log(action.payload.response)
 			state.called = true
 			state.success.add = true;
+			state.data.single = action.payload.response
 			return { ...state };
 
 		case qualityIndicatorActionType.UPDATE_STATUS_QUALITY_INDICATOR:

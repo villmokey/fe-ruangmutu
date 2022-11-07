@@ -1,11 +1,4 @@
-import {
-  Checkbox,
-  Col,
-  Form as AntdForm,
-  Row,
-  Select,
-  Upload,
-} from "antd";
+import { Checkbox, Col, Form as AntdForm, Row, Select, Upload } from "antd";
 import { Title } from "../../../../atoms/Title/Title";
 import { Form } from "../../../../molecules/Form/Form";
 import { InputText } from "../../../../atoms/InputText/InputText";
@@ -289,7 +282,10 @@ export const SecondStep = ({
               onChange={targetCapaianChange}
               type="number"
               rules={[
-                { required: true, message: "Target capaian tidak boleh kosong!" },
+                {
+                  required: true,
+                  message: "Target capaian tidak boleh kosong!",
+                },
               ]}
             />
             {/* <Item
@@ -480,7 +476,12 @@ export const SecondStep = ({
                 { required: true, message: "Penugas tidak boleh kosong!" },
               ]}
             >
-              <Dragger accept="application/pdf, images/*" beforeUpload={() => false} style={{ height: 200 }}>
+              <Dragger
+                multiple={false}
+                accept="application/pdf, images/*"
+                beforeUpload={() => false}
+                style={{ height: 200 }}
+              >
                 <Text>Drag & Drop</Text>
               </Dragger>
             </Item>

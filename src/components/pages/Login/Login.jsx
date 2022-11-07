@@ -22,6 +22,7 @@ const Copyright = styled.div`
 export const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const callback = new URLSearchParams(window.location.search).get("redirect");
   const { getIsAuth } = useAuthToken();
 
   const { loading, error, called, isAuth } = useSelector(authSelector);
@@ -44,8 +45,12 @@ export const Login = () => {
 
   useEffect(() => {
     if (!getIsAuth()) return;
-
-    navigate("/dashboard");
+    
+    if (callback) {
+      navigate(callback);
+    } else {
+      navigate("/dashboard");
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [called, isAuth]);

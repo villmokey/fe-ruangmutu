@@ -176,7 +176,8 @@ export const addQualityIndicator = (bodyData) => {
       return setAddQualityIndicator(data);
     },
     error: (err) => {
-      const error = err.errorCode ? err.errorCode : err.message;
+      console.log('ERR', err)
+      const error = err.data ?? err;
       return fetchDataError(error);
     },
   };
