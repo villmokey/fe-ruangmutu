@@ -79,7 +79,7 @@ const QualityIndicatorCardview = ({ filter, search }) => {
 
   React.useEffect(() => {
     fetchIndicator();
-  }, [filter, search]);
+  }, [filter, search]); //eslint-disable-line
 
   return (
     <>

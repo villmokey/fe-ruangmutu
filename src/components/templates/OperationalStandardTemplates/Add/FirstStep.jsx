@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Checkbox, Radio, Row, Col } from "antd"
+import { Checkbox, Row, Col } from "antd"
 
 import { Title } from "../../../atoms/Title/Title"
 
@@ -10,74 +10,8 @@ export const FirstStep = ({
   defaultValues = [],
   onChangeForm
 }) => {
-  const [selected, setSelected] = useState([])
+  const [selected, setSelected] = useState([]) //eslint-disable-line
   const [programs, setPrograms] = useState([])
-  const options = [
-    {
-      text: 'ADMEN',
-      value: 'admen',
-    },
-    {
-      text: 'MUTU',
-      value: 'mutu',
-    },
-    {
-      text: 'UKM',
-      value: 'ukm',
-    },
-    {
-      text: 'UKS',
-      value: 'uks',
-    },
-    {
-      text: 'UKP',
-      value: 'ukp',
-    },
-    {
-      text: 'UP GIGI DAN MULUT',
-      value: 'up',
-    },
-    {
-      text: 'PERENCANAAN',
-      value: 'perencanaan',
-    },
-    {
-      text: 'PENGADAAN',
-      value: 'pengadaan',
-    },
-    {
-      text: 'KEUANGAN',
-      value: 'keuangan',
-    },
-    {
-      text: 'SARPRAS',
-      value: 'sarpras',
-    },
-    {
-      text: 'UKGS',
-      value: 'ukgs',
-    },
-    {
-      text: 'PROGRAM GIZI',
-      value: 'gizi',
-    },
-    {
-      text: 'GERIATRI',
-      value: 'geriatri',
-    },
-    {
-      text: 'UP PKPR',
-      value: 'pkpr',
-    },
-    {
-      text: 'UP MTBS',
-      value: 'mtbs',
-    },
-    {
-      text: 'LABORATORIUM',
-      value: 'lab',
-    },
-  ];
 
   const handleChange = (e) => {
     let temp = [...defaultValues];
@@ -88,7 +22,6 @@ export const FirstStep = ({
       temp.push(e.target.value)
     }
     onChangeForm(temp)
-    console.log(defaultValues)
   }
 
   useEffect(() => {

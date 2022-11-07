@@ -3,24 +3,11 @@ import {
   Bar,
   XAxis,
   YAxis,
-  Cell,
-  ReferenceLine,
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
 
 const ComplaintChart = ({ chartData, achievement = 0 }) => {
-  const getBarColor = (value) => {
-    if (value > achievement) {
-      return "#5F5DC8";
-    } else if (value === achievement) {
-      return "#6CC85D";
-    } else if (value >= achievement / 2 && value < achievement) {
-      return "#C8BD5D";
-    } else {
-      return "#C85D5D";
-    }
-  };
 
   return (
     <div style={{ width: "100%", height: 250, marginTop: 10 }}>

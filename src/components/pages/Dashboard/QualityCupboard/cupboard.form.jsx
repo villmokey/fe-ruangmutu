@@ -97,7 +97,11 @@ const QualityCupboardForm = ({ open, onClose, onSuccessSubmit }) => {
                   if (res && res.success) {
                     onSuccessSubmit();
                   } else {
-                    toast.error(res.message);
+                    if (res.response) {
+                      toast.warning(res.response.data.message);
+                    } else {
+                      toast.error(res.message);
+                    }
                   }
                 })
                 .finally(() => setLoading(false));
@@ -419,7 +423,7 @@ const QualityCupboardForm = ({ open, onClose, onSuccessSubmit }) => {
                     setFiles(fileList);
                   }}
                   style={{
-                    minHeight: "200px !important",
+                    height: "200px !important",
                     background: "transparent",
                     border: "1px dashed #000000",
                   }}

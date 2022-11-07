@@ -1,4 +1,4 @@
-import { Button, Modal, Skeleton, message, Row, Col, Checkbox } from "antd";
+import { Button, Modal, Skeleton, message } from "antd";
 import React, { useState } from "react";
 import { PlusOutlined, DeleteTwoTone } from "@ant-design/icons";
 import { InputSearch } from "../../../../atoms/InputSearch/InputSearch";
@@ -16,9 +16,7 @@ import {
 } from "../../../../../globals/fetchApi";
 import { Form } from "../../../../molecules/Form/Form";
 import Textfield from "../../../../molecules/Form/Textfield";
-import moment from "moment";
 import { useAuthToken } from "../../../../../globals/useAuthToken";
-import FormAddService from "../../HealthService/Add/AddService";
 import { Title } from "../../../../atoms/Title/Title";
 
 const { confirm } = Modal;
@@ -97,7 +95,7 @@ const AddSubProgramModal = ({
 
   React.useEffect(() => {
     fetchServices();
-  }, [paginationProps.activePage, search, programId]);
+  }, [paginationProps.activePage, search, programId]); //eslint-disable-line
   return (
     <Modal
       title={"TAMBAH SUB-PROGRAM UNTUK " + programName}

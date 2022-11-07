@@ -2,7 +2,6 @@ import {
   Checkbox,
   Col,
   Form as AntdForm,
-  InputNumber,
   Row,
   Select,
   Upload,
@@ -481,7 +480,7 @@ export const SecondStep = ({
                 { required: true, message: "Penugas tidak boleh kosong!" },
               ]}
             >
-              <Dragger beforeUpload={() => false} style={{ height: 200 }}>
+              <Dragger accept="application/pdf, images/*" beforeUpload={() => false} style={{ height: 200 }}>
                 <Text>Drag & Drop</Text>
               </Dragger>
             </Item>

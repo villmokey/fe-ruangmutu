@@ -260,7 +260,7 @@ export const Add = () => {
       second_pic_id: profileQualityIndicatorDataTemp.penanggungJawab2,
       assign_by: profileQualityIndicatorDataTemp.pembuatDokumen,
       signature,
-      document_id: upload.id,
+      document_id: upload.data.id,
       type: "performance",
     };
 
@@ -480,36 +480,36 @@ export const Add = () => {
     setDocumentFormChoosen(e.target.value);
   };
 
-  const handleSubmitFormProfileQualityIndicator = (value) => {
-    setProfileQualityIndicatorDataTemp(value);
-    setProfileQualityIndicatorIsUploading(true);
-
+  const handleSubmitFormProfileQualityIndicator = async (value) => {
     const formData = new FormData();
     formData.append("file", value.dokumenTelusur[0].originFileObj);
-    formData.append("group_name", "document_profile_indicator");
+    formData.append("group_name", "document_profile_indicator_performance");
 
     dispatch(
-      uploadFileAPIProfileQualityIndicator({
+      await uploadFileAPIProfileQualityIndicator({
         accessToken,
         param: formData,
       })
     );
+
+    setProfileQualityIndicatorDataTemp(value);
+    setProfileQualityIndicatorIsUploading(true);
   };
 
-  const handleSubmitFormQualityIndicator = (value) => {
-    setQualityIndicatorDataTemp(value);
-    setQualityIndicatorIsUploading(true);
-
+  const handleSubmitFormQualityIndicator = async (value) => {
     const formData = new FormData();
     formData.append("file", value.dokumenTelusur[0].originFileObj);
     formData.append("group_name", "document_quality_indicator");
 
     dispatch(
-      uploadFileAPIQualityIndicator({
+      await uploadFileAPIQualityIndicator({
         accessToken,
         param: formData,
       })
     );
+
+    setQualityIndicatorDataTemp(value);
+    setQualityIndicatorIsUploading(true);
   };
 
   const handleSave = () => {

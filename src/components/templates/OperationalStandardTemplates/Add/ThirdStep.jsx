@@ -2,20 +2,16 @@ import {
   Col,
   Form as AntdForm,
   Row,
-  DatePicker,
-  Button,
-  Typography
+  DatePicker
 } from 'antd';
 
 import { Title } from '../../../atoms/Title/Title';
-import { InputText } from '../../../atoms/InputText/InputText';
 import { Form } from '../../../molecules/Form/Form';
 import Textfield from '../../../molecules/Form/Textfield';
 import TextEditor from '../../../molecules/Form/TextEditor';
 import Dragger from 'antd/lib/upload/Dragger';
 
 const { Item } = AntdForm;
-const { Text } = Typography
 
 export const ThirdStep = ({ form, setter, histories, historySetter }) => {
   return (
@@ -87,7 +83,7 @@ export const ThirdStep = ({ form, setter, histories, historySetter }) => {
 
         <Title level={5} style={{ fontWeight: 'bold', marginTop: '20px' }}>History Perubahan</Title>
         {histories && histories.map((history, index) => (
-          <Row gutter={[8, 8]} key={'row-' + index} style={{ marginBottom: '1px solid #757474', marginBottom: '10px' }}>
+          <Row gutter={[8, 8]} key={'row-' + index} style={{ borderBottom: '1px solid #757474', marginBottom: '10px' }}>
             <Col span={8}>
               <Textfield label={'Yang Dirubah'} value={history.name} disabled></Textfield>
             </Col>

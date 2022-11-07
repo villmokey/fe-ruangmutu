@@ -3,7 +3,7 @@ import { Typography, Tag } from "antd";
 import React from "react";
 import styled from "styled-components";
 import { PDFIcon } from "../../../../../assets/icons";
-import { CloudUploadOutlined, CheckCircleOutlined } from "@ant-design/icons";
+import { CloudUploadOutlined } from "@ant-design/icons";
 import moment from "moment";
 import "moment/locale/id";
 import { Link } from "react-router-dom";

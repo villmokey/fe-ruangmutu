@@ -1,12 +1,11 @@
 import { Button, Col, Layout, Row } from "antd";
 import { Text } from "../../../../atoms/Text/Text";
 import { Title } from "../../../../atoms/Title/Title";
-import { DocumentType } from "../../../../molecules/Dropdown/DocumentType/DocumentType";
-import { QualityYear } from "../../../../molecules/Dropdown/QualityYear/QualityYear";
 import { UnitService } from "../../../../molecules/Dropdown/UnitService/UnitService";
 import moment from "moment";
 import "moment/locale/id";
 import { useState } from "react";
+
 const { Sider: AntdSider } = Layout;
 
 export const SatisfactionServiceSider = ({

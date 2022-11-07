@@ -6,7 +6,6 @@ import {
   Row,
   Col,
   Button,
-  Form,
   message,
 } from "antd";
 import { HomeFilled } from "@ant-design/icons";
@@ -18,8 +17,6 @@ import { FirstStep as OperationalStandardFirstStep } from "../../../templates/Op
 import { SecondStep as OperationalStandardSecondStep } from "../../../templates/OperationalStandardTemplates/Add/SecondStep";
 import { ThirdStep as OperationalStandardThirdStep } from "../../../templates/OperationalStandardTemplates/Add/ThirdStep";
 
-import { useNavigate } from "react-router-dom";
-import { paths } from "../../../../routing/paths";
 import { fetchApiPost } from "../../../../globals/fetchApi";
 import { useAuthToken } from "../../../../globals/useAuthToken";
 import "./OperationalStandard.less";
@@ -30,13 +27,10 @@ const { Content, Sider: AntdSider } = Layout;
 const { Step } = Steps;
 
 export const OperationalStandard = () => {
-  const navigate = useNavigate();
   const [current, setCurrent] = useState(0);
   const { getAccessToken } = useAuthToken();
   const accessToken = getAccessToken();
   const [relatedPrograms, setRelatedPrograms] = useState([]);
-  const [secondStepOperationalStandardForm] = Form.useForm();
-  const [thirdStepOperationalStandardForm] = Form.useForm();
   const [loading, setLoading] = useState(false);
 
   const [payload, setPayload] = useState({

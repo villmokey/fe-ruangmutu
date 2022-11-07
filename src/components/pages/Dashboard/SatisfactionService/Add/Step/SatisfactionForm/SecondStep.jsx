@@ -1,5 +1,4 @@
 import {
-  Checkbox,
   Col,
   Form as AntdForm,
   Row,
@@ -12,7 +11,6 @@ import { Title } from "../../../../../../atoms/Title/Title";
 import { Form } from "../../../../../../molecules/Form/Form";
 import { InputText } from "../../../../../../atoms/InputText/InputText";
 import { Text } from "../../../../../../atoms/Text/Text";
-import { puskesmasList } from "../SatisfactionLevelForm/ThirdStep";
 
 const { Option } = Select;
 const { Item } = AntdForm;

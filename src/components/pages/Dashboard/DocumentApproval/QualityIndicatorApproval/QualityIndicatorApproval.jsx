@@ -8,7 +8,6 @@ import {
   updateStatusQualityIndicator,
 } from "../../../../../redux/modules/qualityIndicator/action";
 import { DocumentApprovalCard } from "../../../../molecules/DocumentApprovalCard/DocumentApprovalCard";
-import { useNavigate } from "react-router-dom";
 import { Text } from "../../../../atoms/Text/Text";
 import { Box, Pagination } from "@mui/material";
 
@@ -17,7 +16,6 @@ export const QualityIndicatorApproval = ({ filter, search }) => {
   const { getAccessToken, getUserId } = useAuthToken();
   const accessToken = getAccessToken();
   const userID = getUserId();
-  const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
 
@@ -28,7 +26,7 @@ export const QualityIndicatorApproval = ({ filter, search }) => {
   } = useSelector(qualityIndicatorSelector);
   const [dataSource, setDataSource] = useState(null);
 
-  useEffect(() => {
+  const handleFetchApproval = async () => {
     dispatch(
       getAllApprovalQualityIndicator(userID, {
         accessToken,
@@ -41,7 +39,10 @@ export const QualityIndicatorApproval = ({ filter, search }) => {
         },
       })
     );
+  };
 
+  useEffect(() => {
+    handleFetchApproval();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateStatus, filter, search, page]);
 
@@ -121,8 +122,8 @@ export const QualityIndicatorApproval = ({ filter, search }) => {
   };
 
   const handleReject = async (id) => {
-    await dispatch(
-      updateStatusQualityIndicator(id, {
+    dispatch(
+      await updateStatusQualityIndicator(id, {
         accessToken,
         param: {
           user_id: userID,
@@ -131,13 +132,13 @@ export const QualityIndicatorApproval = ({ filter, search }) => {
       })
     );
 
-    navigate(-1);
+    await handleFetchApproval();
     message.info("Berhasil mengubah status!");
   };
 
   const handleApprove = async (id) => {
-    await dispatch(
-      updateStatusQualityIndicator(id, {
+    dispatch(
+      await updateStatusQualityIndicator(id, {
         accessToken,
         param: {
           user_id: userID,
@@ -145,7 +146,7 @@ export const QualityIndicatorApproval = ({ filter, search }) => {
       })
     );
 
-    navigate(-1);
+    await handleFetchApproval();
     message.info("Berhasil mengubah status!");
   };
 

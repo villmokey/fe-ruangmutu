@@ -1,4 +1,4 @@
-import { Col, Form as AntdForm, InputNumber, Row, Select, Upload } from "antd";
+import { Col, Form as AntdForm, Row, Select, Upload } from "antd";
 import { InputText } from "../../../../atoms/InputText/InputText";
 import { Text } from "../../../../atoms/Text/Text";
 import { Title } from "../../../../atoms/Title/Title";

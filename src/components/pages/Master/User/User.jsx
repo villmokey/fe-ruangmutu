@@ -107,7 +107,7 @@ export const UserPage = () => {
 
   useEffect(() => {
     fetchPrograms();
-  }, [paginationProps.activePage, search, sorting]);
+  }, [paginationProps.activePage, search, sorting]); //eslint-disable-line
 
   return (
     <Layout>

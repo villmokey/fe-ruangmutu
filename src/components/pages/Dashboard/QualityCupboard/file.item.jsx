@@ -2,7 +2,6 @@ import { Stack } from "@mui/material";
 import { Typography, Tag } from "antd";
 import React from "react";
 import styled from "styled-components";
-import { PDFIcon } from "../../../../assets/icons";
 import { CloudUploadOutlined, CheckCircleOutlined } from "@ant-design/icons";
 import moment from "moment";
 import "moment/locale/id";
@@ -91,20 +90,14 @@ const FileItem = ({
   publish,
   created,
   file,
+  thumbnail,
   number,
   docId,
 }) => {
   return (
     <Link to={`${docId}/${paths.VIEW}`}>
       <Container>
-        <ExtensionLogo
-          src={
-            documentTypeLogos.find((logo) => logo.key === type)
-              ? documentTypeLogos.find((logo) => logo.key === type).image
-              : PDFIcon
-          }
-          alt={"icon"}
-        />
+        <ExtensionLogo src={thumbnail} alt={"icon"} />
         <DetailContainer>
           {programs && programs.length > 0 && (
             <Stack direction={"row"}>
@@ -166,7 +159,7 @@ const DetailContainer = styled.div`
   border-radius: 0 0 10px 10px;
   text-align: left;
   padding: 10px 7px;
-  min-height: 120px;
+  min-height: 137px;
 
   .ant-tag {
     color: white !important;
@@ -176,6 +169,7 @@ const DetailContainer = styled.div`
 
 const ExtensionLogo = styled.img`
   width: 150px;
+  height: 190px;
   margin: 10px 0;
   border-radius: 10px;
   padding: 15px;

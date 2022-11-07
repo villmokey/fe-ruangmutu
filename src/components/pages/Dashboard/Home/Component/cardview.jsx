@@ -1,8 +1,6 @@
-import { Box, Grid, Stack, Pagination, Skeleton } from "@mui/material";
+import { Box, Grid, Pagination, Skeleton } from "@mui/material";
 import React from "react";
 import FileItem from "./file.item";
-import { Typography } from "antd";
-import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 
 const CardView = ({
   documents = [],

@@ -1,6 +1,5 @@
-import { Button, Modal, Skeleton, message, Row, Col, Checkbox } from "antd";
+import { Button, Modal, Skeleton, message, Checkbox } from "antd";
 import React, { useState } from "react";
-import { PlusOutlined, DeleteTwoTone } from "@ant-design/icons";
 import { InputSearch } from "../../../../atoms/InputSearch/InputSearch";
 import {
   TableRow,
@@ -11,14 +10,9 @@ import {
 import { Box, Pagination, Stack } from "@mui/material";
 import {
   fetchApiGet,
-  fetchApiDelete,
   fetchApiPost,
 } from "../../../../../globals/fetchApi";
-import moment from "moment";
 import { useAuthToken } from "../../../../../globals/useAuthToken";
-import FormAddService from "../Add/AddService";
-
-const { confirm } = Modal;
 
 const AssignServiceUnitModal = ({
   open = true,
@@ -60,7 +54,7 @@ const AssignServiceUnitModal = ({
     });
   };
 
-  const handleSubmit = (itemId) => {
+  const handleSubmit = () => {
     fetchApiPost("/health-service/assign-unit", token, {
       health_service_id: healthServiceId,
       units: selecteds.map((x) => x).join(","),
@@ -75,7 +69,8 @@ const AssignServiceUnitModal = ({
 
   React.useEffect(() => {
     fetchServices();
-  }, [paginationProps.activePage, search]);
+  }, [paginationProps.activePage, search]); //eslint-disable-line
+
   return (
     <Modal
       title="ASSIGN UNIT LAYANAN KESEHATAN"

@@ -42,7 +42,7 @@ const DetailQualityCupboard = () => {
 
   React.useEffect(() => {
     requestDetail();
-  }, []);
+  }, []); //eslint-disable-line
 
   return (
     <Layout>
@@ -168,6 +168,7 @@ const DetailQualityCupboard = () => {
                           {rel.related.name}
                           <div style={{ marginLeft: "10px" }}>
                             <a
+                              rel="noreferrer"
                               target={"_blank"}
                               href={rel.related.file.file_link}
                             >

@@ -3,8 +3,6 @@ import {
   Bar,
   XAxis,
   YAxis,
-  Cell,
-  ReferenceLine,
   Tooltip,
   ResponsiveContainer,
   Legend,

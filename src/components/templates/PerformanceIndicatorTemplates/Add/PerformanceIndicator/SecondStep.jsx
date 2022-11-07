@@ -1,4 +1,4 @@
-import { Col, Form as AntdForm, InputNumber, Row, Select, Upload } from 'antd';
+import { Col, Form as AntdForm, Row, Select, Upload } from 'antd';
 import { InputText } from '../../../../atoms/InputText/InputText';
 import { Text } from '../../../../atoms/Text/Text';
 import { Title } from '../../../../atoms/Title/Title';
@@ -221,7 +221,15 @@ export const SecondStep = ({
             />
           </Col>
           <Col md={8} sm={24} xs={24}>
-            <Item
+          <InputText 
+              label="Capaian bulan ini"
+              name="capaianBulanIni"
+              type={'number'}
+              rules={[
+                { required: true, message: 'Capaian bulanan tidak boleh kosong!', max: 1000 }
+              ]}
+            />
+            {/* <Item
               label="Capaian bulan ini"
               name="capaianBulanIni"
               type={'number'}
@@ -230,7 +238,7 @@ export const SecondStep = ({
               ]}
             >
               <InputNumber min={0} max={1000} style={{ width: '100%' }} type={'number'}/>
-            </Item>
+            </Item> */}
             
             <Item
               label="Pembuat Dokumen"

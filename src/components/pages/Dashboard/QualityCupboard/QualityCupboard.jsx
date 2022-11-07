@@ -185,6 +185,7 @@ export const QualityCupboard = () => {
           onClose={() => setFormOpen(false)}
           onSuccessSubmit={() => {
             setFormOpen(false);
+            fetchDocuments();
             toast.success("Berhasil menambahkan dokumen");
           }}
         />

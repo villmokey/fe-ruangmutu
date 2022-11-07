@@ -27,7 +27,7 @@ export const QualityIndicatorProfileApproval = ({ filter, search }) => {
 
   const [dataSource, setDataSource] = useState(null);
 
-  useEffect(() => {
+  const handleFetchApproval = async () => {
     dispatch(
       getAllApprovalProfileQualityIndicator(userID, {
         accessToken,
@@ -40,7 +40,10 @@ export const QualityIndicatorProfileApproval = ({ filter, search }) => {
         },
       })
     );
+  };
 
+  useEffect(() => {
+    handleFetchApproval();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [update, filter, search, page]);
 
@@ -102,7 +105,7 @@ export const QualityIndicatorProfileApproval = ({ filter, search }) => {
           ? approval2.signed === 1
             ? new Date(approval3.signed_at).toLocaleDateString()
             : "Belum disetujui"
-          : "-",
+          : "Tidak ada penanggung jawab 2",
         status: item.status,
         signature: item.signature,
       };
@@ -112,8 +115,8 @@ export const QualityIndicatorProfileApproval = ({ filter, search }) => {
   };
 
   const handleReject = async (id) => {
-    await dispatch(
-      updateStatusProfileQualityIndicator(id, {
+    dispatch(
+      await updateStatusProfileQualityIndicator(id, {
         accessToken,
         param: {
           user_id: userID,
@@ -121,17 +124,21 @@ export const QualityIndicatorProfileApproval = ({ filter, search }) => {
         },
       })
     );
+    await handleFetchApproval();
+    message.success("Berhasil mengubah status!");
   };
 
   const handleApprove = async (id) => {
-    await dispatch(
-      updateStatusProfileQualityIndicator(id, {
+    dispatch(
+      await updateStatusProfileQualityIndicator(id, {
         accessToken,
         param: {
           user_id: userID,
         },
       })
     );
+    await handleFetchApproval();
+    message.success("Berhasil mengubah status!");
   };
 
   return !loading ? (

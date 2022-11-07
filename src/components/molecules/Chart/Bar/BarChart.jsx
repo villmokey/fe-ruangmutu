@@ -10,7 +10,7 @@ import {
 
 import PropTypes from "prop-types";
 
-import { Bar, Line } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 import { monthAcronymID } from "../../../../globals/monthLabel";
 import ChartAnnotation from "chartjs-plugin-annotation";
 
@@ -42,42 +42,6 @@ export const BarChart = ({
   options,
   ref,
 }) => {
-  const chartOptions = {
-    plugins: {
-      legend: {
-        position: "top",
-        display: false,
-      },
-      title: {
-        display: false,
-      },
-      annotation: {
-        annotations: [
-          {
-            id: "slo",
-            type: "line",
-            mode: "horizontal",
-            value: indicatorLineValue,
-            scaleID: "y",
-            borderWidth: 1,
-            borderDash: [10, 1],
-            label: {
-              enabled: false,
-              position: "start",
-            },
-          },
-        ],
-      },
-    },
-    scales: {
-      y: {
-        min: 0,
-        ticks: {
-          stepSize: 25,
-        },
-      },
-    },
-  };
 
   const optionss = {
     responsive: true,

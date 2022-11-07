@@ -15,7 +15,6 @@ import { Text } from "../../atoms/Text/Text";
 import { Title } from "../../atoms/Title/Title";
 import { PerformanceIndicatorPreview } from "../../templates/PerformanceIndicatorTemplates/Preview/PerformanceIndicatorPreview";
 import { QualityIndicatorPreview } from "../../templates/QualityIndicatorTemplates/Preview/QualityIndicatorPreview";
-import { Buffer } from "buffer";
 
 export const DocumentApprovalCard = ({
   documentApprovalTitle,
@@ -40,7 +39,7 @@ export const DocumentApprovalCard = ({
   onReject,
   status,
 }) => {
-  const [previewData, setPreviewData] = useState({});
+  const [previewData, setPreviewData] = useState({});  //eslint-disable-line
   const [tempChartData, setTempChartData] = useState([]);
   const [previewVis, setPreviewVis] = useState(false);
   const [loadingGenerate, setLoadingGenerate] = useState(false);
@@ -49,6 +48,8 @@ export const DocumentApprovalCard = ({
   const { getAccessToken } = useAuthToken();
   const accessToken = getAccessToken();
   const chartRef = useRef(null);
+  const [previewProfileOnIndicator, setPreviewProfileOnIndicator] =
+    useState(false);
 
   const chartOption = {
     responsive: true,
@@ -146,11 +147,6 @@ export const DocumentApprovalCard = ({
 
           setTempChartData(results);
           setTimeout(async () => {
-            const link = document.createElement("a");
-            link.download = "chart.jpeg";
-            link.href = chartRef.current.toBase64Image("image/png");
-            link.click();
-
             let bags = new FormData();
             bags.set("group_name", "indicator_chart");
             bags.set("is_base_64", true);
@@ -176,7 +172,8 @@ export const DocumentApprovalCard = ({
                       );
                     }
                   })
-                  .catch();
+                  .catch()
+                  .finally(() => setLoadingGenerate(false));
               }
             });
           }, 3000);
@@ -184,22 +181,8 @@ export const DocumentApprovalCard = ({
       })
       .catch((e) => {
         console.log(e.message);
-      })
-      .finally(() => setLoadingGenerate(false));
+      });
   };
-
-  function dataURLtoFile(dataurl, filename) {
-    var arr = dataurl.split(",");
-    var mime = arr[0].match(/:(.*?);/)[1];
-    var bstr = Buffer.from(arr[1], "base64");
-    var n = bstr.length;
-    var u8arr = new Uint8Array(n);
-    while (n--) {
-      u8arr[n] = bstr.toString().charCodeAt(n);
-    }
-
-    return new File([u8arr], filename, { type: mime });
-  }
 
   const fetchIndicatorDetail = async () => {
     await fetchApiGet(`/indicator/${indicatorID}`, {}, accessToken)
@@ -273,6 +256,17 @@ export const DocumentApprovalCard = ({
     }
 
     return style;
+  };
+
+  const handlePreviewProfile = async () => {
+    await fetchApiGet(`/indicator-profile/${profileId}`, {}, accessToken)
+      .then((res) => {
+        if (res) {
+          setDetail(res.data);
+          setPreviewProfileOnIndicator(true);
+        }
+      })
+      .catch((e) => console.log(e.getMessage()));
   };
 
   const handleGenerate = async (id) => {
@@ -411,6 +405,17 @@ export const DocumentApprovalCard = ({
             <Text style={{ color: "black" }}>Preview</Text>
           </Button>
         </Col>
+        {type === "indicator" && (
+          <Col>
+            <Button
+              onClick={() => handlePreviewProfile()}
+              size="small"
+              type="dashed"
+            >
+              Preview Profil Indikator
+            </Button>
+          </Col>
+        )}
         {signature && !signature.some((sign) => sign.signed === 0) && (
           <Col>
             <Button
@@ -449,29 +454,6 @@ export const DocumentApprovalCard = ({
               ],
             }}
           />
-
-          {/* <BarChart
-            ref={chartRef}
-            chartData={
-              tempChartData &&
-              tempChartData.map((x) => {
-                return x.value;
-              })
-            }
-            labels={
-              tempChartData &&
-              tempChartData.map((x) => {
-                return x.month;
-              })
-            }
-            width={700}
-            height={300}
-            indicatorLineValue={chartData.data}
-            className="chart"
-            XAxisDataKey="month"
-            barColor="#5DC8BDE5"
-            barDataKey="value"
-          /> */}
         </Row>
       )}
       {previewVis &&
@@ -498,6 +480,17 @@ export const DocumentApprovalCard = ({
             onClose={() => setPreviewVis(false)}
           />
         ))}
+
+      <QualityIndicatorPreview
+        chartData={[]}
+        isProfile={true}
+        baseline={chartData.profile_target}
+        detail={detail}
+        hideQr
+        indicator={previewData}
+        visibility={previewProfileOnIndicator}
+        onClose={() => setPreviewProfileOnIndicator(false)}
+      />
     </Card>
   );
 };

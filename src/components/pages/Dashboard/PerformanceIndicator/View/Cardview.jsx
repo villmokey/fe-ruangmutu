@@ -79,8 +79,7 @@ const PerformanceIndicatorCardview = ({ filter, search }) => {
 
   React.useEffect(() => {
     fetchIndicator();
-    console.log("PerformanceIndicatorPreview", chartData);
-  }, [filter]);
+  }, [filter]); //eslint-disable-line
 
   return (
     <>

@@ -1,4 +1,4 @@
-import { Button, Modal, Skeleton, message, Row, Col } from "antd";
+import { Button, Modal, Skeleton, message } from "antd";
 import React, { useState } from "react";
 import { PlusOutlined, DeleteTwoTone } from "@ant-design/icons";
 import { InputSearch } from "../../../../atoms/InputSearch/InputSearch";
@@ -10,7 +10,6 @@ import {
 } from "../../../../atoms/Table/styled";
 import { Box, Pagination, Stack } from "@mui/material";
 import { fetchApiGet, fetchApiDelete } from "../../../../../globals/fetchApi";
-import moment from "moment";
 import { useAuthToken } from "../../../../../globals/useAuthToken";
 import FormAddPosition from "../Add/AddPosition";
 
@@ -70,7 +69,8 @@ const PositionModal = ({ open = false, handleOk, handleCancel }) => {
 
   React.useEffect(() => {
     fetchServices();
-  }, [paginationProps.activePage, search]);
+  }, [paginationProps.activePage, search]); //eslint-disable-line
+
   return (
     <Modal
       title="MASTER DATA JABATAN"

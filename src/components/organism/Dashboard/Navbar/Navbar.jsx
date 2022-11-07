@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { Menu as AntdMenu } from "antd";
+import { useState } from "react";
 import { paths } from "../../../../routing/paths";
 import { Button, Dropdown, Layout } from "antd";
 import { Menu } from "../../../molecules/Menu/Menu";
@@ -14,6 +13,7 @@ const { Header } = Layout;
 export const Navbar = ({ onLogout, showMenu = true }) => {
   const { getRole } = useAuthToken();
   const navigate = useNavigate();
+  //eslint-disable-next-line
   const [menuItems, setMenuItems] = useState([
     {
       key: "submenu_document",
@@ -57,37 +57,7 @@ export const Navbar = ({ onLogout, showMenu = true }) => {
       title: "LEMARI MUTU",
       url: paths.QUALITY_CUPBOARD,
     },
-  ]);
-
-  const adminMenu = [
-    {
-      key: "master_data_admin",
-      title: "MASTER DATA",
-      url: paths.DASHBOARD,
-      children: [
-        {
-          key: "pengguna",
-          title: "PENGGUNA",
-          url: paths.USERS,
-        },
-        {
-          key: "program-mutu",
-          title: "UNIT/PROGRAM",
-          url: paths.INDICATOR_PROGRAM,
-        },
-        {
-          key: "layanan-kesehatan",
-          title: "LAYANAN KESEHATAN",
-          url: paths.HEALTH_SERVICE,
-        },
-        {
-          key: "doc-type",
-          title: "TIPE DOKUMEN",
-          url: paths.DOCUMENT_TYPE,
-        },
-      ],
-    },
-  ];
+  ]); 
 
   // for the key, use "_" for submenu
   // e.g submenu_sponsor

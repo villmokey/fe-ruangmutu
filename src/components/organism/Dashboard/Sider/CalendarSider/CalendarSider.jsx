@@ -2,7 +2,6 @@ import React from "react";
 import { Button, Col, Layout, Row } from "antd";
 import { Text } from "../../../../atoms/Text/Text";
 import { Title } from "../../../../atoms/Title/Title";
-import { DocumentType } from "../../../../molecules/Dropdown/DocumentType/DocumentType";
 import { QualityYear } from "../../../../molecules/Dropdown/QualityYear/QualityYear";
 import { UnitService } from "../../../../molecules/Dropdown/UnitService/UnitService";
 import { MonthDropdown } from "../../../../molecules/Dropdown/Month/MonthDropdown";

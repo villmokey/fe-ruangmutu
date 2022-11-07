@@ -182,7 +182,7 @@ export const addQualityIndicator = (bodyData) => {
   };
 };
 
-export const uploadFileAPIQualityIndicator = (bodyData) => {
+export const uploadFileAPIQualityIndicator = async (bodyData) => {
   return {
     type: "API",
     payload: {
@@ -244,7 +244,7 @@ export const getAllApprovalQualityIndicator = (userID, bodyData) => {
   };
 };
 
-export const updateStatusQualityIndicator = (id, bodyData) => {
+export const updateStatusQualityIndicator = async (id, bodyData) => {
   return {
     type: "API",
     payload: {

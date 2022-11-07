@@ -1,4 +1,4 @@
-import { Button, Modal, Skeleton, message, Row, Col } from "antd";
+import { Button, Modal, Skeleton, message } from "antd";
 import React, { useState } from "react";
 import { PlusOutlined, DeleteTwoTone } from "@ant-design/icons";
 import { InputSearch } from "../../../../atoms/InputSearch/InputSearch";
@@ -70,7 +70,8 @@ const ServiceUnitModal = ({ open = true, handleOk, handleCancel }) => {
 
   React.useEffect(() => {
     fetchServices();
-  }, [paginationProps.activePage, search]);
+  }, [paginationProps.activePage, search]); //eslint-disable-line
+
   return (
     <Modal
       title="DAFTAR UNIT LAYANAN KESEHATAN"

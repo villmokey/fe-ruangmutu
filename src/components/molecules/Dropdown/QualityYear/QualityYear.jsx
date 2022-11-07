@@ -5,12 +5,6 @@ import { Text } from "../../../atoms/Text/Text";
 
 const { Option } = Select;
 
-const qualityYear = [
-  { title: "2020", value: "2020" },
-  { title: "2021", value: "2021" },
-  { title: "2022", value: "2022" },
-];
-
 export const QualityYear = ({ onChange, value }) => {
   const [years, setYears] = useState([]);
 

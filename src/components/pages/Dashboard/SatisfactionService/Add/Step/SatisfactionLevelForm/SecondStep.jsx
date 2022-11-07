@@ -3,11 +3,7 @@ import { Title } from "../../../../../../atoms/Title/Title";
 import { Form } from "../../../../../../molecules/Form/Form";
 import { InputText } from "../../../../../../atoms/InputText/InputText";
 import { Text } from "../../../../../../atoms/Text/Text";
-import { monthFullID } from "../../../../../../../globals/monthLabel";
-import { useState } from "react";
 import { useEffect } from "react";
-import { fetchApiGet } from "../../../../../../../globals/fetchApi";
-import { useAuthToken } from "../../../../../../../globals/useAuthToken";
 
 const { Option } = Select;
 const { Item } = AntdForm;
@@ -24,7 +20,7 @@ export const SecondStep = ({
 }) => {
   const countAverage = () => {
     let res = 0;
-    units.map((item) => {
+    units.forEach((item) => {
       res += item.percent ? Number(item.percent) : 0;
     });
 
@@ -39,7 +35,7 @@ export const SecondStep = ({
 
   useEffect(() => {
     countAverage();
-  }, [units]);
+  }, [units]); //eslint-disable-line
 
   return (
     <>

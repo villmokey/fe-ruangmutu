@@ -1,4 +1,4 @@
-import { Button, message, Row, Col, Space, Select, Upload } from "antd";
+import { Button, message, Row, Col, Select, Upload } from "antd";
 import Textfield from "../../../../molecules/Form/Textfield";
 import { Form } from "../../../../molecules/Form/Form";
 import React, { useEffect } from "react";
@@ -11,7 +11,6 @@ import {
   fetchApiPut,
 } from "../../../../../globals/fetchApi";
 import { useState } from "react";
-import { Text } from "../../../../atoms/Text/Text";
 
 const FormAdd = ({
   onSuccess,
@@ -168,7 +167,7 @@ const FormAdd = ({
   useEffect(() => {
     fetchRole();
     fetchPosition();
-  }, []);
+  }, []); //eslint-disable-line
 
   return (
     <div

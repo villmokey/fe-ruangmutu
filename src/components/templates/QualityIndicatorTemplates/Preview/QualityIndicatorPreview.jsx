@@ -1,6 +1,5 @@
 import React from "react";
 import { Col, Image, Input, Modal, Row, Tag, Space, Checkbox } from "antd";
-import { LogoIcon } from "../../../atoms/Icons/LogoIcon";
 import { Text } from "../../../atoms/Text/Text";
 import { Title } from "../../../atoms/Title/Title";
 import { BarChart } from "../../../molecules/Chart/Bar/BarChart";
@@ -15,7 +14,8 @@ import {
   monthAcronymID,
 } from "../../../../globals/monthLabel";
 import "./QualityIndicatorPreview.less";
-import { SquareLogo } from "../../../../assets/images";
+import { LogoGambir, SquareLogo } from "../../../../assets/images";
+import { Stack } from "@mui/material";
 // import { SquareLogo } from "../../../../assets/images";
 // import { QRCode } from "react-qrcode-logo";
 
@@ -105,7 +105,7 @@ export const QualityIndicatorPreview = ({
         <Col span={12}>
           <Row justify="center">
             <Col>
-              <LogoIcon />
+              <img width={"65px"} src={LogoGambir} alt="logo-gambir" />
             </Col>
           </Row>
           <div className="preview-title">
@@ -412,17 +412,44 @@ export const QualityIndicatorPreview = ({
           </>
         )}
 
+        {detail && detail.file && (
+          <Row>
+            <Col md={12}>
+              <Space direction="vertical" style={{ width: "100%" }}>
+                <Text style={{ color: "#5A7D7C", marginBottom: "10px" }}>
+                  DOKUMEN TELUSUR
+                </Text>
+                <a
+                  rel="noreferrer"
+                  href={detail.file.file_link}
+                  target={"_blank"}
+                  className="file-telusur"
+                >
+                  {detail.file.real_name}
+                </a>
+              </Space>
+            </Col>
+          </Row>
+        )}
+
         {/* Signatures */}
         <Row style={{ marginTop: "30px", justifyContent: "center" }}>
           {detail &&
             detail.signature &&
             detail.signature.map((sign, index) => (
               <Col span={8} key={index}>
-                <Space direction="vertical" align="center">
+                <Stack direction="column" align="center">
                   <Text style={{ margin: "20px 0 0 0" }}>
-                    {sign.level === 1 ? "Pembuat Dokumen" : "Penanggung Jawab"}
+                    {sign.level === 1
+                      ? "Pembuat Dokumen"
+                      : sign.level === 2
+                      ? "Penanggung Jawab 1"
+                      : "Penanggung Jawab 2"}
                   </Text>
-                  <Text style={{ fontWeight: "bold" }} strong>
+                  <Text
+                    style={{ fontWeight: "bold", marginBottom: "10px" }}
+                    strong
+                  >
                     {sign.user && sign.user.position && sign.user.position.name
                       ? sign.user.position.name
                       : ""}
@@ -454,7 +481,7 @@ export const QualityIndicatorPreview = ({
                     </div>
                   )}
                   <Text>{sign.user.name}</Text>
-                </Space>
+                </Stack>
               </Col>
             ))}
         </Row>

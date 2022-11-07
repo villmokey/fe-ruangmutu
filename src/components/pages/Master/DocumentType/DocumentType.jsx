@@ -89,7 +89,7 @@ export const DocumentTypePage = () => {
 
   useEffect(() => {
     fetchPrograms();
-  }, [paginationProps.activePage, search]);
+  }, [paginationProps.activePage, search]); //eslint-disable-line
 
   return (
     <Layout>

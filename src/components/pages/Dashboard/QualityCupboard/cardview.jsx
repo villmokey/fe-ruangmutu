@@ -3,6 +3,7 @@ import React from "react";
 import FileItem from "./file.item";
 import { Typography } from "antd";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+import { DefaultThumbnail } from "../../../../assets/images";
 
 const CardView = ({
   documents = [],
@@ -45,6 +46,14 @@ const CardView = ({
                 publish={doc.publish_date}
                 created={doc.created_at}
                 number={doc.document_number}
+                thumbnail={
+                  doc &&
+                  doc.document_type &&
+                  doc.document_type.thumbnail &&
+                  doc.document_type.thumbnail.file_link
+                    ? doc.document_type.thumbnail.file_link
+                    : DefaultThumbnail
+                }
                 file={
                   doc.file && doc.file.file_link && doc.file.file_link
                     ? doc.file.file_link

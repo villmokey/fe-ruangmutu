@@ -9,7 +9,6 @@ import { ThirdStep as SatisfactionThirdStep } from "./Step/SatisfactionForm/Thir
 import { Title } from "../../../../atoms/Title/Title";
 import { Text } from "../../../../atoms/Text/Text";
 import { Card } from "../../../../atoms/Card/Card";
-import { useDispatch, useSelector } from "react-redux";
 import "./Add.less";
 import { useAuthToken } from "../../../../../globals/useAuthToken";
 import { useState } from "react";
@@ -23,8 +22,7 @@ const { Sider, Content } = Layout;
 const { Step } = Steps;
 
 export const AddSatisfaction = () => {
-  const dispatch = useDispatch();
-  const { getAccessToken, getName } = useAuthToken();
+  const { getAccessToken } = useAuthToken();
   const accessToken = getAccessToken();
   const navigate = useNavigate();
   const [current, setCurrent] = useState(0);
@@ -217,7 +215,7 @@ export const AddSatisfaction = () => {
   useEffect(() => {
     fetchHealthService();
     fetchPrograms();
-  }, []);
+  }, []); //eslint-disable-line
 
   return (
     <Layout>

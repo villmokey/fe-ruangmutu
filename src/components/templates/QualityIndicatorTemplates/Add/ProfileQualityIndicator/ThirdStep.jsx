@@ -2,7 +2,6 @@ import {
   Checkbox,
   Col,
   Form as AntdForm,
-  InputNumber,
   Row,
   Select,
   Upload,

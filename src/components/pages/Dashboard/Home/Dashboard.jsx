@@ -2,7 +2,7 @@ import { Breadcrumb, Col, Layout, Row, Skeleton } from "antd";
 import { Card } from "../../../atoms/Card/Card";
 import { Title } from "../../../atoms/Title/Title";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { useAuthToken } from "../../../../globals/useAuthToken";
 import { monthAcronymID } from "../../../../globals/monthLabel";
@@ -17,21 +17,15 @@ import "swiper/css";
 import "swiper/css/pagination";
 // import required modules
 import { Pagination, Autoplay } from "swiper";
-import { Text } from "../../../atoms/Text/Text";
 import Documents from "./Component/Documents";
-import { HomeFilled } from '@ant-design/icons';
+import { HomeFilled } from "@ant-design/icons";
 
 const { Content } = Layout;
 
 export const DashboardPage = () => {
   const { getAccessToken } = useAuthToken();
-  const navigate = useNavigate();
   const accessToken = getAccessToken();
-  const [totalResult, setTotalResult] = useState({
-    all: "",
-    selected: "",
-    unreached: "",
-  });
+
   const [filter, setFilter] = useState({
     year: undefined,
   });
@@ -48,7 +42,7 @@ export const DashboardPage = () => {
     total: 0,
   });
 
-  const fetchIndicator = () => {
+  const fetchIndicator = async () => {
     fetchApiGet(
       "/dashboard/recap/indicator",
       { year: filter.year ?? undefined },
@@ -75,7 +69,7 @@ export const DashboardPage = () => {
     });
   };
 
-  const fetchPerformance = () => {
+  const fetchPerformance = async () => {
     fetchApiGet(
       "/dashboard/recap/performance",
       { year: filter.year ?? undefined },
@@ -102,7 +96,7 @@ export const DashboardPage = () => {
     });
   };
 
-  const fetchComplaint = () => {
+  const fetchComplaint = async () => {
     fetchApiGet(
       "/dashboard/recap/complaint",
       { year: filter.year ?? undefined },
@@ -129,7 +123,7 @@ export const DashboardPage = () => {
     });
   };
 
-  const fetchSatisfaction = () => {
+  const fetchSatisfaction = async () => {
     fetchApiGet(
       "/dashboard/recap/satisfaction",
       { year: filter.year ?? undefined },
@@ -199,14 +193,20 @@ export const DashboardPage = () => {
   useEffect(() => {
     fetchEvents();
     fetchDocumentInfo();
-  }, []);
+  }, []); //eslint-disable-line
+
+  const fetchAll = async () => {
+    setLoading(true);
+    await fetchIndicator();
+    await fetchPerformance();
+    await fetchComplaint();
+    await fetchSatisfaction();
+    setLoading(false);
+  };
 
   useEffect(() => {
-    fetchIndicator();
-    fetchPerformance();
-    fetchComplaint();
-    fetchSatisfaction();
-  }, [filter]);
+    fetchAll();
+  }, [filter]);  //eslint-disable-line
 
   return (
     <Layout>
@@ -223,47 +223,66 @@ export const DashboardPage = () => {
           </Breadcrumb.Item>
         </Breadcrumb>
         <Row justify="center" align="middle" gutter={[24, 16]}>
-          {realized && realized.length > 0 && (
-            <Col>
-              <div className="total-bg">
-                <Link className="link-to" to={"/dashboard/calender/"}>
-                  Kegiatan Terealisasi
-                </Link>
-                <Card className="total">
-                  <Swiper
-                    pagination={true}
-                    autoplay={{
-                      delay: 15000,
-                      disableOnInteraction: false,
-                    }}
-                    modules={[Pagination, Autoplay]}
-                    className="mySwiper"
-                  >
-                    {realized &&
-                      realized.map((item, index) => (
-                        <SwiperSlide key={index}>
-                          <div
-                            style={{
-                              height: "140px",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                            }}
-                          >
-                            <div>
-                              <p className="card-title">{item.name}</p>
-                              <p className="card-date">
-                                {moment(item.start_date).format("DD MMMM YYYY")}
-                              </p>
-                            </div>
+          <Col>
+            <div className="total-bg">
+              <Link className="link-to" to={"/dashboard/calender/"}>
+                Kegiatan Terealisasi
+              </Link>
+              <Card className="total">
+                <Swiper
+                  pagination={true}
+                  autoplay={{
+                    delay: 15000,
+                    disableOnInteraction: false,
+                  }}
+                  modules={[Pagination, Autoplay]}
+                  className="mySwiper"
+                >
+                  {realized && realized.length > 0 ? (
+                    realized.map((up, index) => (
+                      <SwiperSlide key={"realized-" + index}>
+                        <div
+                          style={{
+                            height: "140px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <div>
+                            <p className="card-title">{up.name}</p>
+                            <p className="card-date">
+                              {moment(up.start_date).format("DD MMMM YYYY")}
+                            </p>
                           </div>
-                        </SwiperSlide>
-                      ))}
-                  </Swiper>
-                </Card>
-              </div>
-            </Col>
-          )}
+                        </div>
+                      </SwiperSlide>
+                    ))
+                  ) : (
+                    <SwiperSlide>
+                      <div
+                        style={{
+                          height: "140px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <div>
+                          <p
+                            className="card-title"
+                            style={{ fontSize: "12px" }}
+                          >
+                            Belum Ada Kegiatan
+                          </p>
+                        </div>
+                      </div>
+                    </SwiperSlide>
+                  )}
+                </Swiper>
+              </Card>
+            </div>
+          </Col>
           <Col>
             <div className="total-bg">
               <Link className="link-to" to={"/dashboard/quality-cupboard/"}>
@@ -313,47 +332,66 @@ export const DashboardPage = () => {
               </Card>
             </div>
           </Col>
-          {upcoming && upcoming.length > 0 && (
-            <Col>
-              <div className="total-bg">
-                <Link className="link-to" to={"/dashboard/calender/"}>
-                  Kegiatan Akan Datang
-                </Link>
-                <Card className="total">
-                  <Swiper
-                    autoplay={{
-                      delay: 15000,
-                      disableOnInteraction: false,
-                    }}
-                    pagination={true}
-                    modules={[Pagination, Autoplay]}
-                    className="mySwiper"
-                  >
-                    {upcoming &&
-                      upcoming.map((up, index) => (
-                        <SwiperSlide key={"upcoming-" + index}>
-                          <div
-                            style={{
-                              height: "140px",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                            }}
-                          >
-                            <div>
-                              <p className="card-title">{up.name}</p>
-                              <p className="card-date">
-                                {moment(up.start_date).format("DD MMMM YYYY")}
-                              </p>
-                            </div>
+          <Col>
+            <div className="total-bg">
+              <Link className="link-to" to={"/dashboard/calender/"}>
+                Kegiatan Akan Datang
+              </Link>
+              <Card className="total">
+                <Swiper
+                  autoplay={{
+                    delay: 15000,
+                    disableOnInteraction: false,
+                  }}
+                  pagination={true}
+                  modules={[Pagination, Autoplay]}
+                  className="mySwiper"
+                >
+                  {upcoming && upcoming.length > 0 ? (
+                    upcoming.map((up, index) => (
+                      <SwiperSlide key={"upcoming-" + index}>
+                        <div
+                          style={{
+                            height: "140px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <div>
+                            <p className="card-title">{up.name}</p>
+                            <p className="card-date">
+                              {moment(up.start_date).format("DD MMMM YYYY")}
+                            </p>
                           </div>
-                        </SwiperSlide>
-                      ))}
-                  </Swiper>
-                </Card>
-              </div>
-            </Col>
-          )}
+                        </div>
+                      </SwiperSlide>
+                    ))
+                  ) : (
+                    <SwiperSlide>
+                      <div
+                        style={{
+                          height: "140px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <div>
+                          <p
+                            className="card-title"
+                            style={{ fontSize: "12px" }}
+                          >
+                            Belum Ada Kegiatan
+                          </p>
+                        </div>
+                      </div>
+                    </SwiperSlide>
+                  )}
+                </Swiper>
+              </Card>
+            </div>
+          </Col>
         </Row>
         <Row style={{ marginTop: "50px" }}>
           <Col>

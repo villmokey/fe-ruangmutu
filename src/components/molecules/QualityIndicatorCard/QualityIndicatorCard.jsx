@@ -1,4 +1,4 @@
-import { Image, Space, Tag } from "antd";
+import { Image, Tag } from "antd";
 import { Card } from "../../atoms/Card/Card";
 
 import "./QualityIndicatorCard.less";
