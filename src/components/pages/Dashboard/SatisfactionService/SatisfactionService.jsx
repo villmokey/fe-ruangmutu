@@ -59,6 +59,7 @@ export const SatisfactionService = () => {
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
   const [search, setSearch] = useState("");
+  const [sorting, setSorting] = useState("asc");
   const [totalResult, setTotalResult] = useState({
     in: "0",
     complete: "0",
@@ -76,7 +77,13 @@ export const SatisfactionService = () => {
     setLoading(true);
     fetchApiGet(
       "/complaint",
-      { per_page: 12, page: page, search: search },
+      {
+        per_page: 12,
+        page: page,
+        search: search,
+        sort_by: "report",
+        sort: sorting,
+      },
       accessToken
     ).then((res) => {
       if (res && res.success) {
@@ -172,7 +179,7 @@ export const SatisfactionService = () => {
   useEffect(() => {
     fetchComplaints();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filter, page, search]);
+  }, [filter, page, search, sorting]);
 
   useEffect(() => {
     fetchData();
@@ -286,6 +293,9 @@ export const SatisfactionService = () => {
               />
             ) : (
               <SatisfactionServiceListView
+                onSort={() => setSorting(sorting === "asc" ? "desc" : "asc")}
+                sort={sorting}
+                pages={totalPage}
                 satisafactions={complaints}
                 onPageChange={(p) => console.log(p)}
               />

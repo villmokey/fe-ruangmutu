@@ -7,55 +7,92 @@ import "moment/locale/id";
 
 export const SatisfactionServiceListView = ({
   satisafactions = [],
-  pages = 10,
+  pages = 1,
   activePage = 1,
   onPageChange,
-  sort = "ASC",
+  sort = "asc",
   onSort,
   loading,
 }) => {
   return !loading ? (
     <Box width={"100%"}>
-      <Stack
-        direction={"row"}
-        spacing={0.5}
-        alignItems={"center"}
-        margin={"0 0 10px 0"}
-      >
-        <Typography
-          style={{ color: "#95A0AB", fontWeight: "500", cursor: "pointer" }}
-          onClick={onSort}
-        >
-          Nama
-        </Typography>
-        {sort === "ASC" ? (
-          <ArrowUpOutlined color="#ABAFB3" />
-        ) : (
-          <ArrowDownOutlined color="#ABAFB3" />
-        )}
-      </Stack>
       <Table>
+        <thead>
+          <th>
+            <Stack
+              direction={"row"}
+              spacing={0.5}
+              alignItems={"center"}
+              margin={"0 0 10px 0"}
+            >
+              <Typography
+                style={{
+                  color: "#95A0AB",
+                  fontWeight: "500",
+                  cursor: "pointer",
+                }}
+                onClick={onSort}
+              >
+                Nama
+              </Typography>
+              {sort === "asc" ? (
+                <ArrowUpOutlined color="#ABAFB3" />
+              ) : (
+                <ArrowDownOutlined color="#ABAFB3" />
+              )}
+            </Stack>
+          </th>
+          <th style={{ textAlign: "left" }}>
+            <Typography
+              style={{
+                color: "#95A0AB",
+                fontWeight: "500",
+              }}
+            >
+              Tanggal Keluhan
+            </Typography>
+          </th>
+          <th style={{ textAlign: "left" }}>
+            <Typography
+              style={{
+                color: "#95A0AB",
+                fontWeight: "500",
+              }}
+            >
+              Tanggal Klarifikasi
+            </Typography>
+          </th>
+        </thead>
         {satisafactions && satisafactions.length > 0 ? (
-          <TableRow>
-            <TableData>
-              <Box width={"100%"}>
-                <Stack direction={"row"}>
-                  <Tag style={{ color: "white", background: "#6A9695" }}>
-                    KELUHAN PELANGGAN
-                  </Tag>
-                </Stack>
-                <Typography style={{ fontSize: "14px", fontWeight: "bold" }}>
-                  Keluhan Pertama
-                </Typography>
-              </Box>
-            </TableData>
-            <TableData>
-              {moment("2022-12-12").format("dddd, DD MMMM YYYY")}
-            </TableData>
-            <TableData>
-              {moment("2022-12-12").format("dddd, DD MMMM YYYY")}
-            </TableData>
-          </TableRow>
+          satisafactions.map((item, index) => (
+            <TableRow key={index}>
+              <TableData>
+                <Box width={"100%"}>
+                  <Stack direction={"row"}>
+                    <Tag style={{ color: "white", background: "#6A9695" }}>
+                      {item.program && item.program.name
+                        ? item.program.name
+                        : ""}
+                    </Tag>
+                  </Stack>
+                  <Typography style={{ fontSize: "14px", fontWeight: "bold" }}>
+                    {item.report}
+                  </Typography>
+                  <Typography style={{ fontSize: "11px" }}>
+                    {item.reported_by}
+                  </Typography>
+                </Box>
+              </TableData>
+              <TableData>
+                {moment(item.complaint_date).format("dddd, DD MMMM YYYY")}
+              </TableData>
+              <TableData>
+                {item.clarification_date
+                  ? moment(item.clarification_date).format("dddd, DD MMMM YYYY")
+                  : "-"}
+              </TableData>
+            </TableRow>
+          ))
         ) : (
           <TableRow>
             <TableData colSpan={3}>
