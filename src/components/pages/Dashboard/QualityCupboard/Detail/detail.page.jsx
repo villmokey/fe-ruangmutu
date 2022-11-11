@@ -46,7 +46,7 @@ const DetailQualityCupboard = () => {
   return (
     <Layout>
       <ToastContainer />
-      <QualityCupboardSider />
+      <QualityCupboardSider showFilter={false}/>
       <Content className="main-content">
         <Navigation
           items={[

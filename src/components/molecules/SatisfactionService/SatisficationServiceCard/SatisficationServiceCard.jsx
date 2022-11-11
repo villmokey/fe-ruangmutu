@@ -1,10 +1,11 @@
-import { Image, Tag } from "antd";
+import { Image, Tag, Typography } from "antd";
 import { Card } from "../../../atoms/Card/Card";
 
 import "./SatisficationServiceCard.less";
 import Thumbnail from "../../../../assets/images/keluhan_pelanggan.png";
 import { Text } from "../../../atoms/Text/Text";
 import moment from "moment";
+import { LockOutlined } from "@ant-design/icons";
 
 export const SatisficationServiceCard = ({ onOpenPreview, cardData }) => {
   return (
@@ -32,6 +33,15 @@ export const SatisficationServiceCard = ({ onOpenPreview, cardData }) => {
           <p className="info">
             {moment(cardData.created_at).format("DD MMM YYYY")}
           </p>
+          <Typography
+            style={{
+              fontSize: "12px",
+              fontWeight: "300",
+              color: cardData.is_public ? "green" : "red",
+            }}
+          >
+            <LockOutlined /> {cardData.is_public === 0 ? "Rahasia" : "Publik"}
+          </Typography>
         </div>
       </Card>
     </>

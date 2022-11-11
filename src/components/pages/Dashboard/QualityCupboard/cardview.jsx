@@ -41,6 +41,7 @@ const CardView = ({
               <FileItem
                 docId={doc.id}
                 name={doc.name}
+                secret={doc.is_credential}
                 programs={doc.related_program}
                 type={doc.document_type.name}
                 publish={doc.publish_date}

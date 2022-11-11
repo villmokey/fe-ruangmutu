@@ -14,7 +14,8 @@ import { useAuthToken } from "../../../../globals/useAuthToken";
 const EventItem = ({
   title,
   desc,
-  date,
+  start,
+  end,
   programs,
   user,
   realized,
@@ -76,7 +77,11 @@ const EventItem = ({
                   {user && user.name ? user.name : "Unknown"}
                 </Typography>
                 <Typography fontWeight={"bold"} color={"#959595"} fontSize={12}>
-                  {moment(date).format("DD MMMM YYYY, HH:mm")}
+                  {start !== end
+                    ? `${moment(start).format("DD MMMM YYYY")} - ${moment(
+                        end
+                      ).format("DD MMMM YYYY")}`
+                    : moment(start).format("DD MMMM YYYY")}
                 </Typography>
               </Stack>
             </Stack>
@@ -143,14 +148,14 @@ const EventItem = ({
           >
             {title}
           </Typography>
-          <Typography
-            fontWeight={"500"}
-            fontSize={"14px"}
-            dangerouslySetInnerHTML={{ __html: desc }}
-          ></Typography>
 
           {open && (
             <>
+              <Typography
+                fontWeight={"500"}
+                fontSize={"14px"}
+                dangerouslySetInnerHTML={{ __html: desc }}
+              ></Typography>
               {files && (
                 <>
                   <Typography

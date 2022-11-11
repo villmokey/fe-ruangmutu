@@ -2,7 +2,7 @@ import { Stack } from "@mui/material";
 import { Typography, Tag } from "antd";
 import React from "react";
 import styled from "styled-components";
-import { CloudUploadOutlined, CheckCircleOutlined } from "@ant-design/icons";
+import { CloudUploadOutlined, CheckCircleOutlined, LockOutlined } from "@ant-design/icons";
 import moment from "moment";
 import "moment/locale/id";
 import { Link } from "react-router-dom";
@@ -93,6 +93,7 @@ const FileItem = ({
   thumbnail,
   number,
   docId,
+  secret,
 }) => {
   return (
     <Link to={`${docId}/${paths.VIEW}`}>
@@ -138,6 +139,15 @@ const FileItem = ({
           >
             <CloudUploadOutlined /> {moment(created).format("DD MMM YYYY")}
           </Typography>
+          <Typography
+            style={{
+              fontSize: "12px",
+              fontWeight: "300",
+              color: secret ? "red" : "green",
+            }}
+          >
+            <LockOutlined /> {secret > 0 ? "Rahasia" : "Publik"}
+          </Typography>
         </DetailContainer>
       </Container>
     </Link>
@@ -159,7 +169,7 @@ const DetailContainer = styled.div`
   border-radius: 0 0 10px 10px;
   text-align: left;
   padding: 10px 7px;
-  min-height: 137px;
+  min-height: 156px;
 
   .ant-tag {
     color: white !important;

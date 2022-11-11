@@ -15,6 +15,7 @@ const Documents = () => {
     fetchApiGet("/document", {
       per_page: 5,
       page: page,
+      hide_secret: true,
       sort: "desc",
       visibility: "public",
       sort_by: "created_at",

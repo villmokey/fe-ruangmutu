@@ -25,7 +25,7 @@ const { Content } = Layout;
 export const QualityCupboard = () => {
   const [viewType, setViewType] = useState(1);
   const [formOpen, setFormOpen] = useState(false);
-  const { getAccessToken } = useAuthToken();
+  const { getAccessToken, getRole } = useAuthToken();
   const accessToken = getAccessToken();
   const [loading, setLoading] = useState(false);
   const [programs, setPrograms] = useState([]);
@@ -70,6 +70,7 @@ export const QualityCupboard = () => {
       per_page: 10,
       page: page,
       search: search,
+      hide_secret: getRole() !== 'User',
       sort: sorting,
       sort_by: sortBy,
       ...params,

@@ -4,10 +4,11 @@
 
   .total {
     background-color: #5DC8BDE5;
-    max-width: 250px;
+    min-width: 250px;
     width: 100%;
     height: 150px;
-    box-shadow: 3px 4px 6px rgba(0, 0, 0, 0.25);
+    // box-shadow: 3px 4px 6px rgba(0, 0, 0, 0.25);
+    box-shadow: unset !important;
     border-radius: 16px;
     border: none;
     text-align: center;
@@ -15,20 +16,37 @@
     display: flex;
     word-wrap: break-word;
 
+    .ant-card-body {
+      padding: 5px;
+    }
+
     p {
       color: white;
       margin: 0;
       padding: 0;
     }
 
+    .card-typograph {
+      font-size: 17px;
+      font-weight: bold;
+    }
+
+    .card-amount {
+      font-size: 27px;
+    }
+
     .card-title {
-      font-size: 22px;
-      
+      font-size: 20px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .card-date {
+      font-weight: bold;
+      font-size: 14px;
     }
 
     .card-content {
-      // font-size: 30px;
-      // font-weight: 500;
       color: white;
     }
   }
@@ -44,10 +62,6 @@
 
     .indikator-mutu {
       margin: 20px 0px;
-
-      .chart {
-        // height: 300px !important;
-      }
     }
 
   }
@@ -66,8 +80,5 @@
 }
 
 @media (max-width: 992px) {
-  .total {
-    // max-width: 200px;
-    // height: 120px;
-  }
+  //
 }

@@ -6,24 +6,13 @@ import { Title } from "../../../../atoms/Title/Title";
 import "./Preview.less";
 import { QRCode } from "react-qrcode-logo";
 import moment from "moment";
-import { SquareLogo } from "../../../../../assets/images";
+import { LogoGambir, SquareLogo } from "../../../../../assets/images";
 import { useState } from "react";
 import { fetchApiPut } from "../../../../../globals/fetchApi";
 import { useAuthToken } from "../../../../../globals/useAuthToken";
 
 const Footer = ({ status = null, qrstring = null }) => (
   <Row>
-    {status === "DONE" && (
-      <Col span={24} style={{ textAlign: "left" }}>
-        <QRCode
-          value={qrstring}
-          logoImage={SquareLogo}
-          logoWidth={30}
-          logoHeight={30}
-          size={100}
-        />
-      </Col>
-    )}
     <Col span={12} style={{ textAlign: "left" }}>
       <Text style={{ fontSize: "12px" }}>
         Dilarang menduplikat dokumen tanpa izin Manajemen Mutu
@@ -76,10 +65,10 @@ export const SatisfactionPreview = ({
         RUANG <span style={{ fontWeight: "bold" }}>MUTU</span>
       </Tag>
       <Row justify="center">
-        <Col span={10}>
+        <Col span={12}>
           <Row justify="center">
             <Col>
-              <LogoIcon />
+              <img src={LogoGambir} />
             </Col>
           </Row>
           <div className="preview-title">

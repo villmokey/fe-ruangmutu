@@ -157,7 +157,8 @@ const DetailContainer = styled.div`
 `;
 
 const ExtensionLogo = styled.img`
-  width: 100px;
+  width: 150px;
+  height: 190px;
   margin: 10px 0;
   border-radius: 10px;
   padding: 15px;

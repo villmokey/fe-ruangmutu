@@ -122,10 +122,11 @@ export const Calender = () => {
               <EventItem
                 key={index}
                 title={item.name}
-                date={item.created_at}
                 desc={item.description}
                 programs={item.related_program}
                 user={item.user}
+                start={item.start_date}
+                end={item.end_date}
                 realized={item.is_realized}
                 files={item.related_file}
                 programOwner={

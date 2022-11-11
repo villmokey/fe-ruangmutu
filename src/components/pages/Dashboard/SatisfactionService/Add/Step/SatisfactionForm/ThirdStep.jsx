@@ -142,7 +142,7 @@ export const ThirdStep = ({
                 disabled
                 maxCount={3}
                 accept={"image/*"}
-                beforeUpload={false}
+                beforeUpload={() => false}
               >
                 <Text>Upload lampiran dengan format png/jpg/jpeg</Text>
               </Dragger>

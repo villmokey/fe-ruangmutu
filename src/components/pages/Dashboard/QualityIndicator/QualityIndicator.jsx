@@ -258,7 +258,7 @@ export const QualityIndicator = () => {
                 {chartDataSource && chartDataSource.length > 0 ? (
                   chartDataSource.map((item, index) => (
                     <QualityIndicatorChart
-                      key={index}
+                      key={item.title}
                       chartData={item.chartData}
                       title={item.title}
                       average={item.target}

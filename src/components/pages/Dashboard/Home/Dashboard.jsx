@@ -103,7 +103,6 @@ export const DashboardPage = () => {
       accessToken
     ).then((res) => {
       if (res && res.success) {
-        console.log(res.data.results);
         const temporary = res.data.results;
         const results = [];
         monthAcronymID.forEach((month, index) => {
@@ -130,8 +129,7 @@ export const DashboardPage = () => {
       accessToken
     ).then((res) => {
       if (res && res.success) {
-        const temporary = res.data;
-        console.log("res.data.results", res.data);
+        const temporary = res.data ?? [];
         let results = [];
         let names = temporary.map((item) => {
           return {
@@ -158,7 +156,6 @@ export const DashboardPage = () => {
           });
           results.push({ ...temp, month: month });
         });
-        console.log("satisfactions", results);
         setSatisfactions(results);
       }
     });
@@ -206,7 +203,7 @@ export const DashboardPage = () => {
 
   useEffect(() => {
     fetchAll();
-  }, [filter]);  //eslint-disable-line
+  }, [filter]); //eslint-disable-line
 
   return (
     <Layout>
@@ -224,23 +221,41 @@ export const DashboardPage = () => {
         </Breadcrumb>
         <Row justify="center" align="middle" gutter={[24, 16]}>
           <Col>
-            <div className="total-bg">
-              <Link className="link-to" to={"/dashboard/calender/"}>
-                Kegiatan Terealisasi
-              </Link>
-              <Card className="total">
-                <Swiper
-                  pagination={true}
-                  autoplay={{
-                    delay: 15000,
-                    disableOnInteraction: false,
-                  }}
-                  modules={[Pagination, Autoplay]}
-                  className="mySwiper"
-                >
-                  {realized && realized.length > 0 ? (
-                    realized.map((up, index) => (
-                      <SwiperSlide key={"realized-" + index}>
+            <Link to={"/dashboard/calender/"}>
+              <div className="total-bg">
+                <div className="link-to">Kegiatan Terealisasi</div>
+                <Card className="total">
+                  <Swiper
+                    pagination={{ clickable: "true" }}
+                    autoplay={{
+                      delay: 15000,
+                      disableOnInteraction: false,
+                    }}
+                    modules={[Pagination, Autoplay]}
+                    className="mySwiper"
+                  >
+                    {realized && realized.length > 0 ? (
+                      realized.map((up, index) => (
+                        <SwiperSlide key={"realized-" + index}>
+                          <div
+                            style={{
+                              height: "140px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          >
+                            <div>
+                              <p className="card-title">{up.name}</p>
+                              <p className="card-date">
+                                {moment(up.start_date).format("DD MMMM YYYY")}
+                              </p>
+                            </div>
+                          </div>
+                        </SwiperSlide>
+                      ))
+                    ) : (
+                      <SwiperSlide>
                         <div
                           style={{
                             height: "140px",
@@ -250,15 +265,35 @@ export const DashboardPage = () => {
                           }}
                         >
                           <div>
-                            <p className="card-title">{up.name}</p>
-                            <p className="card-date">
-                              {moment(up.start_date).format("DD MMMM YYYY")}
+                            <p
+                              className="card-title"
+                              style={{ fontSize: "12px" }}
+                            >
+                              Belum Ada Kegiatan
                             </p>
                           </div>
                         </div>
                       </SwiperSlide>
-                    ))
-                  ) : (
+                    )}
+                  </Swiper>
+                </Card>
+              </div>
+            </Link>
+          </Col>
+          <Col>
+            <Link to={"/dashboard/quality-cupboard/"}>
+              <div className="total-bg">
+                <div className="link-to">Dokumen Terverifikasi</div>
+                <Card className="total">
+                  <Swiper
+                    autoplay={{
+                      delay: 15000,
+                      disableOnInteraction: false,
+                    }}
+                    pagination={{ clickable: "true" }}
+                    modules={[Pagination, Autoplay]}
+                    className="mySwiper"
+                  >
                     <SwiperSlide>
                       <div
                         style={{
@@ -269,105 +304,11 @@ export const DashboardPage = () => {
                         }}
                       >
                         <div>
-                          <p
-                            className="card-title"
-                            style={{ fontSize: "12px" }}
-                          >
-                            Belum Ada Kegiatan
-                          </p>
+                          <p className="card-typograph">DOKUMEN</p>
+                          <p className="card-amount">{documentInfo.total}</p>
                         </div>
                       </div>
                     </SwiperSlide>
-                  )}
-                </Swiper>
-              </Card>
-            </div>
-          </Col>
-          <Col>
-            <div className="total-bg">
-              <Link className="link-to" to={"/dashboard/quality-cupboard/"}>
-                Dokumen Terverifikasi
-              </Link>
-              <Card className="total">
-                <Swiper
-                  autoplay={{
-                    delay: 15000,
-                    disableOnInteraction: false,
-                  }}
-                  pagination={true}
-                  modules={[Pagination, Autoplay]}
-                  className="mySwiper"
-                >
-                  <SwiperSlide>
-                    <div
-                      style={{
-                        height: "140px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <div>
-                        <p className="card-typograph">DOKUMEN</p>
-                        <p className="card-amount">{documentInfo.total}</p>
-                      </div>
-                    </div>
-                  </SwiperSlide>
-                  <SwiperSlide>
-                    <div
-                      style={{
-                        height: "140px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <div>
-                        <p className="card-typograph">DOKUMEN TAHUN INI</p>
-                        <p className="card-amount">{documentInfo.this_year}</p>
-                      </div>
-                    </div>
-                  </SwiperSlide>
-                </Swiper>
-              </Card>
-            </div>
-          </Col>
-          <Col>
-            <div className="total-bg">
-              <Link className="link-to" to={"/dashboard/calender/"}>
-                Kegiatan Akan Datang
-              </Link>
-              <Card className="total">
-                <Swiper
-                  autoplay={{
-                    delay: 15000,
-                    disableOnInteraction: false,
-                  }}
-                  pagination={true}
-                  modules={[Pagination, Autoplay]}
-                  className="mySwiper"
-                >
-                  {upcoming && upcoming.length > 0 ? (
-                    upcoming.map((up, index) => (
-                      <SwiperSlide key={"upcoming-" + index}>
-                        <div
-                          style={{
-                            height: "140px",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <div>
-                            <p className="card-title">{up.name}</p>
-                            <p className="card-date">
-                              {moment(up.start_date).format("DD MMMM YYYY")}
-                            </p>
-                          </div>
-                        </div>
-                      </SwiperSlide>
-                    ))
-                  ) : (
                     <SwiperSlide>
                       <div
                         style={{
@@ -378,19 +319,77 @@ export const DashboardPage = () => {
                         }}
                       >
                         <div>
-                          <p
-                            className="card-title"
-                            style={{ fontSize: "12px" }}
-                          >
-                            Belum Ada Kegiatan
+                          <p className="card-typograph">DOKUMEN TAHUN INI</p>
+                          <p className="card-amount">
+                            {documentInfo.this_year}
                           </p>
                         </div>
                       </div>
                     </SwiperSlide>
-                  )}
-                </Swiper>
-              </Card>
-            </div>
+                  </Swiper>
+                </Card>
+              </div>
+            </Link>
+          </Col>
+          <Col>
+            <Link to={"/dashboard/calender/"}>
+              <div className="total-bg">
+                <div className="link-to">Kegiatan Akan Datang</div>
+                <Card className="total">
+                  <Swiper
+                    autoplay={{
+                      delay: 15000,
+                      disableOnInteraction: false,
+                    }}
+                    pagination={{ clickable: "true" }}
+                    modules={[Pagination, Autoplay]}
+                    className="mySwiper"
+                  >
+                    {upcoming && upcoming.length > 0 ? (
+                      upcoming.map((up, index) => (
+                        <SwiperSlide key={"upcoming-" + index}>
+                          <div
+                            style={{
+                              height: "140px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          >
+                            <div>
+                              <p className="card-title">{up.name}</p>
+                              <p className="card-date">
+                                {moment(up.start_date).format("DD MMMM YYYY")}
+                              </p>
+                            </div>
+                          </div>
+                        </SwiperSlide>
+                      ))
+                    ) : (
+                      <SwiperSlide>
+                        <div
+                          style={{
+                            height: "140px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <div>
+                            <p
+                              className="card-title"
+                              style={{ fontSize: "12px" }}
+                            >
+                              Belum Ada Kegiatan
+                            </p>
+                          </div>
+                        </div>
+                      </SwiperSlide>
+                    )}
+                  </Swiper>
+                </Card>
+              </div>
+            </Link>
           </Col>
         </Row>
         <Row style={{ marginTop: "50px" }}>

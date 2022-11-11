@@ -7,6 +7,7 @@ import "./Calendar.less";
 import { Dialog } from "@mui/material";
 import EventItem from "./event.item";
 import { fetchApiGet } from "../../../../globals/fetchApi";
+import moment from "moment";
 
 const EventCalendar = ({
   events = [],
@@ -31,8 +32,8 @@ const EventCalendar = ({
         return {
           id: event.id,
           title: event.name,
-          start: event.start_date + " 00:00",
-          end: event.end_date + " 00:00",
+          start: event.start_date,
+          end: moment(event.end_date).add({d: 1}),
           color:
             event.program && event.program.color
               ? event.program.color

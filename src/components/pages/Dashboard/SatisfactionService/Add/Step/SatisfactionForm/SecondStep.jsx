@@ -152,7 +152,7 @@ export const SecondStep = ({
             </Item>
 
             <Item label={"Lampiran (Max. 3)"} name={"attachment"}>
-              <Dragger maxCount={3} accept={"image/*"} beforeUpload={false}>
+              <Dragger maxCount={3} accept={"image/*"} beforeUpload={() => false}>
                 <Text>Upload lampiran dengan format png/jpg/jpeg</Text>
               </Dragger>
             </Item>
