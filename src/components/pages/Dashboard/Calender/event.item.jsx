@@ -94,11 +94,16 @@ const EventItem = ({
                     <Tag
                       key={"program-" + index + 1}
                       style={{
-                        background: program.program.color,
+                        background:
+                          program && program.program && program.program.color
+                            ? program.program.color
+                            : "#6A9695",
                         color: "white",
                       }}
                     >
-                      {program.program.name}
+                      {program && program.program && program.program.name
+                        ? program.program.name
+                        : "-"}
                     </Tag>
                   ))}
                 </Stack>
@@ -156,7 +161,7 @@ const EventItem = ({
                 fontSize={"14px"}
                 dangerouslySetInnerHTML={{ __html: desc }}
               ></Typography>
-              {files && (
+              {files && files.length > 0 && (
                 <>
                   <Typography
                     fontWeight={"500"}
@@ -169,7 +174,14 @@ const EventItem = ({
                     <DocumentItem key={"Document- " + index}>
                       <a
                         style={{ color: "white" }}
-                        href={rel.related.file.file_link}
+                        href={
+                          rel.related &&
+                          rel.related.file &&
+                          rel.related.file &&
+                          rel.related.file.file_link
+                            ? rel.related.file.file_link
+                            : "#"
+                        }
                         target={"_blank"}
                         rel="noreferrer"
                       >
@@ -197,7 +209,7 @@ const EventItem = ({
                     <DocumentItem key={"support-doc-" + index}>
                       <a
                         style={{ color: "white" }}
-                        href={rel.file_link}
+                        href={rel.file_link ?? "#"}
                         target={"_blank"}
                         rel="noreferrer"
                       >

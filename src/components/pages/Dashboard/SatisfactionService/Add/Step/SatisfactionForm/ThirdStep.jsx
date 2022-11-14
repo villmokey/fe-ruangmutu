@@ -1,4 +1,12 @@
-import { Col, Form as AntdForm, Row, Select, Upload, Input, DatePicker } from "antd";
+import {
+  Col,
+  Form as AntdForm,
+  Row,
+  Select,
+  Upload,
+  Input,
+  DatePicker,
+} from "antd";
 import { Title } from "../../../../../../atoms/Title/Title";
 import { Form } from "../../../../../../molecules/Form/Form";
 import { InputText } from "../../../../../../atoms/InputText/InputText";
@@ -17,12 +25,14 @@ export const ThirdStep = ({
     source: "",
     complaint_date: "",
     reported_by: "",
+    attachments: [],
   },
   onFinish,
   payloadSetter,
   programMutuOptions = [],
   serviceOptions = [],
 }) => {
+  
   return (
     <>
       <Title level={4}>TINJAU KELUHAN PELANGGAN</Title>
@@ -132,15 +142,17 @@ export const ThirdStep = ({
                 },
               ]}
             >
-              <DatePicker
-                value={payload.complaint_date}
-              ></DatePicker>
+              <DatePicker value={payload.complaint_date}></DatePicker>
             </Item>
 
-            <Item label={"Lampiran (Max. 3)"} name={"attachment"}>
+            <Item
+              label={"Lampiran (Max. 3)"}
+              name={"attachment"}
+            >
               <Dragger
                 disabled
                 maxCount={3}
+                fileList={payload.attachments}
                 accept={"image/*"}
                 beforeUpload={() => false}
               >

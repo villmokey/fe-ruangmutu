@@ -69,19 +69,19 @@ export const DocumentApproval = () => {
         <Row justify="center" align="middle" gutter={[24, 16]}>
           <Col>
             <Card className="total">
-              <p className="card-title">TOTAL APPROVAL</p>
+              <p className="card-title">TOTAL PENGAJUAN</p>
               <Title className="card-content">{information.approval}</Title>
             </Card>
           </Col>
           <Col>
             <Card className="total">
-              <p className="card-title">DOKUMEN DIAPPROVE</p>
+              <p className="card-title">DOKUMEN DISETUJUI</p>
               <Title className="card-content">{information.approved}</Title>
             </Card>
           </Col>
           <Col>
             <Card className="total">
-              <p className="card-title">APPROVAL BARU</p>
+              <p className="card-title">PENGAJUAN BARU</p>
               <Title className="card-content">{information.new_approval}</Title>
             </Card>
           </Col>

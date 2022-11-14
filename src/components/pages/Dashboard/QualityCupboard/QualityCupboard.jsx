@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Col, Layout, Row, Space, Tag } from "antd";
+import { Button, Col, Layout, message, Row, Space, Tag } from "antd";
 import { Card } from "../../../atoms/Card/Card";
 import { Title } from "../../../atoms/Title/Title";
 import { InputSearch } from "../../../atoms/InputSearch/InputSearch";
@@ -17,7 +17,7 @@ import ListView from "./listview";
 import QualityCupboardForm from "./cupboard.form";
 import Navigation from "../../../organism/Dashboard/Breadcrumb";
 import { toast, ToastContainer } from "react-toastify";
-import { fetchApiGet } from "../../../../globals/fetchApi";
+import { fetchApiDelete, fetchApiGet } from "../../../../globals/fetchApi";
 import { useAuthToken } from "../../../../globals/useAuthToken";
 
 const { Content } = Layout;
@@ -70,7 +70,7 @@ export const QualityCupboard = () => {
       per_page: 10,
       page: page,
       search: search,
-      hide_secret: getRole() !== 'User',
+      hide_secret: getRole() !== "User",
       sort: sorting,
       sort_by: sortBy,
       ...params,
@@ -115,6 +115,20 @@ export const QualityCupboard = () => {
     fetchApiGet("/program", { paginate: false }, accessToken).then((res) => {
       if (res && res.success) {
         setPrograms(res.data ?? []);
+      }
+    });
+  };
+
+  const handleRemove = (docId) => {
+    console.log(docId);
+    fetchApiDelete(`/document/${docId}`, accessToken).then((res) => {
+      if (res.success) {
+        message.success("Berhasil menghapus dokumen");
+        fetchDocuments();
+      } else {
+        message.warning(
+          "Gagal menghapus dokumen, silahkan coba lagi beberapa saat!"
+        );
       }
     });
   };
@@ -244,6 +258,7 @@ export const QualityCupboard = () => {
         {viewType === 1 ? (
           <CardView
             documents={documents}
+            handleRemove={handleRemove}
             pages={totalPage}
             activePage={page}
             onPageChange={(p) => setPage(p)}

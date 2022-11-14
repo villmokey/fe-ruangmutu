@@ -25,6 +25,7 @@ export const SecondStep = ({
     source: "",
     complaint_date: "",
     reported_by: "",
+    attachments: [],
   },
   onFinish,
   payloadSetter,
@@ -151,8 +152,20 @@ export const SecondStep = ({
               ></DatePicker>
             </Item>
 
-            <Item label={"Lampiran (Max. 3)"} name={"attachment"}>
-              <Dragger maxCount={3} accept={"image/*"} beforeUpload={() => false}>
+            <Item
+              label={"Lampiran (Max. 3)"}
+              name={"attachment"}
+            >
+              <Dragger
+                onChange={({ fileList }) =>
+                  payloadSetter({ ...payload, attachments: fileList })
+                }
+                fileList={payload.attachments}
+                maxCount={3}
+                accept={"image/*"}
+                multiple
+                beforeUpload={() => false}
+              >
                 <Text>Upload lampiran dengan format png/jpg/jpeg</Text>
               </Dragger>
             </Item>

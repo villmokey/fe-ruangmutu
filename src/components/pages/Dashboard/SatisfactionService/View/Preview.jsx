@@ -1,17 +1,15 @@
 import React from "react";
 import { Button, Col, Input, message, Modal, Row, Select, Tag } from "antd";
-import { LogoIcon } from "../../../../atoms/Icons/LogoIcon";
 import { Text } from "../../../../atoms/Text/Text";
 import { Title } from "../../../../atoms/Title/Title";
 import "./Preview.less";
-import { QRCode } from "react-qrcode-logo";
 import moment from "moment";
-import { LogoGambir, SquareLogo } from "../../../../../assets/images";
+import { LogoGambir } from "../../../../../assets/images";
 import { useState } from "react";
-import { fetchApiPut } from "../../../../../globals/fetchApi";
+import { fetchApiPost, fetchApiPut } from "../../../../../globals/fetchApi";
 import { useAuthToken } from "../../../../../globals/useAuthToken";
 
-const Footer = ({ status = null, qrstring = null }) => (
+const Footer = () => (
   <Row>
     <Col span={12} style={{ textAlign: "left" }}>
       <Text style={{ fontSize: "12px" }}>
@@ -35,22 +33,60 @@ export const SatisfactionPreview = ({
   const { getAccessToken, getRole } = useAuthToken();
   const accessToken = getAccessToken();
   const [isEdit, setIsEdit] = useState(false);
+  const [statusLoading, setStatusLoading] = useState(false);
+  const [proofFiles, setProofFiles] = useState([]);
   const [editPayload, setEditPayload] = useState({
     coordination: "",
     status: "",
     follow_up: "",
   });
 
-  const handleSubmit = (type = "normal") => {
-    fetchApiPut(`/complaint/update-info/${detail.id}`, accessToken, {
-      ...editPayload,
-      type: type,
-    }).then((res) => {
-      if (res) {
-        message.success("Berhasil");
-        onUpdateSuccess();
-      }
-    });
+  const uploadFileList = async (fileList = []) => {
+    let bags = new FormData();
+    bags.append("file", "");
+    bags.append("group_name", "proof_complaint_files");
+    const uploaded = Promise.all(
+      fileList.map(async (file) => {
+        bags.set("file", file);
+        const res = await fetchApiPost("/upload/file", accessToken, bags);
+        if (res && res.code === 200 && res.data.id) {
+          return res.data.id;
+        }
+      })
+    );
+
+    return await uploaded;
+  };
+
+  const handleSubmit = async (type = "normal") => {
+    setStatusLoading(true);
+    console.log(proofFiles);
+    if (proofFiles && proofFiles.length > 0) {
+      await uploadFileList(proofFiles).then((ids) => {
+        fetchApiPut(`/complaint/update-info/${detail.id}`, accessToken, {
+          ...editPayload,
+          type: type,
+          attachments: ids,
+        }).then((res) => {
+          if (res) {
+            setStatusLoading(false);
+            message.success("Berhasil");
+            onUpdateSuccess();
+          }
+        });
+      });
+    } else {
+      await fetchApiPut(`/complaint/update-info/${detail.id}`, accessToken, {
+        ...editPayload,
+        type: type,
+      }).then((res) => {
+        if (res) {
+          setStatusLoading(false);
+          message.success("Berhasil");
+          onUpdateSuccess();
+        }
+      });
+    }
   };
 
   return (
@@ -68,7 +104,7 @@ export const SatisfactionPreview = ({
         <Col span={12}>
           <Row justify="center">
             <Col>
-              <img src={LogoGambir} />
+              <img src={LogoGambir} alt="logo puskesmas gambir"/>
             </Col>
           </Row>
           <div className="preview-title">
@@ -205,12 +241,70 @@ export const SatisfactionPreview = ({
               </td>
             </tr>
             <tr>
+              <td className="title">BUKTI KLARIFIKASI</td>
+              <td>:</td>
+              <td className="content">
+                {isEdit ? (
+                  <>
+                    <input
+                      type="file"
+                      multiple
+                      onChange={(e) => {
+                        setProofFiles(Array.from(e.target.files));
+                      }}
+                      accept={"image/*"}
+                    />
+                  </>
+                ) : (
+                  <>
+                    {detail && detail.proof && detail.proof.length > 0 ? (
+                      <>
+                        {detail.proof.map((item) => (
+                          <div className="file-item">
+                            <a
+                              href={item.file_link}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              {item.real_name}
+                            </a>
+                          </div>
+                        ))}
+                      </>
+                    ) : (
+                      "Tidak Ada"
+                    )}
+                  </>
+                )}
+              </td>
+            </tr>
+            <tr>
               <td className="title">LAMPIRAN</td>
               <td>:</td>
-              <td className="content">Tidak Ada</td>
+              <td className="content">
+                {detail &&
+                detail.attachments &&
+                detail.attachments.length > 0 ? (
+                  <>
+                    {detail.attachments.map((item) => (
+                      <div className="file-item">
+                        <a
+                          href={item.file_link}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {item.real_name}
+                        </a>
+                      </div>
+                    ))}
+                  </>
+                ) : (
+                  "Tidak Ada"
+                )}
+              </td>
             </tr>
           </table>
-          {getRole() === "Super Admin" && detail.status === "PENDING" && (
+          {getRole() !== "User" && detail.status === "PENDING" && (
             <Button
               type={isEdit ? "default" : "primary"}
               style={{ marginRight: "10px" }}
@@ -222,13 +316,18 @@ export const SatisfactionPreview = ({
           {isEdit && (
             <>
               <Button
+                loading={statusLoading}
                 type="primary"
                 style={{ marginRight: "10px" }}
                 onClick={() => handleSubmit("publish")}
               >
                 Simpan & Publikasikan
               </Button>
-              <Button type="primary" onClick={() => handleSubmit("normal")}>
+              <Button
+                type="primary"
+                loading={statusLoading}
+                onClick={() => handleSubmit("normal")}
+              >
                 Simpan
               </Button>
             </>

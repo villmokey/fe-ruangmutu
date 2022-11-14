@@ -1,13 +1,5 @@
 import { useState } from "react";
-import {
-  Breadcrumb,
-  Layout,
-  Steps,
-  Row,
-  Col,
-  Button,
-  message,
-} from "antd";
+import { Breadcrumb, Layout, Steps, Row, Col, Button, message } from "antd";
 import { HomeFilled } from "@ant-design/icons";
 import { Card } from "../../../atoms/Card/Card";
 import { Text } from "../../../atoms/Text/Text";
@@ -87,6 +79,7 @@ export const OperationalStandard = () => {
             })
               .then((res) => {
                 if (res) {
+                  console.log(res);
                   if (res.success) {
                     message.success("Berhasil Menambahkan SOP");
                     window.location.reload();

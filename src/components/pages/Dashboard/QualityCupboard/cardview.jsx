@@ -13,6 +13,7 @@ const CardView = ({
   sort,
   onSort,
   loading,
+  handleRemove,
 }) => {
   return !loading ? (
     <Box width={"100%"}>
@@ -39,6 +40,9 @@ const CardView = ({
           {documents.map((doc, index) => (
             <Grid key={index} item xs={12} sm={4} md={2.4} lg={2.4}>
               <FileItem
+                handleRemove={(f) => {
+                  return handleRemove(f);
+                }}
                 docId={doc.id}
                 name={doc.name}
                 secret={doc.is_credential}

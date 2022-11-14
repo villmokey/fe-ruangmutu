@@ -7,7 +7,6 @@ import "./Calendar.less";
 import { Dialog } from "@mui/material";
 import EventItem from "./event.item";
 import { fetchApiGet } from "../../../../globals/fetchApi";
-import moment from "moment";
 
 const EventCalendar = ({
   events = [],
@@ -26,6 +25,18 @@ const EventCalendar = ({
     });
   };
 
+  const extractDate = (start, end = "") => {
+    if (start !== end) {
+      let endDate = end.split("-");
+      let day = parseInt(endDate[2]) + 1;
+      console.log(`${endDate[0]}-${endDate[1]}-${day}`);
+      // return moment(end).add(1, "d");
+      return `${endDate[0]}-${endDate[1]}-${day}`;
+    }
+
+    return end;
+  };
+
   React.useEffect(() => {
     if (events) {
       let temp = events.map((event) => {
@@ -33,7 +44,7 @@ const EventCalendar = ({
           id: event.id,
           title: event.name,
           start: event.start_date,
-          end: moment(event.end_date).add({d: 1}),
+          end: extractDate(event.start_date, event.end_date),
           color:
             event.program && event.program.color
               ? event.program.color
@@ -53,6 +64,8 @@ const EventCalendar = ({
             desc={detail.description}
             programs={detail.related_program}
             user={detail.user}
+            start={detail.start_date}
+            end={detail.end_date}
             realized={detail.is_realized}
             files={detail.related_file}
             programOwner={

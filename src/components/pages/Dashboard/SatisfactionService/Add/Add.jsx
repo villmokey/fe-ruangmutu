@@ -44,6 +44,7 @@ export const AddSatisfaction = () => {
     attachment: "",
     complaint_date: "",
     reported_by: "",
+    attachments: [],
   });
 
   const next = () => {
@@ -162,7 +163,52 @@ export const AddSatisfaction = () => {
     },
   ];
 
-  const handleSave = () => {
+  const uploadFileList = async (fileList = []) => {
+    let bags = new FormData();
+    bags.append("file", "");
+    bags.append("group_name", "complaint_files");
+    const uploaded = Promise.all(
+      fileList.map(async (file) => {
+        bags.set("file", file.originFileObj);
+        const res = await fetchApiPost("/upload/file", accessToken, bags);
+        if (res && res.code === 200 && res.data.id) {
+          return res.data.id;
+        }
+      })
+    );
+
+    return await uploaded;
+  };
+
+  const saveComplaint = async (attachments = []) => {
+    await fetchApiPost("/complaint", accessToken, {
+      ...complaintPayload,
+      attachments: attachments,
+      complaint_date: moment(complaintPayload.complaint_date).format(
+        "YYYY-MM-DD"
+      ),
+    })
+      .then((res) => {
+        if (res && res.success) {
+          console.log(res);
+          message.success("Berhasil menambahkan keluhan pelanggan");
+          navigate("/dashboard/satisfaction-service");
+        } else if (res && res.code === 422) {
+          message.warning(res.message);
+        } else {
+          if (res && res.response) {
+            message.warning(res.response.data.message);
+          }
+        }
+      })
+      .catch((err) => {
+        if (err.response) {
+          message.warning(err.response.data.message);
+        }
+      });
+  };
+
+  const handleSave = async () => {
     if (formType === 1) {
       fetchApiPost("/satisfaction", accessToken, {
         ...satisfactionLevelPayload,
@@ -183,32 +229,17 @@ export const AddSatisfaction = () => {
           }
         });
     } else {
-      console.log("complaintPayload", complaintPayload);
-      fetchApiPost("/complaint", accessToken, {
-        ...complaintPayload,
-        complaint_date: moment(complaintPayload.complaint_date).format(
-          "YYYY-MM-DD"
-        ),
-      })
-        .then((res) => {
-          if (res && res.success) {
-            console.log(res);
-            message.success("Berhasil menambahkan keluhan pelanggan");
-            navigate("/dashboard/satisfaction-service");
-          } else if (res && res.code === 422) {
-            message.warning(res.message);
-          } else {
-            if (res && res.response) {
-              message.warning(res.response.data.message);
-            }
-          }
-        })
-        .catch((err) => {
-          if (err.response) {
-            console.log("ASD");
-            message.warning(err.response.data.message);
-          }
+      if (
+        complaintPayload &&
+        complaintPayload.attachments &&
+        complaintPayload.attachments.length > 0
+      ) {
+        await uploadFileList(complaintPayload.attachments).then(async (ids) => {
+          await saveComplaint(ids);
         });
+      } else {
+        await saveComplaint();
+      }
     }
   };
 

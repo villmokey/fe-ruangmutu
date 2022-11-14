@@ -1,8 +1,13 @@
 import { Stack } from "@mui/material";
-import { Typography, Tag } from "antd";
+import { Typography, Tag, Button, Popconfirm } from "antd";
 import React from "react";
 import styled from "styled-components";
-import { CloudUploadOutlined, CheckCircleOutlined, LockOutlined } from "@ant-design/icons";
+import {
+  CloudUploadOutlined,
+  CheckCircleOutlined,
+  LockOutlined,
+  FileExcelOutlined,
+} from "@ant-design/icons";
 import moment from "moment";
 import "moment/locale/id";
 import { Link } from "react-router-dom";
@@ -94,68 +99,86 @@ const FileItem = ({
   number,
   docId,
   secret,
+  handleRemove,
 }) => {
   return (
-    <Link to={`${docId}/${paths.VIEW}`}>
-      <Container>
-        <ExtensionLogo src={thumbnail} alt={"icon"} />
-        <DetailContainer>
-          {programs && programs.length > 0 && (
-            <Stack direction={"row"}>
-              {programs.map((program, index) => (
-                <Tag key={index} style={{ background: "#6A9695" }}>
-                  {program && program.program && program.program.name
-                    ? program.program.name
-                    : ""}
-                </Tag>
-              ))}
-            </Stack>
-          )}
-          <Typography
-            style={{
-              color: "black",
-              fontSize: "14px",
-            }}
-          >
-            <span title={name}>{titleSplitter(name)}</span>
-          </Typography>
-          <Typography
-            style={{ fontSize: "12px", fontWeight: "400", color: "#7E7E7E" }}
-          >
-            {number}
-          </Typography>
-          <Typography
-            style={{ fontSize: "12px", fontWeight: "400", color: "#7E7E7E" }}
-          >
-            {type}
-          </Typography>
-          <Typography
-            style={{ fontSize: "12px", fontWeight: "300", color: "#7E7E7E" }}
-          >
-            <CheckCircleOutlined /> {moment(publish).format("DD MMM YYYY")}
-          </Typography>
-          <Typography
-            style={{ fontSize: "12px", fontWeight: "300", color: "#7E7E7E" }}
-          >
-            <CloudUploadOutlined /> {moment(created).format("DD MMM YYYY")}
-          </Typography>
-          <Typography
-            style={{
-              fontSize: "12px",
-              fontWeight: "300",
-              color: secret ? "red" : "green",
-            }}
-          >
-            <LockOutlined /> {secret > 0 ? "Rahasia" : "Publik"}
-          </Typography>
-        </DetailContainer>
-      </Container>
-    </Link>
+    <div style={{ position: "relative" }}>
+      <AbsoluteBox>
+        <Popconfirm
+          title="Anda yakin akan menghapus dokumen?"
+          okText="Ya"
+          cancelText="Tidak"
+          onConfirm={() => {
+            return handleRemove(docId);
+          }}
+        >
+          <Button type="primary" color="red">
+            <FileExcelOutlined style={{ color: "red" }} />
+          </Button>
+        </Popconfirm>
+      </AbsoluteBox>
+      <Link to={`${docId}/${paths.VIEW}`}>
+        <Container>
+          <ExtensionLogo src={thumbnail} alt={"icon"} />
+          <DetailContainer>
+            {programs && programs.length > 0 && (
+              <Stack direction={"row"}>
+                {programs.map((program, index) => (
+                  <Tag key={index} style={{ background: "#6A9695" }}>
+                    {program && program.program && program.program.name
+                      ? program.program.name
+                      : ""}
+                  </Tag>
+                ))}
+              </Stack>
+            )}
+            <Typography
+              style={{
+                color: "black",
+                fontSize: "14px",
+              }}
+            >
+              <span title={name}>{titleSplitter(name)}</span>
+            </Typography>
+            <Typography
+              style={{ fontSize: "12px", fontWeight: "400", color: "#7E7E7E" }}
+            >
+              {number}
+            </Typography>
+            <Typography
+              style={{ fontSize: "12px", fontWeight: "400", color: "#7E7E7E" }}
+            >
+              {type}
+            </Typography>
+            <Typography
+              style={{ fontSize: "12px", fontWeight: "300", color: "#7E7E7E" }}
+            >
+              <CheckCircleOutlined /> {moment(publish).format("DD MMM YYYY")}
+            </Typography>
+            <Typography
+              style={{ fontSize: "12px", fontWeight: "300", color: "#7E7E7E" }}
+            >
+              <CloudUploadOutlined /> {moment(created).format("DD MMM YYYY")}
+            </Typography>
+            <Typography
+              style={{
+                fontSize: "12px",
+                fontWeight: "300",
+                color: secret ? "red" : "green",
+              }}
+            >
+              <LockOutlined /> {secret > 0 ? "Rahasia" : "Publik"}
+            </Typography>
+          </DetailContainer>
+        </Container>
+      </Link>
+    </div>
   );
 };
 
 const Container = styled.div`
   width: 100%;
+  position: relative;
   text-align: center;
   background: #6a9695;
   min-height: 237px;
@@ -175,6 +198,13 @@ const DetailContainer = styled.div`
     color: white !important;
     border: none !important;
   }
+`;
+
+const AbsoluteBox = styled.div`
+  position: absolute;
+  top: 5px;
+  right: 3px;
+  z-index: 5;
 `;
 
 const ExtensionLogo = styled.img`

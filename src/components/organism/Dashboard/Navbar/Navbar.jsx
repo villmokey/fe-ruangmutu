@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { paths } from "../../../../routing/paths";
-import { Button, Dropdown, Layout } from "antd";
+import { Button, Dropdown, Layout, Typography } from "antd";
 import { Menu } from "../../../molecules/Menu/Menu";
 import "./Navbar.less";
 import { Text } from "../../../atoms/Text/Text";
@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 const { Header } = Layout;
 
 export const Navbar = ({ onLogout, showMenu = true }) => {
-  const { getRole } = useAuthToken();
+  const { getRole, getName } = useAuthToken();
   const navigate = useNavigate();
   //eslint-disable-next-line
   const [menuItems, setMenuItems] = useState([
@@ -57,12 +57,24 @@ export const Navbar = ({ onLogout, showMenu = true }) => {
       title: "LEMARI MUTU",
       url: paths.QUALITY_CUPBOARD,
     },
-  ]); 
+  ]);
 
   // for the key, use "_" for submenu
   // e.g submenu_sponsor
 
   const userMenuItem = [
+    {
+      key: "username",
+      title: () => getName(),
+      url: "#",
+      content: (
+        <Typography
+          style={{ ":hover": "unset", ":active": "unset", ":focus": "unset" }}
+        >
+          {getName()}
+        </Typography>
+      ),
+    },
     {
       key: "logout",
       title: "Logout",
