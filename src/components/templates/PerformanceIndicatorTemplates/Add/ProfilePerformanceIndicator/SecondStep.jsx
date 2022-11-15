@@ -172,8 +172,8 @@ export const SecondStep = ({
                 placeholder="Pilih Sub program mutu"
                 onChange={subProgramMutuChange}
               >
-                {subProgramMutuOptions &&
-                  subProgramMutuOptions.map((item, index) => (
+                {programMutuOptions &&
+                  programMutuOptions.map((item, index) => (
                     <Option value={item.id} key={index}>
                       {item.title}
                     </Option>
@@ -280,6 +280,8 @@ export const SecondStep = ({
               label="Target Capaian"
               name="achievement_target"
               onChange={targetCapaianChange}
+              type="number"
+              inputMode="numeric"
               rules={[
                 {
                   required: true,
@@ -287,7 +289,6 @@ export const SecondStep = ({
                   InputNumber: true,
                 },
               ]}
-              type="number"
             />
             <InputText
               label="Kriteria Inklusi & Ekslusi"
@@ -459,10 +460,6 @@ export const SecondStep = ({
             <Item
               label="Dokumen Telusur"
               name="dokumenTelusur"
-              valuePropName="file"
-              rules={[
-                { required: true, message: "Penugas tidak boleh kosong!" },
-              ]}
             >
               <Dragger
                 multiple={false}

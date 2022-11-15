@@ -161,7 +161,7 @@ export const ThirdStep = ({
               >
                 {programMutuOptions &&
                   programMutuOptions.map((item, index) => (
-                    <Option value={item.id} key={index}>
+                    <Option value={item.key} key={index}>
                       {item.title}
                     </Option>
                   ))}
@@ -179,9 +179,9 @@ export const ThirdStep = ({
                 onChange={subProgramMutuChange}
                 disabled
               >
-                {subProgramMutuOptions &&
-                  subProgramMutuOptions.map((item, index) => (
-                    <Option value={item.id} key={index}>
+                {programMutuOptions &&
+                  programMutuOptions.map((item, index) => (
+                    <Option value={item.key} key={index}>
                       {item.title}
                     </Option>
                   ))}
@@ -493,9 +493,6 @@ export const ThirdStep = ({
               label="Dokumen Telusur"
               name="dokumenTelusur"
               valuePropName="fileList"
-              rules={[
-                { required: true, message: "Dokumen tidak boleh kosong!" },
-              ]}
             >
               <Dragger
                 beforeUpload={() => false}

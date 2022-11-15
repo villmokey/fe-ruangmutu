@@ -50,7 +50,6 @@ export const Home = () => {
     dispatch(removeAccessToken());
   };
 
-
   return (
     <Layout>
       <head>
@@ -65,10 +64,7 @@ export const Home = () => {
       <Layout className="dashboard-layout">
         <Content className="dashboard-content">
           <Routes>
-            <Route
-              path={'/'}
-              element={<DashboardPage />}
-            />
+            <Route path={"/"} element={<DashboardPage />} />
             <Route
               path={paths.QUALITY_INDICATOR}
               element={<QualityIndicator />}
@@ -190,7 +186,9 @@ export const Home = () => {
           </Col>
         </Row>
       </Footer>
-      <Copyright>PKC Gambir All Rights Reserved.</Copyright>
+      <Copyright className="copyright">
+        PKC Gambir All Rights Reserved.
+      </Copyright>
     </Layout>
   );
 };

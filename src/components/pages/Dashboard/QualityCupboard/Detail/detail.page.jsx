@@ -13,11 +13,12 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import DetailLoading from "./shimmer";
 import "./detail.cupboard.less";
-import { SquareLogo } from "../../../../../assets/images";
+import { LogoRuangMutu, SquareLogo } from "../../../../../assets/images";
 import { QRCode } from "react-qrcode-logo";
 import { EyeOutlined } from "@ant-design/icons";
 import moment from "moment";
 import "moment/locale/id";
+import { useRef } from "react";
 
 const { Content } = Layout;
 
@@ -27,6 +28,7 @@ const DetailQualityCupboard = () => {
   const accessToken = getAccessToken();
   const [loading, setLoading] = useState(true);
   const [document, setDocument] = useState({});
+  const printRef = useRef(null);
 
   const requestDetail = () => {
     setLoading(true);
@@ -46,7 +48,7 @@ const DetailQualityCupboard = () => {
   return (
     <Layout>
       <ToastContainer />
-      <QualityCupboardSider showFilter={false}/>
+      <QualityCupboardSider showFilter={false} />
       <Content className="main-content">
         <Navigation
           items={[
@@ -61,6 +63,7 @@ const DetailQualityCupboard = () => {
           ]}
         />
 
+        <img className="print-ruang-mutu" alt="ruang-mutu" src={LogoRuangMutu} />
         {!loading ? (
           <StyledBox className="printable">
             <Row>
@@ -83,7 +86,7 @@ const DetailQualityCupboard = () => {
                     icon={<PrinterOutlined />}
                     size="large"
                     style={{ borderRadius: 8 }}
-                    onClick={() => window.print()}
+                    onClick={() => window.print({ innerHeight: 300 })}
                   />
                   {document.file && document.file.file_link && (
                     <a
@@ -105,7 +108,7 @@ const DetailQualityCupboard = () => {
                 </Space>
               </Col>
             </Row>
-            <Box className={"detail-information"}>
+            <Box className={"detail-information"} id="printable" ref={printRef}>
               <table>
                 <tbody>
                   <tr>

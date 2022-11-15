@@ -150,7 +150,14 @@ export const Add = () => {
   }, [userList]);
 
   useEffect(() => {
-    if (!(upload && qualityProfileIndicatorIsUploading)) return;
+    if (!qualityProfileIndicatorIsUploading) return;
+
+    if (
+      profileQualityIndicatorDataTemp.dokumenTelusur &&
+      profileQualityIndicatorDataTemp.dokumenTelusur.length > 0 &&
+      !upload
+    )
+      return;
 
     let quality_dimension = profileQualityIndicatorDataTemp.dimensiMutu.map(
       (item) => {
@@ -240,7 +247,11 @@ export const Add = () => {
       second_pic_id: profileQualityIndicatorDataTemp.penanggungJawab2,
       assign_by: profileQualityIndicatorDataTemp.pembuatDokumen,
       signature,
-      document_id: upload.data.id,
+      document_id:
+        profileQualityIndicatorDataTemp.dokumenTelusur &&
+        profileQualityIndicatorDataTemp.dokumenTelusur.length > 0
+          ? upload?.data?.id ?? ""
+          : "",
       type: "performance",
     };
 
@@ -264,7 +275,14 @@ export const Add = () => {
   }, [qualityProfileIndicatorIsUploading, upload]);
 
   useEffect(() => {
-    if (!(uploadQualityIndicator && qualityIndicatorIsUploading)) return;
+    if (!qualityIndicatorIsUploading) return;
+
+    if (
+      qualityIndicatorDataTemp.dokumenTelusur &&
+      qualityIndicatorDataTemp.dokumenTelusur.length > 0 &&
+      !uploadQualityIndicator
+    )
+      return;
 
     let signature = [];
 
@@ -305,20 +323,14 @@ export const Add = () => {
       second_pic_id: qualityIndicatorDataTemp.penanggungJawab2,
       assign_by: qualityIndicatorDataTemp.pembuatDokumen,
       signature,
-      document_id: uploadQualityIndicator.data.id,
+      document_id:
+        qualityIndicatorDataTemp.dokumenTelusur &&
+        qualityIndicatorDataTemp.dokumenTelusur.length > 0
+          ? uploadQualityIndicator?.data?.id ?? ""
+          : "",
       month_target: qualityIndicatorDataTemp.capaianBulanIni,
       type: "performance",
     };
-
-    // dispatch(
-    //   addQualityIndicator({
-    //     accessToken,
-    //     param: finalData,
-    //   })
-    // );
-
-    // message.success("Berhasil membuat indikator mutu");
-    // navigate(-1);
 
     setCreateLoading(true);
     fetchApiPost("/indicator", accessToken, finalData)
@@ -340,24 +352,22 @@ export const Add = () => {
   }, [qualityIndicatorIsUploading, uploadQualityIndicator]);
 
   const handleChangeProgramMutu = (value) => {
-    if (!programMutuOptions) return;
-    const filter = programMutuOptions.filter((item) => item.id === value);
-
-    if (filter[0].sub_programs.length) {
-      const fetchSubProgram = filter[0].sub_programs.map((item, index) => {
-        return {
-          ...item,
-          key: item.id,
-          value: item.id,
-          title: item.name,
-        };
-      });
-
-      setSubProgramMutuOptions(fetchSubProgram);
-    } else {
-      message.warning("Sub Program Mutu tidak tersedia!");
-      setSubProgramMutuOptions(undefined);
-    }
+    // if (!programMutuOptions) return;
+    // const filter = programMutuOptions.filter((item) => item.id === value);
+    // if (filter[0].sub_programs.length) {
+    //   const fetchSubProgram = filter[0].sub_programs.map((item, index) => {
+    //     return {
+    //       ...item,
+    //       key: item.id,
+    //       value: item.id,
+    //       title: item.name,
+    //     };
+    //   });
+    //   setSubProgramMutuOptions(fetchSubProgram);
+    // } else {
+    //   message.warning("Sub Program Mutu tidak tersedia!");
+    //   setSubProgramMutuOptions(undefined);
+    // }
   };
 
   const handleChangeJudulIndikator = (value) => {
@@ -416,7 +426,7 @@ export const Add = () => {
       pembuatDokumen: value.pembuatDokumen,
       penanggungJawab1: value.penanggungJawab1,
       penanggungJawab2: value.penanggungJawab2,
-      dokumenTelusur: value.dokumenTelusur.fileList,
+      dokumenTelusur: value.dokumenTelusur?.fileList ?? [],
     });
   };
 
@@ -433,7 +443,7 @@ export const Add = () => {
       kebijakan: value.kebijakan,
       lingkungan: value.lingkungan,
       rencanaTindakLanjut: value.rencanaTindakLanjut,
-      dokumenTelusur: value.dokumenTelusur.fileList,
+      dokumenTelusur: value.dokumenTelusur?.fileList ?? [],
       dibuatOleh: value.dibuatOleh,
       pembuatDokumen: value.pembuatDokumen,
       penanggungJawab1: value.penanggungJawab1,
@@ -480,33 +490,36 @@ export const Add = () => {
 
   const handleSubmitFormProfileQualityIndicator = async (value) => {
     setCreateLoading(true);
-    const formData = new FormData();
-    formData.append("file", value.dokumenTelusur[0].originFileObj);
-    formData.append("group_name", "document_profile_indicator_performance");
+    if (value.dokumenTelusur && value.dokumenTelusur.length > 0) {
+      const formData = new FormData();
+      formData.append("file", value.dokumenTelusur[0].originFileObj);
+      formData.append("group_name", "document_profile_indicator_performance");
 
-    dispatch(
-      await uploadFileAPIProfileQualityIndicator({
-        accessToken,
-        param: formData,
-      })
-    );
-
+      dispatch(
+        await uploadFileAPIProfileQualityIndicator({
+          accessToken,
+          param: formData,
+        })
+      );
+    }
     setProfileQualityIndicatorDataTemp(value);
     setProfileQualityIndicatorIsUploading(true);
   };
 
   const handleSubmitFormQualityIndicator = async (value) => {
     setCreateLoading(true);
-    const formData = new FormData();
-    formData.append("file", value.dokumenTelusur[0].originFileObj);
-    formData.append("group_name", "document_quality_indicator");
+    if (value.dokumenTelusur && value.dokumenTelusur.length > 0) {
+      const formData = new FormData();
+      formData.append("file", value.dokumenTelusur[0].originFileObj);
+      formData.append("group_name", "document_quality_indicator");
 
-    dispatch(
-      await uploadFileAPIQualityIndicator({
-        accessToken,
-        param: formData,
-      })
-    );
+      dispatch(
+        await uploadFileAPIQualityIndicator({
+          accessToken,
+          param: formData,
+        })
+      );
+    }
 
     setQualityIndicatorDataTemp(value);
     setQualityIndicatorIsUploading(true);

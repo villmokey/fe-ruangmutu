@@ -109,13 +109,14 @@ export const SecondStep = ({
               ]}
             >
               <Select
+                showSearch
                 placeholder="Pilih program mutu"
                 onChange={programMutuChange}
                 disabled
               >
                 {programMutuOptions &&
                   programMutuOptions.map((item, index) => (
-                    <Option value={item.value} key={index}>
+                    <Option value={item.key} key={index}>
                       {item.title}
                     </Option>
                   ))}
@@ -132,13 +133,14 @@ export const SecondStep = ({
               ]}
             >
               <Select
+                showSearch
                 placeholder="Pilih sub program mutu"
                 onChange={programMutuChange}
                 disabled
               >
-                {subProgramMutuOptions &&
-                  subProgramMutuOptions.map((item, index) => (
-                    <Option value={item.value} key={index}>
+                {programMutuOptions &&
+                  programMutuOptions.map((item, index) => (
+                    <Option value={item.key} key={index}>
                       {item.title}
                     </Option>
                   ))}
@@ -230,6 +232,7 @@ export const SecondStep = ({
               label="Capaian bulan ini"
               name="capaianBulanIni"
               type="number"
+              inputMode="numeric"
               rules={[
                 {
                   required: true,
@@ -305,10 +308,6 @@ export const SecondStep = ({
             <Item
               label="Dokumen Telusur"
               name="dokumenTelusur"
-              valuePropName="file"
-              rules={[
-                { required: true, message: "Dokumen tidak boleh kosong!" },
-              ]}
             >
               <Dragger
                 beforeUpload={() => false}

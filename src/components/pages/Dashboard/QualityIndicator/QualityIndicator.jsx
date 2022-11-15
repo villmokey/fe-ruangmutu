@@ -144,7 +144,7 @@ export const QualityIndicator = () => {
       return {
         id: item.id,
         key: index,
-        title: `${item.sub_program.name} - ${item.title}`,
+        title: `${item.sub_program && item.sub_program.name ? item.sub_program.name + ' - ' : ''}${item.title}`,
         year: `Tahun Mutu ${item.year}`,
         monthlyData: item.month.length ? item.month : null,
         target: item.achievement_target,

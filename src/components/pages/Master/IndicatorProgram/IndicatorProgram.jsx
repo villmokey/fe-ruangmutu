@@ -20,7 +20,6 @@ import { InputSearch } from "../../../atoms/InputSearch/InputSearch";
 import {
   DeleteTwoTone,
   EditTwoTone,
-  PlusCircleTwoTone,
   PlusOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
@@ -44,10 +43,11 @@ export const IndicatorProgram = () => {
   const [subModal, setSubModal] = useState(false);
   const [payload, setPayload] = useState({ id: "", name: "" });
   const [search, setSearch] = useState("");
+  //eslint-disable-next-line
   const [subPayload, setSubPayload] = useState({
     program_id: "",
     name: "",
-  });
+  }); 
   const [loading, setLoading] = useState(true);
   const [paginationProps, setPaginationProps] = useState({
     count: 0,
@@ -84,13 +84,13 @@ export const IndicatorProgram = () => {
     setPaginationProps({ ...paginationProps, activePage: page });
   };
 
-  const handleAddChildren = (id, name) => {
-    setSubPayload({
-      program_id: id,
-      name: name,
-    });
-    setSubModal(true);
-  };
+  // const handleAddChildren = (id, name) => {
+  //   setSubPayload({
+  //     program_id: id,
+  //     name: name,
+  //   });
+  //   setSubModal(true);
+  // };
 
   const handleEdit = (id, name, color) => {
     setIsCreate(false);
@@ -121,7 +121,7 @@ export const IndicatorProgram = () => {
 
   return (
     <Layout>
-      <MasterDataSider title={"MASTER DATA UNIT/PROGRAM"} />
+      <MasterDataSider title={"MASTER DATA UNIT/ PROGRAM"} />
       <Content className="main-content">
         <AddSubProgramModal
           open={subModal}
@@ -197,14 +197,14 @@ export const IndicatorProgram = () => {
                       </TableData>
                       <TableData width={"10%"}>
                         <Stack direction={"row"} spacing={1}>
-                          <Button
+                          {/* <Button
                             type="text"
                             onClick={() =>
                               handleAddChildren(program.id, program.name)
                             }
                           >
                             <PlusCircleTwoTone />
-                          </Button>
+                          </Button> */}
                           <Button
                             type="text"
                             onClick={() =>

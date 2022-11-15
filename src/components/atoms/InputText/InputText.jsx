@@ -23,7 +23,8 @@ export const InputText = ({
   onChange,
   type,
   className,
-  style
+  style,
+  inputMode,
 }) => {
   return (
     <Item
@@ -34,6 +35,7 @@ export const InputText = ({
     labelCol={labelCol}
     >
       <Input 
+        inputMode={inputMode}
         placeholder={placeholder}
         disabled={disabled} 
         prefix={prefix}
