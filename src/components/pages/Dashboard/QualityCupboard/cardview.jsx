@@ -47,7 +47,11 @@ const CardView = ({
                 name={doc.name}
                 secret={doc.is_credential}
                 programs={doc.related_program}
-                type={doc.document_type.name}
+                type={
+                  doc && doc.document_type && doc.document_type.name
+                    ? doc.document_type.name
+                    : ""
+                }
                 publish={doc.publish_date}
                 created={doc.created_at}
                 number={doc.document_number}
