@@ -24,6 +24,8 @@ export const UnitService = ({ onChange, value, multiple = false }) => {
         onChange={onChange}
         allowClear
         value={value}
+        showSearch
+        filterOption={(input, option) => (option?.children?.toLowerCase() ?? "").includes(input.toLowerCase())}
         mode={multiple ? "multiple" : ""}
         style={{ width: 170 }}
       >

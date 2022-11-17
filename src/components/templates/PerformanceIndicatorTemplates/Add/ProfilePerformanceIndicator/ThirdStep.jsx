@@ -264,14 +264,14 @@ export const ThirdStep = ({
             </Item>
 
             <InputText
-              label="Status Pengukuran"
+              label="Satuan Pengukuran"
               name="statusPengukuran"
               onChange={statusPengukuranChange}
               disabled
               rules={[
                 {
                   required: true,
-                  message: "Status pengukuran tidak boleh kosong!",
+                  message: "Satuan pengukuran tidak boleh kosong!",
                 },
               ]}
             />
@@ -332,14 +332,14 @@ export const ThirdStep = ({
               ]}
             />
             <InputText
-              label="Pengumpulan Data"
+              label="Desain Pengumpulan Data"
               name="pengumpulanData"
               onChange={pengumpulanDataChange}
               disabled
               rules={[
                 {
                   required: true,
-                  message: "Pengumpulan data tidak boleh kosong!",
+                  message: "Desain pengumpulan data tidak boleh kosong!",
                 },
               ]}
             />

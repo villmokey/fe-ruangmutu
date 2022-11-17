@@ -90,22 +90,16 @@ const EventItem = ({
             {programs && (
               <Box sx={{ float: "right" }}>
                 <Stack direction={"row"}>
-                  {programs.map((program, index) => (
-                    <Tag
-                      key={"program-" + index + 1}
-                      style={{
-                        background:
-                          program && program.program && program.program.color
-                            ? program.program.color
-                            : "#6A9695",
-                        color: "white",
-                      }}
-                    >
-                      {program && program.program && program.program.name
-                        ? program.program.name
-                        : "-"}
-                    </Tag>
-                  ))}
+                  <Tag
+                    style={{
+                      maxWidth: "100px",
+                      marginBottom: "10px",
+                      background: programOwnerColor,
+                      color: "white",
+                    }}
+                  >
+                    {programOwner}
+                  </Tag>
                 </Stack>
               </Box>
             )}
@@ -121,29 +115,27 @@ const EventItem = ({
 
           {programOwner && (
             <>
-              <Stack
-                direction={"row"}
-                alignItems={"center"}
-                justifyContent={"space-between"}
-              >
-                <Typography
-                  fontWeight={"500"}
-                  fontSize={"14px"}
-                  marginBottom={"10px"}
-                >
-                  Unit Layanan
-                </Typography>
-                <Tag
-                  style={{
-                    maxWidth: "100px",
-                    marginBottom: "10px",
-                    background: programOwnerColor,
-                    color: "white",
-                  }}
-                >
-                  {programOwner}
-                </Tag>
-              </Stack>
+              {/* <Typography fontWeight={"500"} fontSize={"12px"}>
+                Unit Terkait
+              </Typography> */}
+              <div style={{ marginBottom: "10px" }}>
+                {programs.map((program, index) => (
+                  <Tag
+                    key={"program-" + index + 1}
+                    style={{
+                      background:
+                        program && program.program && program.program.color
+                          ? program.program.color
+                          : "#6A9695",
+                      color: "white",
+                    }}
+                  >
+                    {program && program.program && program.program.name
+                      ? program.program.name
+                      : "-"}
+                  </Tag>
+                ))}
+              </div>
             </>
           )}
           <Typography

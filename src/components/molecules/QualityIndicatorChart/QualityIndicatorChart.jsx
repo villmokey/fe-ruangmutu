@@ -88,7 +88,18 @@ export const QualityIndicatorChart = ({
   return (
     <Card className={className}>
       <Title level={4}>{title}</Title>
-      <Title level={5} type="secondary">
+      <Title
+        level={5}
+        type="secondary"
+        style={{ margin: "-10px 0 0 0", fontSize: "13px" }}
+      >
+        Target Capaian Mutu: {average}
+      </Title>
+      <Title
+        level={5}
+        type="secondary"
+        style={{ marginTop: "unset", fontSize: "13px" }}
+      >
         {year}
       </Title>
       <Button type="text" onClick={() => setIsExpand(!isExpand)}>

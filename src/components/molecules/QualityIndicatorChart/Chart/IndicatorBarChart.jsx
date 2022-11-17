@@ -23,7 +23,7 @@ const IndicatorBarChart = ({ chartData, achievement = 0 }) => {
   };
 
   return (
-    <div style={{ width: "100%", height: 400, marginTop: 10 }}>
+    <div style={{ width: "100%", height: 250, marginTop: 10 }}>
       <ResponsiveContainer>
         <BarChart
           width={500}
@@ -41,7 +41,7 @@ const IndicatorBarChart = ({ chartData, achievement = 0 }) => {
             axisLine={false}
             tickLine={false}
             type={"number"}
-            domain={[0, achievement + 20]}
+            domain={[0, 100]}
           />
           <Tooltip />
           <ReferenceLine y={achievement} stroke="black" />

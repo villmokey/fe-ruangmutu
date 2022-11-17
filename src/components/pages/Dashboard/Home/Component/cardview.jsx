@@ -17,7 +17,7 @@ const CardView = ({
       <Grid container spacing={1}>
         {documents &&
           documents.map((doc, index) => (
-            <Grid key={index} item xs={12} sm={4} md={2.4} lg={2.4}>
+            <Grid key={index} item xs={12} sm={6} md={4} lg={2.4}>
               <FileItem
                 docId={doc.id}
                 name={doc.name}

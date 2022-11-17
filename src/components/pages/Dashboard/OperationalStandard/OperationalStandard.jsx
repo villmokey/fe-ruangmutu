@@ -42,9 +42,7 @@ export const OperationalStandard = () => {
     notes: "",
   });
 
-  const [histories, setHistories] = useState([
-    { name: "Tujuan", value: "", publish: "" },
-  ]);
+  const [histories, setHistories] = useState([]);
 
   const handleSubmit = () => {
     if (payload.flow_diagram && payload.flow_diagram.file) {

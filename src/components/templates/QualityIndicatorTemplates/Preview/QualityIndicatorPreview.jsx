@@ -305,7 +305,7 @@ export const QualityIndicatorPreview = ({
                   </div>
                 </Space>
                 <Space direction="vertical">
-                  <Text>STATUS PENGUKURAN</Text>
+                  <Text>SATUAN PENGUKURAN</Text>
                   <Input value={detail?.measurement_status} />
                 </Space>
                 <Space direction="vertical">
@@ -331,7 +331,7 @@ export const QualityIndicatorPreview = ({
                   <Input value={detail?.measurement_formula} />
                 </Space>
                 <Space direction="vertical">
-                  <Text>PENGUMPULAN DATA</Text>
+                  <Text>DESAIN PENGUMPULAN DATA</Text>
                   <Input value={detail?.data_collection_design} />
                 </Space>
                 <Space direction="vertical">

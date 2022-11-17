@@ -26,9 +26,9 @@ export const MonthDropdown = ({ onChange, value, hasAll }) => {
         placeholder="Pilih Bulan"
         onChange={onChange}
         value={value}
+        allowClear
         style={{ width: 170 }}
       >
-        {hasAll && <Option value={"ALL"}>Semua</Option>}
         {months &&
           months.map((item, index) => {
             return (

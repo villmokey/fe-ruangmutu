@@ -29,8 +29,6 @@ const EventCalendar = ({
     if (start !== end) {
       let endDate = end.split("-");
       let day = parseInt(endDate[2]) + 1;
-      console.log(`${endDate[0]}-${endDate[1]}-${day}`);
-      // return moment(end).add(1, "d");
       return `${endDate[0]}-${endDate[1]}-${day}`;
     }
 

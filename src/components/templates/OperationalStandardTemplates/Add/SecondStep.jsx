@@ -33,7 +33,7 @@ export const SecondStep = ({
   onFinish,
   form,
   setter,
-  histories,
+  histories = [],
   historySetter,
 }) => {
   return (
@@ -158,88 +158,102 @@ export const SecondStep = ({
         <div style={{ marginTop: "20px" }}>
           <Collapse defaultActiveKey={["1"]}>
             <Panel header="Tambah History Perubahan" key="1">
-              {histories &&
-                histories.map((history, index) => (
-                  <Row gutter={[8, 8]} key={"row-" + index}>
-                    <Col span={6}>
-                      <Text className={"ant-form-item-label"}>
-                        Yang Dirubah
-                      </Text>
-                      <Select
-                        style={{ width: "100%" }}
-                        value={history.name}
-                        onChange={(value) => {
-                          let temp = [...histories];
-                          temp[index].name = value;
-                          historySetter(temp);
-                        }}
-                      >
-                        {fields &&
-                          fields.map((field, itemIndex) => (
-                            <Select.Option
-                              value={field}
-                              key={"feat-" + itemIndex}
-                            >
-                              {field}
-                            </Select.Option>
-                          ))}
-                      </Select>
-                    </Col>
-                    <Col span={8}>
-                      <Textfield
-                        label={"Isi Perubahan"}
-                        value={history.value}
-                        onChange={(e) => {
-                          let temp = [...histories];
-                          temp[index].value = e.target.value;
-                          historySetter(temp);
-                        }}
-                      ></Textfield>
-                    </Col>
-                    <Col span={4}>
-                      <Text className={"ant-form-item-label"}>
-                        Tanggal Diterapkan
-                      </Text>
-                      <DatePicker
-                        value={history.publish}
-                        onChange={(value) => {
-                          let temp = [...histories];
-                          temp[index].publish = value;
-                          historySetter(temp);
-                        }}
-                      ></DatePicker>
-                    </Col>
-                    <Col span={6}>
-                      <div style={{ marginTop: "30px" }}>
-                        <Button
-                          type={"primary"}
-                          onClick={() => {
-                            historySetter([
-                              ...histories,
-                              { name: "", value: "", publish: "" },
-                            ]);
+              {histories && histories.length > 0 ? (
+                <>
+                  {histories.map((history, index) => (
+                    <Row gutter={[8, 8]} key={"row-" + index}>
+                      <Col span={6}>
+                        <Text className={"ant-form-item-label"}>
+                          Yang Dirubah
+                        </Text>
+                        <Select
+                          style={{ width: "100%" }}
+                          value={history.name}
+                          onChange={(value) => {
+                            let temp = [...histories];
+                            temp[index].name = value;
+                            historySetter(temp);
                           }}
                         >
-                          +
-                        </Button>
-                        <Button
-                          type={"primary"}
-                          style={{ background: "#435454", marginLeft: "10px" }}
-                          onClick={() => {
-                            if (histories.length > 1) {
+                          {fields &&
+                            fields.map((field, itemIndex) => (
+                              <Select.Option
+                                value={field}
+                                key={"feat-" + itemIndex}
+                              >
+                                {field}
+                              </Select.Option>
+                            ))}
+                        </Select>
+                      </Col>
+                      <Col span={8}>
+                        <Textfield
+                          label={"Isi Perubahan"}
+                          value={history.value}
+                          onChange={(e) => {
+                            let temp = [...histories];
+                            temp[index].value = e.target.value;
+                            historySetter(temp);
+                          }}
+                        ></Textfield>
+                      </Col>
+                      <Col span={4}>
+                        <Text className={"ant-form-item-label"}>
+                          Tanggal Diterapkan
+                        </Text>
+                        <DatePicker
+                          value={history.publish}
+                          onChange={(value) => {
+                            let temp = [...histories];
+                            temp[index].publish = value;
+                            historySetter(temp);
+                          }}
+                        ></DatePicker>
+                      </Col>
+                      <Col span={6}>
+                        <div style={{ marginTop: "30px" }}>
+                          <Button
+                            type={"primary"}
+                            onClick={() => {
+                              historySetter([
+                                ...histories,
+                                { name: "", value: "", publish: "" },
+                              ]);
+                            }}
+                          >
+                            +
+                          </Button>
+                          <Button
+                            type={"primary"}
+                            style={{
+                              background: "#435454",
+                              marginLeft: "10px",
+                            }}
+                            onClick={() => {
+                              // if (histories.length > 1) {
                               let temp = [...histories];
-                              console.log(index);
                               temp.splice(index, 1);
                               historySetter(temp);
-                            }
-                          }}
-                        >
-                          -
-                        </Button>
-                      </div>
-                    </Col>
-                  </Row>
-                ))}
+                              // }
+                            }}
+                          >
+                            -
+                          </Button>
+                        </div>
+                      </Col>
+                    </Row>
+                  ))}
+                </>
+              ) : (
+                <Button
+                  type={"primary"}
+                  onClick={() => {
+                    historySetter([{ name: "", value: "", publish: "" }]);
+                  }}
+                >
+                  Tambah
+                </Button>
+              )}
             </Panel>
           </Collapse>
         </div>
