@@ -57,13 +57,16 @@ const QualityCupboardForm = ({ open, onClose, onSuccessSubmit }) => {
     let bags = new FormData();
     bags.append("file", file.originFileObj);
     bags.append("group_name", "document_files");
-    const uploaded = await fetchApiPost("/upload/file", accessToken, bags).then(
-      (res) => {
+    const uploaded = await fetchApiPost("/upload/file", accessToken, bags)
+      .then((res) => {
         if (res && res.code === 200 && res.data.id) {
           return res.data.id;
         }
-      }
-    );
+      })
+      .catch((err) => {
+        setLoading(false)
+        console.log("FILE UPLOAD ERR:", err);
+      });
 
     return await uploaded;
   };
@@ -250,6 +253,7 @@ const QualityCupboardForm = ({ open, onClose, onSuccessSubmit }) => {
           </Typography>
           <Stack direction={"row"} alignItems={"center"} spacing={1}>
             <Button
+              loading={loading}
               type={loading ? "ghost" : "primary"}
               size="large"
               style={{ borderRadius: 8 }}
