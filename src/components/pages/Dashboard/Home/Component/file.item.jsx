@@ -1,5 +1,5 @@
 import { Stack } from "@mui/material";
-import { Typography, Tag } from "antd";
+import { Typography, Tag, Popover } from "antd";
 import React from "react";
 import styled from "styled-components";
 import { CloudUploadOutlined } from "@ant-design/icons";
@@ -100,13 +100,29 @@ const FileItem = ({
         <DetailContainer>
           {programs && programs.length > 0 && (
             <Stack direction={"row"}>
-              {programs.map((program, index) => (
-                <Tag key={index} style={{ background: "#6A9695" }}>
-                  {program && program.program && program.program.name
-                    ? program.program.name
-                    : ""}
-                </Tag>
-              ))}
+              <Tag style={{ background: "#6A9695", color: "white" }}>
+                {programs[0].program.name}
+              </Tag>
+              {programs.length > 1 && (
+                <Popover
+                  content={
+                    <>
+                      {programs.map((program, index) => (
+                        <Tag
+                          key={index}
+                          style={{ background: "#6A9695", color: "white" }}
+                        >
+                          {program && program.program && program.program.name
+                            ? program.program.name
+                            : ""}
+                        </Tag>
+                      ))}
+                    </>
+                  }
+                >
+                  <Tag style={{ background: "#739b9b" }}>...</Tag>
+                </Popover>
+              )}
             </Stack>
           )}
           <Typography
