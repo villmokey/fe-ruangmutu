@@ -35,6 +35,13 @@ export const QualityCupboard = () => {
     countSelected: 0,
     countNew: 0,
   });
+
+  const [paginationProps, setPaginationProps] = useState({
+    total: 0,
+    from: 0,
+    to: 0,
+  });
+
   const [totalPage, setTotalPage] = useState(0);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
@@ -104,6 +111,11 @@ export const QualityCupboard = () => {
             countNew: res.data.countNew,
           });
           setTotalPage(res.data.data.last_page);
+          setPaginationProps({
+            from: res.data.data.from,
+            to: res.data.data.to,
+            total: res.data.data.total,
+          });
           setDocuments(res.data.data.data);
         }
       })
@@ -263,6 +275,7 @@ export const QualityCupboard = () => {
             activePage={page}
             onPageChange={(p) => setPage(p)}
             sort={sorting}
+            paginationProps={paginationProps}
             loading={loading}
             onSort={() => {
               setSortBy("name");
@@ -272,6 +285,7 @@ export const QualityCupboard = () => {
         ) : (
           <ListView
             documents={documents}
+            paginationProps={paginationProps}
             pages={totalPage}
             activePage={page}
             sort={sorting}

@@ -1,19 +1,3 @@
-/*
-
-==KPI FORM==
-Guest - Isi laporan, lampiran, sumber, faskes
-Admin - Update status, tindak lajut, tanggal klarifikasi
-
-NO SIGN!!!!!!!
-
-etc:
--MASTER DATA
--User
--Tipe Dokumen
--Program
---Sub Program
-*/
-
 import {
   Breadcrumb,
   Button,
@@ -23,6 +7,7 @@ import {
   Skeleton,
   Space,
   Tag,
+  Typography,
 } from "antd";
 import { Card } from "../../../atoms/Card/Card";
 import { Title } from "../../../atoms/Title/Title";
@@ -44,7 +29,7 @@ import { SatisfactionServiceCardView } from "./View/Cardview";
 import { SatisfactionServiceListView } from "./View/ListView";
 import { monthAcronymID } from "../../../../globals/monthLabel";
 import { HomeFilled } from "@ant-design/icons";
-import { Box, Pagination } from "@mui/material";
+import { Box, Pagination, Grid } from "@mui/material";
 
 const { Content } = Layout;
 
@@ -60,6 +45,11 @@ export const SatisfactionService = () => {
   const [totalPage, setTotalPage] = useState(0);
   const [search, setSearch] = useState("");
   const [sorting, setSorting] = useState("asc");
+  const [paginationProps, setPaginationProps] = useState({
+    total: 0,
+    from: 0,
+    to: 0,
+  });
   const [totalResult, setTotalResult] = useState({
     in: "0",
     complete: "0",
@@ -89,6 +79,11 @@ export const SatisfactionService = () => {
       if (res && res.success) {
         setLoading(false);
         setTotalPage(res.data.last_page);
+        setPaginationProps({
+          from: res.data.from,
+          to: res.data.to,
+          total: res.data.total,
+        });
         setComplaints(res.data.data);
       }
     });
@@ -304,17 +299,27 @@ export const SatisfactionService = () => {
             <Skeleton style={{ textAlign: "center" }}>Loading</Skeleton>
           )}
         </div>
-        <Box width={"100%"} display={"flex"} justifyContent={"end"}>
-          <Pagination
-            sx={{ marginTop: "20px" }}
-            count={totalPage}
-            color="standard"
-            page={page}
-            onChange={(e, p) => {
-              setPage(p);
-            }}
-          />
-        </Box>
+        <Grid container alignItems={"center"} marginTop={"20px"}>
+          <Grid item xs={12} sm={12} md={6}>
+            <Typography style={{ color: "rgb(168 168 168 / 85%)" }}>
+              Menampilkan {paginationProps.from} - {paginationProps.to} dari{" "}
+              {paginationProps.total}
+            </Typography>
+          </Grid>
+          <Grid item xs={12} sm={12} md={6}>
+            <Box width={"100%"} display={"flex"} justifyContent={"end"}>
+              <Pagination
+                sx={{ marginTop: "20px" }}
+                count={totalPage}
+                color="standard"
+                page={page}
+                onChange={(e, p) => {
+                  setPage(p);
+                }}
+              />
+            </Box>
+          </Grid>
+        </Grid>
       </Content>
     </Layout>
   );

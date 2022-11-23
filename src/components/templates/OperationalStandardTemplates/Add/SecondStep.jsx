@@ -199,7 +199,7 @@ export const SecondStep = ({
                       </Col>
                       <Col span={4}>
                         <Text className={"ant-form-item-label"}>
-                          Tanggal Diterapkan
+                          Tanggal Diterbitkan
                         </Text>
                         <DatePicker
                           value={history.publish}

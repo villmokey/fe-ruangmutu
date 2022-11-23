@@ -124,7 +124,7 @@ const FileItem = ({
             {programs && programs.length > 0 && (
               <Stack direction={"row"}>
                 <Tag style={{ background: "#6A9695", color: "white" }}>
-                  {programs[0].program.name}
+                  {programs[0]?.program?.name ?? ""}
                 </Tag>
                 {programs.length > 1 && (
                   <Popover

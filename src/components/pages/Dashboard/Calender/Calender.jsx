@@ -10,7 +10,7 @@ import { useAuthToken } from "../../../../globals/useAuthToken";
 import styled from "styled-components";
 import EventItem from "./event.item";
 import EventCalendar from "./event.calendar";
-import { Typography } from "@mui/material";
+import { Box, Grid, Pagination, Typography } from "@mui/material";
 import FormCalendar from "./calendar.form";
 import {
   fetchApiGet,
@@ -35,6 +35,15 @@ export const Calender = () => {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [events, setEvents] = useState([]);
+  const [eventsPaginated, setEventsPaginated] = useState([]);
+  const [page, setPage] = useState(1);
+  const [paginationProps, setPaginationProps] = useState({
+    count: 1,
+    activePage: 1,
+    total: 0,
+    from: 0,
+    to: 0,
+  });
 
   const handleRealize = (id) => {
     fetchApiPut(`/event/realize/${id}`, accessToken).then((res) => {
@@ -69,10 +78,39 @@ export const Calender = () => {
       setEvents(res.data);
     });
   };
+  const getPaginatedEvents = () => {
+    setLoading(true);
+    fetchApiGet("/event", {
+      ...filterPayload,
+      page: page,
+      per_page: 10,
+      search: search,
+    }).then((res) => {
+      if (res && res.success) {
+        setPaginationProps({
+          activePage: res.data.current_page,
+          count: Math.ceil(res.data.total / res.data.per_page),
+          total: res.data.total,
+          from: res.data.from,
+          to: res.data.to,
+        });
+        setLoading(false);
+        setEventsPaginated(res.data.data);
+      }
+    });
+  };
+
+  const handlePageChange = (e, p) => {
+    setPage(p);
+  };
 
   React.useEffect(() => {
     getEvents();
   }, [filterPayload, search]); //eslint-disable-line
+
+  React.useEffect(() => {
+    getPaginatedEvents();
+  }, [filterPayload, search, page]); //eslint-disable-line
 
   return (
     <Layout>
@@ -116,34 +154,55 @@ export const Calender = () => {
         </Row>
         {loading ? (
           <EventLoader />
-        ) : events && events.length > 0 ? (
-          <ContentContainter>
-            {events.map((item, index) => (
-              <EventItem
-                key={index}
-                title={item.name}
-                desc={item.description}
-                programs={item.related_program}
-                user={item.user}
-                start={item.start_date}
-                end={item.end_date}
-                realized={item.is_realized}
-                files={item.related_file}
-                programOwner={
-                  item.program && item.program.name ? item.program.name : ""
-                }
-                programOwnerColor={
-                  item.program && item.program.color
-                    ? item.program.color
-                    : "transparent"
-                }
-                otherFiles={item.other_files}
-                onRealized={() => handleRealize(item.id)}
-                onEdit={() => handleEdit(item.id)}
-                onDelete={() => handleRemove(item.id)}
-              />
-            ))}
-          </ContentContainter>
+        ) : eventsPaginated && eventsPaginated.length > 0 ? (
+          <>
+            <ContentContainter>
+              {eventsPaginated.map((item, index) => (
+                <EventItem
+                  key={index}
+                  title={item.name}
+                  desc={item.description}
+                  programs={item.related_program}
+                  user={item.user}
+                  start={item.start_date}
+                  end={item.end_date}
+                  realized={item.is_realized}
+                  files={item.related_file}
+                  programOwner={
+                    item.program && item.program.name ? item.program.name : ""
+                  }
+                  programOwnerColor={
+                    item.program && item.program.color
+                      ? item.program.color
+                      : "transparent"
+                  }
+                  otherFiles={item.other_files}
+                  onRealized={() => handleRealize(item.id)}
+                  onEdit={() => handleEdit(item.id)}
+                  onDelete={() => handleRemove(item.id)}
+                />
+              ))}
+            </ContentContainter>
+            <Grid container alignItems={"center"} marginTop={"20px"}>
+              <Grid item xs={12} sm={12} md={6}>
+                <Typography style={{ color: "rgb(168 168 168 / 85%)" }}>
+                  Menampilkan {paginationProps.from} - {paginationProps.to} dari{" "}
+                  {paginationProps.total}
+                </Typography>
+              </Grid>
+              <Grid item xs={12} sm={12} md={6}>
+                <Box width={"100%"} display={"flex"} justifyContent={"end"}>
+                  <Pagination
+                    sx={{ marginTop: "20px" }}
+                    count={paginationProps.count}
+                    color="standard"
+                    page={paginationProps.activePage}
+                    onChange={handlePageChange}
+                  />
+                </Box>
+              </Grid>
+            </Grid>
+          </>
         ) : (
           <Typography
             fontSize={"15px"}

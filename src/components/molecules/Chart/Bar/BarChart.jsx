@@ -42,7 +42,6 @@ export const BarChart = ({
   options,
   ref,
 }) => {
-
   const optionss = {
     responsive: true,
     plugins: {
@@ -54,16 +53,52 @@ export const BarChart = ({
         display: false,
         text: "Chart.js Bar Chart",
       },
+      annotation: {
+        annotations: [
+          {
+            id: "slo",
+            type: "line",
+            mode: "horizontal",
+            value: indicatorLineValue,
+            scaleID: "y",
+            borderWidth: 1,
+            borderDash: [10, 1],
+            label: {
+              enabled: false,
+              position: "start",
+            },
+          },
+        ],
+      },
+      beforeDraw: (chart) => {
+        const { ctx } = chart;
+        ctx.save();
+        ctx.register(ChartAnnotation);
+        ctx.globalCompositeOperation = "destination-over";
+        ctx.fillStyle = "lightGreen";
+        ctx.fillRect(0, 0, chart.width, chart.height);
+        ctx.restore();
+      },
     },
     scales: {
       y: {
-        min: 0,
-        max: 100,
         ticks: {
           stepSize: 25,
         },
       },
     },
+  };
+
+  const getBarColor = (value) => {
+    if (value > indicatorLineValue) {
+      return "#5F5DC8";
+    } else if (value === indicatorLineValue) {
+      return "#6CC85D";
+    } else if (value >= indicatorLineValue / 2 && value < indicatorLineValue) {
+      return "#C8BD5D";
+    } else {
+      return "#C85D5D";
+    }
   };
 
   // ['#C85D5D', '#6CC85D', '#5F5DC8', '#C85D5D', '#C85D5D', '#C85D5D', '#C8BD5D', '#C8BD5D', '#C85D5D', '#C85D5D', '#5F5DC8', '#C85D5D']
@@ -74,12 +109,21 @@ export const BarChart = ({
       {
         label: "Quality Indicator",
         data: chartData,
-        backgroundColor: barColor,
+        backgroundColor: chartData.map((x) => {
+          return getBarColor(x);
+        }),
       },
     ],
   };
 
-  return <Bar ref={ref} options={optionss} data={data} />;
+  return (
+    <Bar
+      ref={ref}
+      options={optionss}
+      data={data}
+      color={(e) => console.log(e)}
+    />
+  );
   // return <Line data={data} options={optionss} />;
 };
 

@@ -91,7 +91,7 @@ export const PerformanceIndicatorApproval = ({ filter, search }) => {
           approval3Temp = "Belum disetujui";
         }
       } else {
-        approval3Temp = "Tidak ada penanggung jawab 2";
+        approval3Temp = "-";
       }
 
       return {
@@ -106,6 +106,7 @@ export const PerformanceIndicatorApproval = ({ filter, search }) => {
         user1: user1,
         user2: user2,
         user3: user3,
+        generated: item.is_generated,
         approval1:
           approval1.signed === 1
             ? new Date(approval1.signed_at).toLocaleDateString()
@@ -175,6 +176,8 @@ export const PerformanceIndicatorApproval = ({ filter, search }) => {
               type={"indicator"}
               onApprove={handleApprove}
               onReject={handleReject}
+              generated={item.generated}
+              onGenerateSuccess={async () => await handleFetchApproval()}
             />
           ))}
           <Box display={"flex"} justifyContent={"right"}>

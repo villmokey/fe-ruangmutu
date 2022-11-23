@@ -92,7 +92,7 @@ export const ThirdStep = ({ form, setter, histories, historySetter }) => {
             </Col>
             <Col span={8}>
               <Item
-                label="Tanggal Ditetapkan"
+                label="Tanggal Diterbitkan"
                 name={'publish-' + index + 1}
                 initialValue={history.publish}
               >

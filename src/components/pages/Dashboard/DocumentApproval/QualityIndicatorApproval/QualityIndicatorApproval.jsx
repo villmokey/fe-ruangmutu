@@ -89,7 +89,7 @@ export const QualityIndicatorApproval = ({ filter, search }) => {
           approval3Temp = "Belum disetujui";
         }
       } else {
-        approval3Temp = "Tidak ada penanggung jawab 2";
+        approval3Temp = "-";
       }
 
       return {
@@ -104,6 +104,7 @@ export const QualityIndicatorApproval = ({ filter, search }) => {
         user1: user1,
         user2: user2,
         user3: user3,
+        generated: item.is_generated,
         approval1:
           approval1.signed === 1
             ? new Date(approval1.signed_at).toLocaleDateString()
@@ -173,8 +174,10 @@ export const QualityIndicatorApproval = ({ filter, search }) => {
               indicatorID={item.id}
               profileId={item.profile_id}
               type={"indicator"}
+              generated={item.generated}
               onApprove={handleApprove}
               onReject={handleReject}
+              onGenerateSuccess={async () => await handleFetchApproval()}
             />
           ))}
           <Box display={"flex"} justifyContent={"right"}>

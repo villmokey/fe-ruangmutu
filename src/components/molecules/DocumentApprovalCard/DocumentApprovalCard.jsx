@@ -28,6 +28,8 @@ export const DocumentApprovalCard = ({
   month,
   // onEdit,
   onSubmit,
+  generated = false,
+  onGenerateSuccess,
   signature = [],
   user1,
   user2,
@@ -39,11 +41,12 @@ export const DocumentApprovalCard = ({
   onReject,
   status,
 }) => {
-  const [previewData, setPreviewData] = useState({});  //eslint-disable-line
+  const [previewData, setPreviewData] = useState({}); //eslint-disable-line
   const [tempChartData, setTempChartData] = useState([]);
   const [previewVis, setPreviewVis] = useState(false);
   const [loadingGenerate, setLoadingGenerate] = useState(false);
   const [chartData, setChartData] = useState({});
+  const [profileTarget, setProfileTarget] = useState(0);
   const [detail, setDetail] = useState({});
   const { getAccessToken } = useAuthToken();
   const accessToken = getAccessToken();
@@ -60,7 +63,7 @@ export const DocumentApprovalCard = ({
       },
       title: {
         display: false,
-        text: "Chart.js Bar Chart",
+        text: "",
       },
       annotation: {
         annotations: [
@@ -68,7 +71,7 @@ export const DocumentApprovalCard = ({
             id: "slo",
             type: "line",
             mode: "horizontal",
-            value: 50,
+            value: profileTarget,
             scaleID: "y",
             borderWidth: 1,
             borderDash: [10, 1],
@@ -91,8 +94,6 @@ export const DocumentApprovalCard = ({
     },
     scales: {
       y: {
-        min: 0,
-        max: 100,
         ticks: {
           stepSize: 25,
         },
@@ -105,6 +106,7 @@ export const DocumentApprovalCard = ({
       .then((res) => {
         if (res) {
           console.log(res.data);
+          setProfileTarget(res.data.profile_target);
           setChartData(res.data);
           // setPreviewVis(true);
         }
@@ -165,6 +167,7 @@ export const DocumentApprovalCard = ({
                 )
                   .then((res) => {
                     if (res && res.success) {
+                      onGenerateSuccess()
                       message.success(res.message);
                     } else {
                       message.warning(
@@ -269,12 +272,25 @@ export const DocumentApprovalCard = ({
       .catch((e) => console.log(e.getMessage()));
   };
 
+  const getBarColor = (value) => {
+    if (value > profileTarget) {
+      return "#5F5DC8";
+    } else if (value === profileTarget) {
+      return "#6CC85D";
+    } else if (value >= profileTarget / 2 && value < profileTarget) {
+      return "#C8BD5D";
+    } else {
+      return "#C85D5D";
+    }
+  };
+
   const handleGenerate = async (id) => {
     setLoadingGenerate(true);
     if (type === "profile") {
       await fetchApiGet(`/indicator-profile/generate/${id}`, {}, accessToken)
         .then((res) => {
           if (res && res.success) {
+            onGenerateSuccess()
             message.success(res.message);
           } else {
             message.warning(
@@ -418,14 +434,31 @@ export const DocumentApprovalCard = ({
         )}
         {signature && !signature.some((sign) => sign.signed === 0) && (
           <Col>
-            <Button
-              onClick={() => handleGenerate(indicatorID)}
-              size="small"
-              type="dashed"
-              loading={loadingGenerate}
-            >
-              Generate
-            </Button>
+            {!generated ? (
+              <Popconfirm
+                title="Generate hanya bisa dilakukan sekali, lanjutkan?"
+                onConfirm={() => handleGenerate(indicatorID)}
+              >
+                <Button
+                  // onClick={() => handleGenerate(indicatorID)}
+                  size="small"
+                  type="dashed"
+                  loading={loadingGenerate}
+                >
+                  Generate
+                </Button>
+              </Popconfirm>
+            ) : (
+              <p
+                style={{
+                  border: "1px solid white",
+                  fontStyle: "italic",
+                  padding: "0 5px",
+                }}
+              >
+                Sudah Digenerate
+              </p>
+            )}
           </Col>
         )}
       </Row>
@@ -449,7 +482,11 @@ export const DocumentApprovalCard = ({
                     tempChartData.map((x) => {
                       return x.value;
                     }),
-                  backgroundColor: "#5DC8BDE5",
+                  backgroundColor:
+                    tempChartData &&
+                    tempChartData.map((x) => {
+                      return getBarColor(x.value);
+                    }),
                 },
               ],
             }}

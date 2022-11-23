@@ -1,11 +1,20 @@
-import { Button, Col, Layout, Row, Skeleton, Modal, message } from "antd";
+import {
+  Button,
+  Col,
+  Layout,
+  Row,
+  Skeleton,
+  Modal,
+  message,
+  Typography,
+} from "antd";
 import {
   TableData,
   TableHead,
   Table,
   TableRow,
 } from "../../../atoms/Table/styled";
-import { Box, Pagination, Stack } from "@mui/material";
+import { Box, Pagination, Stack, Grid } from "@mui/material";
 import "./User.less";
 import { InputSearch } from "../../../atoms/InputSearch/InputSearch";
 import {
@@ -41,6 +50,9 @@ export const UserPage = () => {
   const [paginationProps, setPaginationProps] = useState({
     count: 0,
     activePage: 1,
+    total: 0,
+    from: 0,
+    to: 0,
   });
 
   const fetchPrograms = () => {
@@ -59,6 +71,9 @@ export const UserPage = () => {
         setPaginationProps({
           activePage: res.data.current_page,
           count: Math.ceil(res.data.total / res.data.per_page),
+          total: res.data.total,
+          from: res.data.from,
+          to: res.data.to,
         });
         setLoading(false);
         setPrograms(res.data.data ?? []);
@@ -235,15 +250,25 @@ export const UserPage = () => {
                     </TableRow>
                   ))}
               </Table>
-              <Box width={"100%"} display={"flex"} justifyContent={"end"}>
-                <Pagination
-                  sx={{ marginTop: "20px" }}
-                  count={paginationProps.count}
-                  color="standard"
-                  page={paginationProps.activePage}
-                  onChange={handlePageChange}
-                />
-              </Box>
+              <Grid container alignItems={"center"} marginTop={"10px"}>
+                <Grid item xs={12} sm={12} md={6}>
+                  <Typography style={{ color: "rgb(168 168 168 / 85%)" }}>
+                    Menampilkan {paginationProps.from} - {paginationProps.to}{" "}
+                    dari {paginationProps.total}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} sm={12} md={6}>
+                  <Box width={"100%"} display={"flex"} justifyContent={"end"}>
+                    <Pagination
+                      sx={{ marginTop: "20px" }}
+                      count={paginationProps.count}
+                      color="standard"
+                      page={paginationProps.activePage}
+                      onChange={handlePageChange}
+                    />
+                  </Box>
+                </Grid>
+              </Grid>
             </>
           ) : (
             <Skeleton style={{ textAlign: "center" }}>Loading</Skeleton>

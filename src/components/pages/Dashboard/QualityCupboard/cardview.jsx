@@ -12,6 +12,7 @@ const CardView = ({
   onPageChange,
   sort,
   onSort,
+  paginationProps = { from: 0, to: 0, total: 1 },
   loading,
   handleRemove,
 }) => {
@@ -77,17 +78,27 @@ const CardView = ({
           <p>Oops, Belum ada data</p>
         </Box>
       )}
-      <Box width={"100%"} display={"flex"} justifyContent={"end"}>
-        <Pagination
-          sx={{ marginTop: "20px" }}
-          count={pages}
-          color="standard"
-          page={activePage}
-          onChange={(e, p) => {
-            return onPageChange(p);
-          }}
-        />
-      </Box>
+      <Grid container alignItems={"center"} marginTop={"20px"}>
+        <Grid item xs={12} sm={12} md={6}>
+          <Typography style={{ color: "rgb(168 168 168 / 85%)" }}>
+            Menampilkan {paginationProps.from} - {paginationProps.to} dari{" "}
+            {paginationProps.total}
+          </Typography>
+        </Grid>
+        <Grid item xs={12} sm={12} md={6}>
+          <Box width={"100%"} display={"flex"} justifyContent={"end"}>
+            <Pagination
+              sx={{ marginTop: "20px" }}
+              count={pages}
+              color="standard"
+              page={activePage}
+              onChange={(e, p) => {
+                return onPageChange(p);
+              }}
+            />
+          </Box>
+        </Grid>
+      </Grid>
     </Box>
   ) : (
     <Box width={"100%"}>

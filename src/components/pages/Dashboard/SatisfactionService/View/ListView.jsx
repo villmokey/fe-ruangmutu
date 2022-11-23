@@ -1,4 +1,4 @@
-import { Box, Stack, Pagination, Skeleton } from "@mui/material";
+import { Box, Stack, Skeleton } from "@mui/material";
 import { Tag, Typography } from "antd";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import styled from "styled-components";
@@ -103,17 +103,6 @@ export const SatisfactionServiceListView = ({
           </TableRow>
         )}
       </Table>
-      <Box width={"100%"} display={"flex"} justifyContent={"end"}>
-        <Pagination
-          sx={{ marginTop: "20px" }}
-          count={pages}
-          color="standard"
-          page={activePage}
-          onChange={(e, p) => {
-            return onPageChange(p);
-          }}
-        />
-      </Box>
     </Box>
   ) : (
     <Box width={"100%"}>

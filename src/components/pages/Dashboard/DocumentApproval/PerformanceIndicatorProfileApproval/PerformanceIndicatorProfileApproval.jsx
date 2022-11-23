@@ -94,6 +94,7 @@ export const PerformanceIndicatorProfileApproval = ({ filter, search }) => {
         user1: user1,
         user2: user2,
         user3: user3,
+        generated: item.is_generated,
         approval1:
           approval1.signed === 1
             ? new Date(approval1.signed_at).toLocaleDateString()
@@ -106,7 +107,7 @@ export const PerformanceIndicatorProfileApproval = ({ filter, search }) => {
           ? approval2.signed === 1
             ? new Date(approval3.signed_at).toLocaleDateString()
             : "Belum disetujui"
-          : "Tidak ada penanggung jawab 2",
+          : "-",
         status: item.status,
         signature: item.signature,
       };
@@ -168,6 +169,8 @@ export const PerformanceIndicatorProfileApproval = ({ filter, search }) => {
               onApprove={handleApprove}
               onReject={handleReject}
               status={item.status}
+              generated={item.generated}
+              onGenerateSuccess={async () => await handleFetchApproval()}
             />
           ))}
           <Box display={"flex"} justifyContent={"right"}>
