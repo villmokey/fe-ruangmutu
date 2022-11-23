@@ -46,9 +46,13 @@ const CardView = ({
             </Grid>
           ))}
       </Grid>
-      <Box width={"100%"} display={"flex"} justifyContent={"end"}>
+      <Box
+        width={"100%"}
+        display={"flex"}
+        sx={{ marginTop: "20px" }}
+        justifyContent={"end"}
+      >
         <Pagination
-          sx={{ marginTop: "20px" }}
           count={pages > 4 ? 4 : pages}
           color="standard"
           page={activePage}

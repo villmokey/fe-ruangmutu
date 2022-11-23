@@ -7,6 +7,7 @@ import {
   Skeleton,
   Space,
   Tag,
+  Typography,
 } from "antd";
 import { Card } from "../../../atoms/Card/Card";
 import { Title } from "../../../atoms/Title/Title";
@@ -35,7 +36,7 @@ import { FileTextOutlined, BarChartOutlined } from "@ant-design/icons";
 import { fetchApiGet } from "../../../../globals/fetchApi";
 import QualityIndicatorCardview from "./View/Cardview";
 import { HomeFilled } from "@ant-design/icons";
-import { Box } from "@mui/material";
+import { Box, Grid, Pagination } from "@mui/material";
 
 const { Content } = Layout;
 
@@ -45,11 +46,19 @@ export const QualityIndicator = () => {
   const { getAccessToken } = useAuthToken();
   const accessToken = getAccessToken();
   const [programs, setPrograms] = useState([]);
+  const [page, setPage] = useState(1);
   const [search, setSearch] = useState(undefined);
   const [totalResult, setTotalResult] = useState({
     all: "",
     selected: "",
     unreached: "",
+  });
+  const [paginationProps, setPaginationProps] = useState({
+    count: 0,
+    activePage: 1,
+    total: 0,
+    from: 0,
+    to: 0,
   });
   const [filter, setFilter] = useState({
     year: undefined,
@@ -72,6 +81,8 @@ export const QualityIndicator = () => {
           year: filter.year !== undefined ? filter.year : "",
           program_id: filter.program_id !== undefined ? filter.program_id : "",
           search: search,
+          page: page,
+          per_page: 5,
         },
       })
     );
@@ -93,7 +104,7 @@ export const QualityIndicator = () => {
   useEffect(() => {
     fetchQuality();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filter, search]);
+  }, [filter, search, page]);
 
   useEffect(() => {
     if (!list) return;
@@ -111,7 +122,14 @@ export const QualityIndicator = () => {
       selected: data.total_selected,
       unreached: data.total_unreached,
     });
-    const fetch = data.result.map((item, index) => {
+    setPaginationProps({
+      activePage: data.result.current_page,
+      count: Math.ceil(data.result.total / data.result.per_page),
+      total: data.result.total,
+      from: data.result.from,
+      to: data.result.to,
+    });
+    const fetch = data.result.data.map((item, index) => {
       let monthsTarget = [];
       if (item.month.length) {
         monthList.forEach((month, index) => {
@@ -144,7 +162,11 @@ export const QualityIndicator = () => {
       return {
         id: item.id,
         key: index,
-        title: `${item.sub_program && item.sub_program.name ? item.sub_program.name + ' - ' : ''}${item.title}`,
+        title: `${
+          item.sub_program && item.sub_program.name
+            ? item.sub_program.name + " - "
+            : ""
+        }${item.title}`,
         year: `Tahun Mutu ${item.year}`,
         monthlyData: item.month.length ? item.month : null,
         target: item.achievement_target,
@@ -256,17 +278,42 @@ export const QualityIndicator = () => {
             ) : (
               <>
                 {chartDataSource && chartDataSource.length > 0 ? (
-                  chartDataSource.map((item, index) => (
-                    <QualityIndicatorChart
-                      key={item.title}
-                      chartData={item.chartData}
-                      title={item.title}
-                      average={item.target}
-                      year={item.year}
-                      className="indikator-mutu"
-                      data={item.monthlyData}
-                    />
-                  ))
+                  <>
+                    {chartDataSource.map((item, index) => (
+                      <QualityIndicatorChart
+                        key={item.title}
+                        chartData={item.chartData}
+                        title={item.title}
+                        average={item.target}
+                        year={item.year}
+                        className="indikator-mutu"
+                        data={item.monthlyData}
+                      />
+                    ))}
+                    <Grid container alignItems={"center"} marginTop={"10px"}>
+                      <Grid item xs={12} sm={12} md={6}>
+                        <Typography style={{ color: "rgb(168 168 168 / 85%)" }}>
+                          Menampilkan {paginationProps.from} -{" "}
+                          {paginationProps.to} dari {paginationProps.total}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={12} sm={12} md={6}>
+                        <Box
+                          width={"100%"}
+                          display={"flex"}
+                          justifyContent={"end"}
+                        >
+                          <Pagination
+                            sx={{ marginTop: "20px" }}
+                            count={paginationProps.count}
+                            color="standard"
+                            page={paginationProps.activePage}
+                            onChange={(e, p) => setPage(p)}
+                          />
+                        </Box>
+                      </Grid>
+                    </Grid>
+                  </>
                 ) : (
                   <Box margin={"40px 0"} textAlign={"center"}>
                     <p>Oops, Belum ada data</p>

@@ -27,7 +27,7 @@ const IndicatorBarChart = ({ chartData, achievement = 0 }) => {
       <ResponsiveContainer>
         <BarChart
           width={500}
-          height={300}
+          height={250}
           data={chartData}
           margin={{
             top: 5,

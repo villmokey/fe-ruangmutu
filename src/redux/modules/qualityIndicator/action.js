@@ -93,6 +93,14 @@ export const getAllQualityIndicator = (bodyData) => {
         bodyData.filter && bodyData.filter.program_id
           ? bodyData.filter.program_id
           : ""
+      }&page=${
+        bodyData.filter && bodyData.filter.page
+          ? bodyData.filter.page
+          : 1
+      }&per_page=${
+        bodyData.filter && bodyData.filter.per_page
+          ? bodyData.filter.per_page
+          : 20
       }&search=${
         bodyData.filter && bodyData.filter.search
           ? bodyData.filter.search
