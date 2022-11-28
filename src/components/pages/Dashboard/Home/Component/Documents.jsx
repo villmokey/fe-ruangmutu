@@ -13,7 +13,7 @@ const Documents = () => {
   const fetchDocuments = () => {
     setLoading(true);
     fetchApiGet("/document", {
-      per_page: 5,
+      per_page: 6,
       page: page,
       hide_secret: true,
       sort: "desc",

@@ -20,6 +20,8 @@ export const ThirdStep = ({
   programMutuOptions,
   subProgramMutuOptions,
   userOptions,
+  userOptions2,
+  userOptions3,
 }) => {
   let months = [
     {
@@ -286,8 +288,8 @@ export const ThirdStep = ({
               ]}
             >
               <Select placeholder="Pilih penanggung jawab 1" disabled>
-                {userOptions &&
-                  userOptions.map((item, index) => (
+                {userOptions2 &&
+                  userOptions2.map((item, index) => (
                     <Option value={item.id} key={index}>
                       {item.name}
                     </Option>
@@ -296,8 +298,8 @@ export const ThirdStep = ({
             </Item>
             <Item label="Penanggung jawab 2 (opsional)" name="penanggungJawab2">
               <Select placeholder="Pilih penanggung jawab 2" disabled>
-                {userOptions &&
-                  userOptions.map((item, index) => (
+                {userOptions3 &&
+                  userOptions3.map((item, index) => (
                     <Option value={item.id} key={index}>
                       {item.name}
                     </Option>

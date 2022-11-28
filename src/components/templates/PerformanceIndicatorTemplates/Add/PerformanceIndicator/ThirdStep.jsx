@@ -1,4 +1,4 @@
-import { Col, Form as AntdForm, InputNumber, Row, Select, Upload } from "antd";
+import { Col, Form as AntdForm, Row, Select, Upload } from "antd";
 import { InputText } from "../../../../atoms/InputText/InputText";
 import { Text } from "../../../../atoms/Text/Text";
 import { Title } from "../../../../atoms/Title/Title";
@@ -20,6 +20,8 @@ export const ThirdStep = ({
   programMutuOptions,
   subProgramMutuOptions,
   userOptions,
+  userOptions2,
+  userOptions3,
 }) => {
   let months = [
     {
@@ -74,7 +76,7 @@ export const ThirdStep = ({
 
   return (
     <>
-      <Title level={4}>Form Indikator Kinerja</Title>
+      <Title level={4}>Form Indikator Mutu</Title>
       <Form form={form} onFinish={onFinish} layout="vertical">
         <Row gutter={[24]}>
           <Col md={8} sm={24} xs={24}>
@@ -237,24 +239,26 @@ export const ThirdStep = ({
             />
           </Col>
           <Col md={8} sm={24} xs={24}>
-            <Item
+            <InputText
               label="Capaian bulan ini"
               name="capaianBulanIni"
+              disabled
               rules={[
                 {
                   required: true,
-                  message: "Pembuat tidak boleh kosong!",
-                  max: 1000,
+                  message: "Capaian bulan tidak boleh kosong!",
                 },
               ]}
+            />
+            {/* <Item
+              label="Capaian bulan ini"
+              name="capaianBulanIni"
+              rules={[
+                { required: true, message: 'Pembuat tidak boleh kosong!' }
+              ]}
             >
-              <InputNumber
-                min={0}
-                max={1000}
-                style={{ width: "100%" }}
-                disabled
-              />
-            </Item>
+              <InputNumber min={0} max={100} style={{ width: '100%' }} disabled/>
+            </Item> */}
 
             <Item
               label="Pembuat Dokumen"
@@ -284,8 +288,8 @@ export const ThirdStep = ({
               ]}
             >
               <Select placeholder="Pilih penanggung jawab 1" disabled>
-                {userOptions &&
-                  userOptions.map((item, index) => (
+                {userOptions2 &&
+                  userOptions2.map((item, index) => (
                     <Option value={item.id} key={index}>
                       {item.name}
                     </Option>
@@ -294,19 +298,21 @@ export const ThirdStep = ({
             </Item>
             <Item label="Penanggung jawab 2 (opsional)" name="penanggungJawab2">
               <Select placeholder="Pilih penanggung jawab 2" disabled>
-                {userOptions &&
-                  userOptions.map((item, index) => (
+                {userOptions3 &&
+                  userOptions3.map((item, index) => (
                     <Option value={item.id} key={index}>
                       {item.name}
                     </Option>
                   ))}
               </Select>
             </Item>
-            <Item label="Dokumen Telusur" name="dokumenTelusur" valuePropName="fileList">
+            <Item
+              label="Dokumen Telusur"
+              name="dokumenTelusur"
+              valuePropName="fileList"
+            >
               <Dragger
-                multiple={false}
                 beforeUpload={() => false}
-                accept="images/*, application/pdf"
                 style={{ height: 200 }}
                 disabled
               >

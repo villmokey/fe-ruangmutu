@@ -87,6 +87,8 @@ export const PerformanceIndicatorApproval = ({ filter, search }) => {
       if (approval3.length) {
         if (approval3[0].signed === 1) {
           approval3Temp = approval3[0].signed_at;
+        } else if (approval3[0].signed === -1) {
+          approval3Temp = "[X] " + approval3[0].signed_at;
         } else {
           approval3Temp = "Belum disetujui";
         }
@@ -110,10 +112,14 @@ export const PerformanceIndicatorApproval = ({ filter, search }) => {
         approval1:
           approval1.signed === 1
             ? new Date(approval1.signed_at).toLocaleDateString()
+            : approval1.signed === -1
+            ? "[X] " + new Date(approval1.signed_at).toLocaleDateString()
             : "Belum disetujui",
         approval2:
           approval2.signed === 1
             ? new Date(approval2.signed_at).toLocaleDateString()
+            : approval2.signed === -1
+            ? "[X] " + new Date(approval2.signed_at).toLocaleDateString()
             : "Belum disetujui",
         approval3: approval3Temp,
         status: item.status,

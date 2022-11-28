@@ -1,15 +1,16 @@
 import React from "react";
 import styled from "styled-components";
-import { Button, Input, Modal } from "antd";
+import {
+  Button,
+  Collapse,
+  Input,
+  message,
+  Modal,
+  Select as AntdSelect,
+} from "antd";
 import { InputText } from "../../../atoms/InputText/InputText";
 import { Form } from "../../../molecules/Form/Form";
-import {
-  Grid,
-  Typography,
-  Stack,
-  Autocomplete,
-  TextField,
-} from "@mui/material";
+import { Grid, Typography, Stack } from "@mui/material";
 import { Upload } from "antd";
 import moment from "moment";
 import "moment/locale/id";
@@ -24,7 +25,12 @@ import { DocumentIcon } from "../../../../assets/icons";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import "./Calendar.less";
-import { fetchApiGet, fetchApiPost } from "../../../../globals/fetchApi";
+import {
+  fetchApiDelete,
+  fetchApiGet,
+  fetchApiPost,
+  fetchApiPut,
+} from "../../../../globals/fetchApi";
 import { toast } from "react-toastify";
 import { useAuthToken } from "../../../../globals/useAuthToken";
 import { useDebounce } from "../../../../hooks";
@@ -33,6 +39,7 @@ import { Select, Space } from "antd";
 
 const { Option } = Select;
 const { Dragger } = Upload;
+const { confirm } = Modal;
 
 ClassicEditor.defaultConfig = {
   toolbar: {
@@ -60,26 +67,39 @@ ClassicEditor.defaultConfig = {
   language: "en",
 };
 
-const FormCalendar = ({ open, onClose, onSuccessSubmit }) => {
-  const { getAccessToken } = useAuthToken();
-  const accessToken = getAccessToken();
-  const [openModal, setOpenModal] = React.useState(false);
-  const [docsLoading, setDocsLoading] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
-  const [search, setSearch] = React.useState("");
-  const [documents, setDocuments] = React.useState([]);
-  const [programUnits, setProgramUnits] = React.useState([]);
-  const [selected, setSelected] = React.useState([]);
-  const [files, setFiles] = React.useState([]);
-  const [payload, setPayload] = React.useState({
+const FormCalendar = ({
+  isCreate = true,
+  open,
+  onClose,
+  onSuccessSubmit,
+  payload = {
+    id: "",
     name: "",
     start_date: "",
     end_date: "",
     program_id: "",
-  });
+    related_program: "",
+  },
+  payloadSetter,
+  description = "",
+  descriptionSetter,
+  selectedDocuments = [],
+  selectedDocumentsSetter,
+  oldFiles = [],
+  oldFilesSetter,
+}) => {
+  const { getAccessToken } = useAuthToken();
+  const accessToken = getAccessToken();
+  const [openModal, setOpenModal] = React.useState(false);
+  const [documents, setDocuments] = React.useState([]);
+  const [programUnits, setProgramUnits] = React.useState([]);
+
+  const [docsLoading, setDocsLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+  const [search, setSearch] = React.useState("");
   const keyword = useDebounce(search, 1000);
 
-  const [desc, setDesc] = React.useState("");
+  const [files, setFiles] = React.useState([]);
 
   const uploadFileList = async (fileList = []) => {
     let bags = new FormData();
@@ -98,28 +118,48 @@ const FormCalendar = ({ open, onClose, onSuccessSubmit }) => {
     return await uploaded;
   };
 
+  const cleanForms = () => {
+    selectedDocumentsSetter([]);
+    descriptionSetter("");
+    payloadSetter({
+      name: "",
+      start_date: "",
+      end_date: "",
+      program_id: "",
+      related_program: "",
+    });
+  };
+
   const handleSubmit = async () => {
+    if (isCreate) {
+      await handleCreate();
+    } else {
+      await handleUpdate();
+    }
+  };
+
+  const handleCreate = async () => {
     setLoading(true);
 
     let formdata = {
       ...payload,
-      description: desc,
+      description: description,
     };
 
-    if (selected && selected.length > 0) {
-      let docs = selected.map((item) => {
+    if (selectedDocuments && selectedDocuments.length > 0) {
+      let docs = selectedDocuments.map((item) => {
         return item.id;
       });
       formdata.document_related = docs;
     }
 
-    if (payload.related_program && payload.related_program.length > 0) {
-      let mapped = payload.related_program.map((rel) => {
-        return rel.id;
-      });
+    // if (payload.related_program && payload.related_program.length > 0) {
+    //   let mapped = payload.related_program.map((rel) => {
+    //     return rel.id;
+    //   });
 
-      formdata.related_program = mapped;
-    }
+    //   formdata.related_program = mapped;
+    // }
 
     if (files && files.length > 0) {
       await uploadFileList(files)
@@ -133,6 +173,7 @@ const FormCalendar = ({ open, onClose, onSuccessSubmit }) => {
           fetchApiPost("/event", accessToken, formdata)
             .then((res) => {
               if (res && res.code === 200) {
+                cleanForms();
                 toast.success("Berhasil menambahkan kegiatan");
                 setLoading(false);
                 if (onSuccessSubmit) {
@@ -142,7 +183,6 @@ const FormCalendar = ({ open, onClose, onSuccessSubmit }) => {
                 toast.error(res.message);
               } else {
                 if (res.response.data) {
-                  console.log(res.response.data);
                   toast.error(res.response.data.message);
                 }
               }
@@ -154,6 +194,78 @@ const FormCalendar = ({ open, onClose, onSuccessSubmit }) => {
         .then((res) => {
           if (res && res.code === 200) {
             toast.success("Berhasil menambahkan kegiatan");
+            setLoading(false);
+            if (onSuccessSubmit) {
+              onSuccessSubmit();
+            }
+          } else if (res && res.code === 422) {
+            toast.error(res.message);
+          } else {
+            if (res.response.data) {
+              console.log(res.response.data);
+              toast.error(res.response.data.message);
+            }
+          }
+        })
+        .finally(() => setLoading(false));
+    }
+  };
+
+  const handleUpdate = async () => {
+    setLoading(true);
+
+    let formdata = {
+      ...payload,
+      description: description,
+    };
+
+    if (selectedDocuments && selectedDocuments.length > 0) {
+      let docs = selectedDocuments.map((item) => {
+        return item.id;
+      });
+      formdata.document_related = docs;
+    }
+
+    // if (payload.related_program && payload.related_program.length > 0) {
+    //   let mapped = payload.related_program.map((rel) => {
+    //     return rel.id;
+    //   });
+
+    //   formdata.related_program = mapped;
+    // }
+
+    if (files && files.length > 0) {
+      await uploadFileList(files)
+        .then((success) => {
+          if (success) {
+            formdata.event_files = success;
+          }
+        })
+        .then(() => {
+          fetchApiPut(`/event/${payload.id}`, accessToken, formdata)
+            .then((res) => {
+              if (res && res.code === 200) {
+                cleanForms();
+                toast.success("Berhasil mengubah informasi kegiatan");
+                setLoading(false);
+                if (onSuccessSubmit) {
+                  onSuccessSubmit();
+                }
+              } else if (res && res.code === 422) {
+                toast.error(res.message);
+              } else {
+                if (res.response.data) {
+                  toast.error(res.response.data.message);
+                }
+              }
+            })
+            .finally(() => setLoading(false));
+        });
+    } else {
+      fetchApiPut(`/event/${payload.id}`, accessToken, formdata)
+        .then((res) => {
+          if (res && res.code === 200) {
+            toast.success("Berhasil mengubah informasi kegiatan");
             setLoading(false);
             if (onSuccessSubmit) {
               onSuccessSubmit();
@@ -200,6 +312,23 @@ const FormCalendar = ({ open, onClose, onSuccessSubmit }) => {
     setOpenModal(true);
   };
 
+  const handleDeleteFile = (itemId) => {
+    confirm({
+      title: "Konfirmasi",
+      content: "Setelah dihapus, item tidak dapat dikembalikan, Lanjutkan?",
+      cancelText: "Batal",
+      okText: "Lanjutkan",
+      onOk: () => {
+        fetchApiDelete("/upload/" + itemId, accessToken).then((res) => {
+          if (res && res.code === 200) {
+            oldFilesSetter((prev) => prev.filter((x) => x.id !== itemId));
+            message.success("Berhasil menghapus item");
+          }
+        });
+      },
+    });
+  };
+
   React.useEffect(() => {
     requestDocument();
   }, [keyword]); //eslint-disable-line
@@ -212,7 +341,7 @@ const FormCalendar = ({ open, onClose, onSuccessSubmit }) => {
     open && (
       <div className="form-event">
         <Modal
-          title={`Dokumen Terkait (${selected.length} Dipilih)`}
+          title={`Dokumen Terkait (${selectedDocuments.length} Dipilih)`}
           visible={openModal}
           onCancel={() => setOpenModal(false)}
           onConfirm={() => setOpenModal(false)}
@@ -238,17 +367,17 @@ const FormCalendar = ({ open, onClose, onSuccessSubmit }) => {
             documents.map((doc, i) => (
               <RelatedItem
                 key={i}
-                active={selected.some((x) => x.id === doc.id)}
+                active={selectedDocuments.some((x) => x.id === doc.id)}
                 name={doc.name}
                 onClick={() => {
-                  let temp = [...selected];
+                  let temp = [...selectedDocuments];
                   if (temp.some((x) => x.id === doc.id)) {
                     let idx = temp.findIndex((x) => x.id === doc.id);
                     temp.splice(idx, 1);
                   } else {
                     temp.push({ id: doc.id, name: doc.name });
                   }
-                  setSelected(temp);
+                  selectedDocumentsSetter(temp);
                 }}
               ></RelatedItem>
             ))
@@ -270,16 +399,17 @@ const FormCalendar = ({ open, onClose, onSuccessSubmit }) => {
           justifyContent={"space-between"}
         >
           <Typography fontWeight={"bold"} color={"#5DC8BD"}>
-            TAMBAH KEGIATAN
+            {isCreate ? "TAMBAH" : "EDIT INFORMASI"} KEGIATAN
           </Typography>
           <Stack direction={"row"} alignItems={"center"} spacing={1}>
             <Button
               type={loading ? "ghost" : "primary"}
               size="large"
+              loading={loading}
               style={{ borderRadius: 8 }}
               onClick={async () => (loading ? null : await handleSubmit())}
             >
-              {loading ? "MOHON TUNGGU" : "TAMBAHKAN"}
+              {loading ? "MOHON TUNGGU" : isCreate ? "TAMBAHKAN" : "SIMPAN"}
             </Button>
             <Button
               onClick={onClose}
@@ -291,14 +421,15 @@ const FormCalendar = ({ open, onClose, onSuccessSubmit }) => {
           </Stack>
         </Stack>
         <Container>
-          <Form layout={"vertical"}>
+          <Form initialValues={payload} layout={"vertical"}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6} md={5} xl={4}>
                 <InputText
                   label="NAMA KEGIATAN"
                   name="name"
+                  value={payload.name}
                   onChange={(e) =>
-                    setPayload({ ...payload, name: e.target.value })
+                    payloadSetter({ ...payload, name: e.target.value })
                   }
                   rules={[
                     {
@@ -321,9 +452,10 @@ const FormCalendar = ({ open, onClose, onSuccessSubmit }) => {
                   label="TANGGAL MULAI"
                   style={{ label: { fontSize: "20px" } }}
                   name="start_date"
+                  value={payload.start_date}
                   type={"date"}
                   onChange={(e) =>
-                    setPayload({ ...payload, start_date: e.target.value })
+                    payloadSetter({ ...payload, start_date: e.target.value })
                   }
                   rules={[
                     {
@@ -336,8 +468,9 @@ const FormCalendar = ({ open, onClose, onSuccessSubmit }) => {
                   label="TANGGAL SELESAI"
                   name="end_date"
                   type={"date"}
+                  value={payload.end_date}
                   onChange={(e) =>
-                    setPayload({ ...payload, end_date: e.target.value })
+                    payloadSetter({ ...payload, end_date: e.target.value })
                   }
                   rules={[
                     {
@@ -349,8 +482,8 @@ const FormCalendar = ({ open, onClose, onSuccessSubmit }) => {
                 <Typography fontSize={"14px"} fontWeight={"bold"}>
                   DOKUMEN TERKAIT
                 </Typography>
-                {selected &&
-                  selected.map((item, key) => (
+                {selectedDocuments &&
+                  selectedDocuments.map((item, key) => (
                     <Selected key={key}>
                       <Stack
                         direction={"row"}
@@ -360,9 +493,9 @@ const FormCalendar = ({ open, onClose, onSuccessSubmit }) => {
                         {item.name}
                         <DeleteOutlined
                           onClick={() => {
-                            let temp = [...selected];
+                            let temp = [...selectedDocuments];
                             temp.splice(key, 1);
-                            setSelected(temp);
+                            selectedDocumentsSetter(temp);
                           }}
                           style={{ cursor: "pointer" }}
                         />
@@ -390,7 +523,10 @@ const FormCalendar = ({ open, onClose, onSuccessSubmit }) => {
                   </Typography>
                   <Select
                     placeholder="Pilih Bulan"
-                    onChange={(e) => setPayload({ ...payload, program_id: e })}
+                    onChange={(e) => {
+                      console.log(e);
+                      payloadSetter({ ...payload, program_id: e });
+                    }}
                     value={payload.program_id}
                     style={{ width: "100%" }}
                   >
@@ -411,13 +547,37 @@ const FormCalendar = ({ open, onClose, onSuccessSubmit }) => {
                 >
                   UNIT LAYANAN TERKAIT
                 </Typography>
-                <Autocomplete
+                <AntdSelect
+                  placeholder="Pilih program/unit"
+                  onChange={(v) => {
+                    console.log(v);
+                    payloadSetter({ ...payload, related_program: v });
+                  }}
+                  allowClear
+                  value={payload.related_program}
+                  showSearch
+                  filterOption={(input, option) =>
+                    (option?.children?.toLowerCase() ?? "").includes(
+                      input.toLowerCase()
+                    )
+                  }
+                  mode={"multiple"}
+                  style={{ width: "100%" }}
+                >
+                  {programUnits &&
+                    programUnits.map((x, index) => (
+                      <AntdSelect.Option value={x.id} key={index}>
+                        {x.name}
+                      </AntdSelect.Option>
+                    ))}
+                </AntdSelect>
+                {/* <Autocomplete
                   id="combo-box-demo"
                   multiple
                   options={programUnits ?? []}
                   getOptionLabel={(option) => option.name}
                   onChange={(event, value) => {
-                    setPayload({ ...payload, related_program: value });
+                    payloadSetter({ ...payload, related_program: value });
                   }}
                   sx={{ width: "100%" }}
                   renderInput={(params) => (
@@ -428,7 +588,7 @@ const FormCalendar = ({ open, onClose, onSuccessSubmit }) => {
                       placeholder="Pilih unit layanan"
                     />
                   )}
-                />
+                /> */}
                 <Typography
                   fontSize={"14px"}
                   fontWeight={"bold"}
@@ -439,19 +599,51 @@ const FormCalendar = ({ open, onClose, onSuccessSubmit }) => {
                 <CKEditor
                   name={"description"}
                   editor={ClassicEditor}
-                  data=""
+                  data={description}
                   onChange={(event, editor) => {
                     const data = editor.getData();
-                    setDesc(data);
+                    descriptionSetter(data);
                   }}
                 />
                 <Typography
                   fontSize={"14px"}
                   fontWeight={"bold"}
-                  margin={"20px 0 10px 0"}
+                  margin={"20px 0 0 0"}
                 >
                   UNGGAH DOKUMEN PENDUKUNG KEGIATAN
                 </Typography>
+                <Typography fontSize={"10px"} margin={"0 0 10px 0"}>
+                  Hapus file sebelumnya / unggah dokumen kegiatan baru
+                </Typography>
+                <Collapse
+                  defaultActiveKey={["1"]}
+                  style={{ marginBottom: "10px" }}
+                >
+                  <Collapse.Panel header="File unggahan sebelumnya" key="1">
+                    {oldFiles && oldFiles.length > 0 ? (
+                      <>
+                        {oldFiles.map((x) => (
+                          <Selected>
+                            <Stack
+                              direction={"row"}
+                              justifyContent={"space-between"}
+                              alignItems={"center"}
+                            >
+                              {x.real_name}
+                              <DeleteOutlined
+                                onClick={() => handleDeleteFile(x.id)}
+                                style={{ cursor: "pointer" }}
+                              />
+                            </Stack>
+                          </Selected>
+                        ))}
+                      </>
+                    ) : (
+                      <p>Belum ada file diunggah</p>
+                    )}
+                  </Collapse.Panel>
+                </Collapse>
+
                 <Dragger
                   beforeUpload={() => false}
                   accept="application/pdf, image/*"
@@ -459,8 +651,9 @@ const FormCalendar = ({ open, onClose, onSuccessSubmit }) => {
                   onChange={({ file, fileList }) => {
                     setFiles(fileList);
                   }}
+                  className={"calender-dragger"}
+                  height={"100px !important"}
                   style={{
-                    height: "200px !important",
                     background: "transparent",
                     border: "1px dashed #000000",
                   }}
@@ -523,6 +716,7 @@ const Selected = styled.div`
   background: #8dacab;
   padding: 3px 5px 5px 5px;
   width: 100%;
+  margin: 5px 0;
   font-weight: bold;
   border-radius: 10px;
   color: white;

@@ -1,11 +1,4 @@
-import {
-  Checkbox,
-  Col,
-  Form as AntdForm,
-  Row,
-  Select,
-  Upload,
-} from "antd";
+import { Checkbox, Col, Form as AntdForm, Row, Select, Upload } from "antd";
 import { InputText } from "../../../../atoms/InputText/InputText";
 import { Text } from "../../../../atoms/Text/Text";
 import { Title } from "../../../../atoms/Title/Title";
@@ -45,6 +38,8 @@ export const ThirdStep = ({
   programMutuOptions,
   subProgramMutuOptions,
   userOptions,
+  userOptions2,
+  userOptions3,
   pembuatDokumenChange,
   penanggungJawab1Change,
   penanggungJawab2Change,
@@ -161,7 +156,7 @@ export const ThirdStep = ({
               >
                 {programMutuOptions &&
                   programMutuOptions.map((item, index) => (
-                    <Option value={item.key} key={index}>
+                    <Option value={item.id} key={index}>
                       {item.title}
                     </Option>
                   ))}
@@ -181,7 +176,7 @@ export const ThirdStep = ({
               >
                 {programMutuOptions &&
                   programMutuOptions.map((item, index) => (
-                    <Option value={item.key} key={index}>
+                    <Option value={item.id} key={index}>
                       {item.title}
                     </Option>
                   ))}
@@ -300,15 +295,14 @@ export const ThirdStep = ({
               label="Target Capaian"
               name="achievement_target"
               onChange={targetCapaianChange}
+              type="number"
+              disabled
               rules={[
                 {
                   required: true,
                   message: "Target capaian tidak boleh kosong!",
-                  InputNumber: true,
                 },
               ]}
-              disabled
-              type="number"
             />
             <InputText
               label="Kriteria Inklusi & Ekslusi"
@@ -467,8 +461,8 @@ export const ThirdStep = ({
                 onChange={penanggungJawab1Change}
                 disabled
               >
-                {userOptions &&
-                  userOptions.map((item, index) => (
+                {userOptions2 &&
+                  userOptions2.map((item, index) => (
                     <Option value={item.id} key={index}>
                       {item.name}
                     </Option>
@@ -481,8 +475,8 @@ export const ThirdStep = ({
                 onChange={penanggungJawab2Change}
                 disabled
               >
-                {userOptions &&
-                  userOptions.map((item, index) => (
+                {userOptions3 &&
+                  userOptions3.map((item, index) => (
                     <Option value={item.id} key={index}>
                       {item.name}
                     </Option>

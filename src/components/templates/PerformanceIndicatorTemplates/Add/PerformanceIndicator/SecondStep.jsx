@@ -16,10 +16,15 @@ export const SecondStep = ({
   definisiOperasionalChange,
   sasaranMutuChange,
   judulIndikatorChange,
+  pembuatDokumenChange,
+  penanggungJawab1Change,
+  penanggungJawab2Change,
   profileOptions,
   programMutuOptions,
   subProgramMutuOptions,
   userOptions,
+  userOptions2,
+  userOptions3,
 }) => {
   let months = [
     {
@@ -92,6 +97,11 @@ export const SecondStep = ({
                 placeholder="Pilih Judul Indikator"
                 onChange={judulIndikatorChange}
                 showSearch
+                filterOption={(input, option) =>
+                  (option?.children?.toLowerCase() ?? "").includes(
+                    input.toLowerCase()
+                  )
+                }
               >
                 {profileOptions &&
                   profileOptions.map((item, index) => (
@@ -109,6 +119,7 @@ export const SecondStep = ({
               ]}
             >
               <Select
+                showSearch
                 placeholder="Pilih program mutu"
                 onChange={programMutuChange}
                 disabled
@@ -132,6 +143,7 @@ export const SecondStep = ({
               ]}
             >
               <Select
+                showSearch
                 placeholder="Pilih sub program mutu"
                 onChange={programMutuChange}
                 disabled
@@ -229,8 +241,19 @@ export const SecondStep = ({
             <InputText
               label="Capaian bulan ini"
               name="capaianBulanIni"
+              type="number"
+              inputMode="numeric"
+              rules={[
+                {
+                  required: true,
+                  message: "Capaian bulan tidak boleh kosong!",
+                },
+              ]}
+            />
+            {/* <Item
+              label="Capaian bulan ini"
+              name="capaianBulanIni"
               type={"number"}
-              inputMode="numerice"
               rules={[
                 {
                   required: true,
@@ -238,16 +261,13 @@ export const SecondStep = ({
                   max: 1000,
                 },
               ]}
-            />
-            {/* <Item
-              label="Capaian bulan ini"
-              name="capaianBulanIni"
-              type={'number'}
-              rules={[
-                { required: true, message: 'Capaian bulanan tidak boleh kosong!', max: 1000 }
-              ]}
             >
-              <InputNumber min={0} max={1000} style={{ width: '100%' }} type={'number'}/>
+              <InputNumber
+                min={0}
+                max={1000}
+                style={{ width: "100%" }}
+                type={"number"}
+              />
             </Item> */}
 
             <Item
@@ -257,7 +277,15 @@ export const SecondStep = ({
                 { required: true, message: "Pembuat tidak boleh kosong!" },
               ]}
             >
-              <Select placeholder="Pilih pembuat dokumen">
+              <Select
+                placeholder="Pilih pembuat dokumen"
+                onChange={pembuatDokumenChange}
+                filterOption={(input, option) =>
+                  (option?.children?.toLowerCase() ?? "").includes(
+                    input.toLowerCase()
+                  )
+                }
+              >
                 {userOptions &&
                   userOptions.map((item, index) => (
                     <Option value={item.id} key={index}>
@@ -276,9 +304,17 @@ export const SecondStep = ({
                 },
               ]}
             >
-              <Select placeholder="Pilih penanggung jawab 1">
-                {userOptions &&
-                  userOptions.map((item, index) => (
+              <Select
+                placeholder="Pilih penanggung jawab 1"
+                onChange={penanggungJawab1Change}
+                filterOption={(input, option) =>
+                  (option?.children?.toLowerCase() ?? "").includes(
+                    input.toLowerCase()
+                  )
+                }
+              >
+                {userOptions2 &&
+                  userOptions2.map((item, index) => (
                     <Option value={item.id} key={index}>
                       {item.name}
                     </Option>
@@ -286,24 +322,29 @@ export const SecondStep = ({
               </Select>
             </Item>
             <Item label="Penanggung jawab 2 (opsional)" name="penanggungJawab2">
-              <Select placeholder="Pilih penanggung jawab 2">
-                {userOptions &&
-                  userOptions.map((item, index) => (
+              <Select
+                placeholder="Pilih penanggung jawab 2"
+                onChange={penanggungJawab2Change}
+                filterOption={(input, option) =>
+                  (option?.children?.toLowerCase() ?? "").includes(
+                    input.toLowerCase()
+                  )
+                }
+              >
+                {userOptions3 &&
+                  userOptions3.map((item, index) => (
                     <Option value={item.id} key={index}>
                       {item.name}
                     </Option>
                   ))}
               </Select>
             </Item>
-            <Item
-              label="Dokumen Telusur"
-              name="dokumenTelusur"
-            >
+            <Item label="Dokumen Telusur" name="dokumenTelusur">
               <Dragger
-                multiple={false}
-                accept="images/*, application/pdf"
                 beforeUpload={() => false}
                 style={{ height: 200 }}
+                multiple={false}
+                accept={"image/*, application/pdf"}
               >
                 <Text>Drag & Drop</Text>
               </Dragger>

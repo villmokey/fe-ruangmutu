@@ -132,6 +132,8 @@ export const SecondStep = ({
   programMutuOptions,
   subProgramMutuOptions,
   userOptions,
+  userOptions2,
+  userOptions3,
   pembuatDokumenChange,
   penanggungJawab1Change,
   penanggungJawab2Change,
@@ -153,6 +155,11 @@ export const SecondStep = ({
                 showSearch
                 placeholder="Pilih program mutu"
                 onChange={programMutuChange}
+                filterOption={(input, option) =>
+                  (option?.children?.toLowerCase() ?? "").includes(
+                    input.toLowerCase()
+                  )
+                }
               >
                 {programMutuOptions &&
                   programMutuOptions.map((item, index) => (
@@ -173,6 +180,11 @@ export const SecondStep = ({
                 showSearch
                 placeholder="Pilih Sub program mutu"
                 onChange={subProgramMutuChange}
+                filterOption={(input, option) =>
+                  (option?.children?.toLowerCase() ?? "").includes(
+                    input.toLowerCase()
+                  )
+                }
               >
                 {programMutuOptions &&
                   programMutuOptions.map((item, index) => (
@@ -427,6 +439,11 @@ export const SecondStep = ({
               <Select
                 placeholder="Pilih pembuat dokumen"
                 onChange={pembuatDokumenChange}
+                filterOption={(input, option) =>
+                  (option?.children?.toLowerCase() ?? "").includes(
+                    input.toLowerCase()
+                  )
+                }
               >
                 {userOptions &&
                   userOptions.map((item, index) => (
@@ -449,9 +466,14 @@ export const SecondStep = ({
               <Select
                 placeholder="Pilih penanggung jawab 1"
                 onChange={penanggungJawab1Change}
+                filterOption={(input, option) =>
+                  (option?.children?.toLowerCase() ?? "").includes(
+                    input.toLowerCase()
+                  )
+                }
               >
-                {userOptions &&
-                  userOptions.map((item, index) => (
+                {userOptions2 &&
+                  userOptions2.map((item, index) => (
                     <Option value={item.id} key={index}>
                       {item.name}
                     </Option>
@@ -462,19 +484,21 @@ export const SecondStep = ({
               <Select
                 placeholder="Pilih penanggung jawab 2"
                 onChange={penanggungJawab2Change}
+                filterOption={(input, option) =>
+                  (option?.children?.toLowerCase() ?? "").includes(
+                    input.toLowerCase()
+                  )
+                }
               >
-                {userOptions &&
-                  userOptions.map((item, index) => (
+                {userOptions3 &&
+                  userOptions3.map((item, index) => (
                     <Option value={item.id} key={index}>
                       {item.name}
                     </Option>
                   ))}
               </Select>
             </Item>
-            <Item
-              label="Dokumen Telusur"
-              name="dokumenTelusur"
-            >
+            <Item label="Dokumen Telusur" name="dokumenTelusur">
               <Dragger
                 multiple={false}
                 accept="application/pdf, images/*"

@@ -16,10 +16,15 @@ export const SecondStep = ({
   definisiOperasionalChange,
   sasaranMutuChange,
   judulIndikatorChange,
+  pembuatDokumenChange,
+  penanggungJawab1Change,
+  penanggungJawab2Change,
   profileOptions,
   programMutuOptions,
   subProgramMutuOptions,
   userOptions,
+  userOptions2,
+  userOptions3,
 }) => {
   let months = [
     {
@@ -92,6 +97,11 @@ export const SecondStep = ({
                 placeholder="Pilih Judul Indikator"
                 onChange={judulIndikatorChange}
                 showSearch
+                filterOption={(input, option) =>
+                  (option?.children?.toLowerCase() ?? "").includes(
+                    input.toLowerCase()
+                  )
+                }
               >
                 {profileOptions &&
                   profileOptions.map((item, index) => (
@@ -267,7 +277,15 @@ export const SecondStep = ({
                 { required: true, message: "Pembuat tidak boleh kosong!" },
               ]}
             >
-              <Select placeholder="Pilih pembuat dokumen">
+              <Select
+                placeholder="Pilih pembuat dokumen"
+                onChange={pembuatDokumenChange}
+                filterOption={(input, option) =>
+                  (option?.children?.toLowerCase() ?? "").includes(
+                    input.toLowerCase()
+                  )
+                }
+              >
                 {userOptions &&
                   userOptions.map((item, index) => (
                     <Option value={item.id} key={index}>
@@ -286,9 +304,17 @@ export const SecondStep = ({
                 },
               ]}
             >
-              <Select placeholder="Pilih penanggung jawab 1">
-                {userOptions &&
-                  userOptions.map((item, index) => (
+              <Select
+                placeholder="Pilih penanggung jawab 1"
+                onChange={penanggungJawab1Change}
+                filterOption={(input, option) =>
+                  (option?.children?.toLowerCase() ?? "").includes(
+                    input.toLowerCase()
+                  )
+                }
+              >
+                {userOptions2 &&
+                  userOptions2.map((item, index) => (
                     <Option value={item.id} key={index}>
                       {item.name}
                     </Option>
@@ -296,19 +322,24 @@ export const SecondStep = ({
               </Select>
             </Item>
             <Item label="Penanggung jawab 2 (opsional)" name="penanggungJawab2">
-              <Select placeholder="Pilih penanggung jawab 2">
-                {userOptions &&
-                  userOptions.map((item, index) => (
+              <Select
+                placeholder="Pilih penanggung jawab 2"
+                onChange={penanggungJawab2Change}
+                filterOption={(input, option) =>
+                  (option?.children?.toLowerCase() ?? "").includes(
+                    input.toLowerCase()
+                  )
+                }
+              >
+                {userOptions3 &&
+                  userOptions3.map((item, index) => (
                     <Option value={item.id} key={index}>
                       {item.name}
                     </Option>
                   ))}
               </Select>
             </Item>
-            <Item
-              label="Dokumen Telusur"
-              name="dokumenTelusur"
-            >
+            <Item label="Dokumen Telusur" name="dokumenTelusur">
               <Dragger
                 beforeUpload={() => false}
                 style={{ height: 200 }}

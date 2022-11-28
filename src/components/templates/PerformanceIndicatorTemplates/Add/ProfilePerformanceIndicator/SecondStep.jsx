@@ -132,6 +132,8 @@ export const SecondStep = ({
   programMutuOptions,
   subProgramMutuOptions,
   userOptions,
+  userOptions2,
+  userOptions3,
   pembuatDokumenChange,
   penanggungJawab1Change,
   penanggungJawab2Change,
@@ -150,10 +152,14 @@ export const SecondStep = ({
               ]}
             >
               <Select
+                showSearch
                 placeholder="Pilih program mutu"
                 onChange={programMutuChange}
-                showSearch
-                filterOption={(input, option) => (option?.children?.toLowerCase() ?? "").includes(input.toLowerCase())}
+                filterOption={(input, option) =>
+                  (option?.children?.toLowerCase() ?? "").includes(
+                    input.toLowerCase()
+                  )
+                }
               >
                 {programMutuOptions &&
                   programMutuOptions.map((item, index) => (
@@ -171,10 +177,14 @@ export const SecondStep = ({
               ]}
             >
               <Select
+                showSearch
                 placeholder="Pilih Sub program mutu"
                 onChange={subProgramMutuChange}
-                showSearch
-                filterOption={(input, option) => (option?.children?.toLowerCase() ?? "").includes(input.toLowerCase())}
+                filterOption={(input, option) =>
+                  (option?.children?.toLowerCase() ?? "").includes(
+                    input.toLowerCase()
+                  )
+                }
               >
                 {programMutuOptions &&
                   programMutuOptions.map((item, index) => (
@@ -290,7 +300,6 @@ export const SecondStep = ({
                 {
                   required: true,
                   message: "Target capaian tidak boleh kosong!",
-                  InputNumber: true,
                 },
               ]}
             />
@@ -417,6 +426,11 @@ export const SecondStep = ({
               <Select
                 placeholder="Pilih pembuat dokumen"
                 onChange={pembuatDokumenChange}
+                filterOption={(input, option) =>
+                  (option?.children?.toLowerCase() ?? "").includes(
+                    input.toLowerCase()
+                  )
+                }
               >
                 {userOptions &&
                   userOptions.map((item, index) => (
@@ -439,9 +453,14 @@ export const SecondStep = ({
               <Select
                 placeholder="Pilih penanggung jawab 1"
                 onChange={penanggungJawab1Change}
+                filterOption={(input, option) =>
+                  (option?.children?.toLowerCase() ?? "").includes(
+                    input.toLowerCase()
+                  )
+                }
               >
-                {userOptions &&
-                  userOptions.map((item, index) => (
+                {userOptions2 &&
+                  userOptions2.map((item, index) => (
                     <Option value={item.id} key={index}>
                       {item.name}
                     </Option>
@@ -452,22 +471,24 @@ export const SecondStep = ({
               <Select
                 placeholder="Pilih penanggung jawab 2"
                 onChange={penanggungJawab2Change}
+                filterOption={(input, option) =>
+                  (option?.children?.toLowerCase() ?? "").includes(
+                    input.toLowerCase()
+                  )
+                }
               >
-                {userOptions &&
-                  userOptions.map((item, index) => (
+                {userOptions3 &&
+                  userOptions3.map((item, index) => (
                     <Option value={item.id} key={index}>
                       {item.name}
                     </Option>
                   ))}
               </Select>
             </Item>
-            <Item
-              label="Dokumen Telusur"
-              name="dokumenTelusur"
-            >
+            <Item label="Dokumen Telusur" name="dokumenTelusur">
               <Dragger
                 multiple={false}
-                accept="images/*, application/pdf"
+                accept="application/pdf, images/*"
                 beforeUpload={() => false}
                 style={{ height: 200 }}
               >

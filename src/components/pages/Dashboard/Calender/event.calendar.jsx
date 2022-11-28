@@ -7,6 +7,7 @@ import "./Calendar.less";
 import { Dialog } from "@mui/material";
 import EventItem from "./event.item";
 import { fetchApiGet } from "../../../../globals/fetchApi";
+import moment from 'moment'
 
 const EventCalendar = ({
   events = [],
@@ -27,9 +28,7 @@ const EventCalendar = ({
 
   const extractDate = (start, end = "") => {
     if (start !== end) {
-      let endDate = end.split("-");
-      let day = parseInt(endDate[2]) + 1;
-      return `${endDate[0]}-${endDate[1]}-${day}`;
+      return moment(end, "YYYY-MM-DD").add(1, 'd').format('YYYY-MM-DD')
     }
 
     return end;
@@ -74,6 +73,7 @@ const EventCalendar = ({
                 ? detail.program.color
                 : "transparent"
             }
+            createdAt={detail.created_at}
             otherFiles={detail.other_files}
             onRealized={() => handleRealize(detail.id)}
             onEdit={() => handleEdit(detail.id)}

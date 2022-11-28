@@ -97,14 +97,20 @@ export const QualityIndicatorProfileApproval = ({ filter, search }) => {
         approval1:
           approval1.signed === 1
             ? new Date(approval1.signed_at).toLocaleDateString()
+            : approval1.signed === -1
+            ? "[X] " + new Date(approval1.signed_at).toLocaleDateString()
             : "Belum disetujui",
         approval2:
           approval2.signed === 1
             ? new Date(approval2.signed_at).toLocaleDateString()
+            : approval2.signed === -1
+            ? "[X] " + new Date(approval2.signed_at).toLocaleDateString()
             : "Belum disetujui",
         approval3: approval3.length
-          ? approval2.signed === 1
+          ? approval3.signed === 1
             ? new Date(approval3.signed_at).toLocaleDateString()
+            : approval3.signed === -1
+            ? "[X] " + new Date(approval3.signed_at).toLocaleDateString()
             : "Belum disetujui"
           : "-",
         status: item.status,

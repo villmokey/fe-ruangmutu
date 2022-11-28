@@ -20,7 +20,6 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import EventLoader from "./Loader/event.shimmer";
 import Navigation from "../../../organism/Dashboard/Breadcrumb";
-
 const { Content } = Layout;
 
 export const Calender = () => {
@@ -32,11 +31,24 @@ export const Calender = () => {
   const { getAccessToken } = useAuthToken();
   const accessToken = getAccessToken();
   const [formOpen, setFormOpen] = useState(false);
+  const [isCreate, setIsCreate] = useState(true);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [events, setEvents] = useState([]);
   const [eventsPaginated, setEventsPaginated] = useState([]);
+  const [oldFiles, setOldFiles] = useState([]);
   const [page, setPage] = useState(1);
+  const [selectedDocuments, setSelectedDocuments] = React.useState([]);
+  const [payload, setPayload] = useState({
+    id: "",
+    name: "",
+    start_date: "",
+    end_date: "",
+    program_id: "",
+    related_program: "",
+  });
+  const [description, setDescription] = useState("");
+
   const [paginationProps, setPaginationProps] = useState({
     count: 1,
     activePage: 1,
@@ -64,7 +76,31 @@ export const Calender = () => {
   };
 
   const handleEdit = (id) => {
-    alert("Act " + id);
+    fetchApiGet(`/event/${id}`, {}, accessToken).then((res) => {
+      if (res && res.success) {
+        setIsCreate(false);
+        setPayload({
+          id: res.data.id,
+          name: res.data.name,
+          start_date: res.data.start_date,
+          end_date: res.data.end_date,
+          program_id: res.data.program_id,
+          related_program: res.data.related_program
+            ? res.data.related_program.map((x) => x.program_id)
+            : [],
+        });
+        console.log("res.data.other_files", res.data.other_files);
+        setOldFiles(res.data.other_files);
+        setSelectedDocuments(
+          res.data.related_file.map((x) => {
+            return { id: x.related.id, name: x.related.name };
+          })
+        );
+        setDescription(res.data.description);
+        setFormOpen(true);
+        window.scrollTo({ behavior: "smooth", top: 0 });
+      }
+    });
   };
 
   const getEvents = () => {
@@ -126,31 +162,51 @@ export const Calender = () => {
           ]}
         />
         <FormCalendar
+          isCreate={isCreate}
           open={formOpen}
+          payload={payload}
+          payloadSetter={setPayload}
+          description={description}
+          descriptionSetter={setDescription}
+          selectedDocuments={selectedDocuments}
+          selectedDocumentsSetter={setSelectedDocuments}
+          oldFiles={oldFiles}
+          oldFilesSetter={setOldFiles}
           onClose={() => setFormOpen(false)}
           onSuccessSubmit={() => {
             setFormOpen(false);
-            window.scrollTo({ behavior: "smooth", top: 1200 });
             getEvents();
+            getPaginatedEvents();
+            window.scrollTo({ behavior: "smooth", top: 1200 });
           }}
         />
         <EventCalendar events={events} loading={loading} />
-        <Row justify="end" style={{ marginTop: 40 }} gutter={[8]}>
-          <Col>
-            <InputSearch size="large" onSearch={(e) => setSearch(e)} />
-          </Col>
-          <Col>
-            <Button
-              onClick={() => {
-                setFormOpen(true);
-                window.scrollTo({ behavior: "smooth", top: 0 });
-              }}
-              type="primary"
-              icon={<PlusOutlined />}
-              size="large"
-              style={{ borderRadius: 8 }}
-            />
-          </Col>
+        <Row
+          justify="space-between"
+          align="middle"
+          style={{ marginTop: 40 }}
+          gutter={[8]}
+        >
+          <Typography fontWeight={"bold"} color={"#6A9695"}>
+            {paginationProps.total} KEGIATAN TERPILIH
+          </Typography>
+          <Row gutter={[8]}>
+            <Col>
+              <InputSearch size="large" onSearch={(e) => setSearch(e)} />
+            </Col>
+            <Col>
+              <Button
+                onClick={() => {
+                  setFormOpen(true);
+                  window.scrollTo({ behavior: "smooth", top: 0 });
+                }}
+                type="primary"
+                icon={<PlusOutlined />}
+                size="large"
+                style={{ borderRadius: 8 }}
+              />
+            </Col>
+          </Row>
         </Row>
         {loading ? (
           <EventLoader />
@@ -176,6 +232,7 @@ export const Calender = () => {
                       ? item.program.color
                       : "transparent"
                   }
+                  createdAt={item.created_at}
                   otherFiles={item.other_files}
                   onRealized={() => handleRealize(item.id)}
                   onEdit={() => handleEdit(item.id)}

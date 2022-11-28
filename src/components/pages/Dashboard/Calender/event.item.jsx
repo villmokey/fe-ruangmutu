@@ -22,6 +22,7 @@ const EventItem = ({
   onRealized,
   onEdit,
   onDelete,
+  createdAt,
   programOwner,
   programOwnerColor,
   files = [],
@@ -46,9 +47,9 @@ const EventItem = ({
                     <Button style={{ border: "none" }}>Realisasi</Button>
                   </Popconfirm>
                 )}
-                {/* <Button onClick={onEdit} style={{ border: "none" }}>
-                Ubah
-              </Button> */}
+                <Button onClick={onEdit} style={{ border: "none" }}>
+                  Ubah
+                </Button>
                 <Popconfirm
                   title="Anda yakin akan menghapus kegiatan ini?"
                   okText="Ya"
@@ -153,6 +154,14 @@ const EventItem = ({
                 fontSize={"14px"}
                 dangerouslySetInnerHTML={{ __html: desc }}
               ></Typography>
+              <Typography
+                fontWeight={"500"}
+                fontSize={"12px"}
+                marginTop={"10px"}
+              >
+                Tanggal Publikasi:{" "}
+                {moment(createdAt).format("dddd, DD MMMM YYYY HH:m")}
+              </Typography>
               {files && files.length > 0 && (
                 <>
                   <Typography
@@ -163,28 +172,22 @@ const EventItem = ({
                     Dokumen Terkait:
                   </Typography>
                   {files.map((rel, index) => (
-                    <DocumentItem key={"Document- " + index}>
-                      <a
-                        style={{ color: "white" }}
-                        href={
-                          rel.related &&
-                          rel.related.file &&
-                          rel.related.file &&
-                          rel.related.file.file_link
-                            ? rel.related.file.file_link
-                            : "#"
-                        }
-                        target={"_blank"}
-                        rel="noreferrer"
-                      >
-                        {rel.related &&
-                        rel.related.file &&
-                        rel.related.file &&
-                        rel.related.file.real_name
-                          ? rel.related.file.real_name
+                    <a
+                      style={{ color: "white" }}
+                      href={`/view-file/doc/${
+                        rel.related && rel.related.id
+                          ? rel.related.id
+                          : "undefined"
+                      }`}
+                      target={"_blank"}
+                      rel="noreferrer"
+                    >
+                      <DocumentItem key={"Document- " + index}>
+                        {rel.related && rel.related.name
+                          ? rel.related.name
                           : "Undefined"}
-                      </a>
-                    </DocumentItem>
+                      </DocumentItem>
+                    </a>
                   ))}
                 </>
               )}

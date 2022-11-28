@@ -74,10 +74,10 @@ export const documentTypeLogos = [
   },
 ];
 
-export const titleSplitter = (text) => {
+export const titleSplitter = (text, total = 15) => {
   let title = text;
-  if (text && text.length >= 15) {
-    title = text.slice(0, 15) + "...";
+  if (text && text.length >= total) {
+    title = text.slice(0, total) + "...";
   }
 
   return title;

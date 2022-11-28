@@ -19,6 +19,7 @@ import "swiper/css/pagination";
 import { Pagination, Autoplay } from "swiper";
 import Documents from "./Component/Documents";
 import { HomeFilled } from "@ant-design/icons";
+import { titleSplitter } from "./Component/file.item";
 
 const { Content } = Layout;
 
@@ -246,7 +247,9 @@ export const DashboardPage = () => {
                             }}
                           >
                             <div>
-                              <p className="card-title">{up.name}</p>
+                              <p title={up.name} className="card-title">
+                                {titleSplitter(up.name, 30)}
+                              </p>
                               <p className="card-date">
                                 {moment(up.start_date).format("DD MMMM YYYY")}
                               </p>
@@ -304,7 +307,7 @@ export const DashboardPage = () => {
                         }}
                       >
                         <div>
-                          <p className="card-typograph">DOKUMEN</p>
+                          <p className="card-title">DOKUMEN</p>
                           <p className="card-amount">{documentInfo.total}</p>
                         </div>
                       </div>
@@ -319,7 +322,7 @@ export const DashboardPage = () => {
                         }}
                       >
                         <div>
-                          <p className="card-typograph">DOKUMEN TAHUN INI</p>
+                          <p className="card-title">DOKUMEN TAHUN INI</p>
                           <p className="card-amount">
                             {documentInfo.this_year}
                           </p>
@@ -357,7 +360,9 @@ export const DashboardPage = () => {
                             }}
                           >
                             <div>
-                              <p className="card-title">{up.name}</p>
+                              <p title={up.name} className="card-title">
+                                {titleSplitter(up.name, 30)}
+                              </p>
                               <p className="card-date">
                                 {moment(up.start_date).format("DD MMMM YYYY")}
                               </p>

@@ -59,7 +59,7 @@ export const Add = () => {
   } = useSelector(qualityIndicatorSelector);
 
   const dispatch = useDispatch();
-  const { getAccessToken, getName } = useAuthToken();
+  const { getAccessToken, getName, getUserId } = useAuthToken();
   const accessToken = getAccessToken();
   const navigate = useNavigate();
 
@@ -79,7 +79,10 @@ export const Add = () => {
     useState(null);
   const [qualityIndicatorDataTemp, setQualityIndicatorDataTemp] =
     useState(null);
-  const [userOptions, setUserOptions] = useState(null);
+  const [usersMasterOptions, setUsersMasterOptions] = useState([]);
+  const [userOptions, setUserOptions] = useState([]);
+  const [userOptions2, setUserOptions2] = useState([]);
+  const [userOptions3, setUserOptions3] = useState([]);
   const [profileQualityOptions, setProfileQualityOptions] = useState(null);
 
   const [
@@ -126,13 +129,14 @@ export const Add = () => {
 
   useEffect(() => {
     if (!userList) return;
-
     secondStepProfileQualityIndicatorForm.setFieldsValue({
       dibuatOleh: getName(),
+      pembuatDokumen: getUserId(),
     });
 
     secondStepQualityIndicatorForm.setFieldsValue({
       dibuatOleh: getName(),
+      pembuatDokumen: getUserId(),
     });
 
     const fetch = userList.map((item, index) => {
@@ -144,7 +148,10 @@ export const Add = () => {
       };
     });
 
+    setUsersMasterOptions(fetch);
     setUserOptions(fetch);
+    setUserOptions2(fetch);
+    setUserOptions3(fetch);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userList]);
@@ -474,10 +481,21 @@ export const Add = () => {
         secondStepProfileQualityIndicatorForm.submit();
       }
 
+      if (current === 2) {
+        setUserOptions(usersMasterOptions);
+        setUserOptions2(usersMasterOptions);
+        setUserOptions3(usersMasterOptions);
+      }
+
       setCurrent(current - 1);
     } else if (documentFormChoosen === 2) {
       if (current === 1) {
         secondStepQualityIndicatorForm.submit();
+      }
+      if (current === 2) {
+        setUserOptions(usersMasterOptions);
+        setUserOptions2(usersMasterOptions);
+        setUserOptions3(usersMasterOptions);
       }
 
       setCurrent(current - 1);
@@ -486,6 +504,189 @@ export const Add = () => {
 
   const handleChangeDocumentForm = (e) => {
     setDocumentFormChoosen(e.target.value);
+  };
+
+  const pembuatDokumenChange = (v) => {
+    console.log("pembuatDokumenChange");
+    if (documentFormChoosen === 1) {
+      let lists = [
+        v,
+        secondStepProfileQualityIndicatorForm.getFieldValue("penanggungJawab1"),
+        secondStepProfileQualityIndicatorForm.getFieldValue("penanggungJawab2"),
+      ];
+
+      if (
+        secondStepProfileQualityIndicatorForm.getFieldValue(
+          "penanggungJawab1"
+        ) === v
+      ) {
+        secondStepProfileQualityIndicatorForm.setFieldsValue({
+          penanggungJawab1: undefined,
+        });
+      }
+
+      if (
+        secondStepProfileQualityIndicatorForm.getFieldValue(
+          "penanggungJawab2"
+        ) === v
+      ) {
+        secondStepProfileQualityIndicatorForm.setFieldsValue({
+          penanggungJawab2: undefined,
+        });
+      }
+
+      let temp = usersMasterOptions.filter((x) => !lists.includes(x.value));
+      setUserOptions2(temp);
+      setUserOptions3(temp);
+    } else if (documentFormChoosen === 2) {
+      let lists = [
+        v,
+        secondStepQualityIndicatorForm.getFieldValue("penanggungJawab1"),
+        secondStepQualityIndicatorForm.getFieldValue("penanggungJawab2"),
+      ];
+
+      if (
+        secondStepQualityIndicatorForm.getFieldValue("penanggungJawab1") === v
+      ) {
+        secondStepQualityIndicatorForm.setFieldsValue({
+          penanggungJawab1: undefined,
+        });
+      }
+
+      if (
+        secondStepQualityIndicatorForm.getFieldValue("penanggungJawab2") === v
+      ) {
+        secondStepQualityIndicatorForm.setFieldsValue({
+          penanggungJawab2: undefined,
+        });
+      }
+
+      let temp = usersMasterOptions.filter((x) => !lists.includes(x.value));
+      setUserOptions2(temp);
+      setUserOptions3(temp);
+    }
+  };
+
+  const penanggungJawab1Change = (v) => {
+    console.log("penanggungJawab1Change");
+    if (documentFormChoosen === 1) {
+      let lists = [
+        secondStepProfileQualityIndicatorForm.getFieldValue("pembuatDokumen"),
+        v,
+        secondStepProfileQualityIndicatorForm.getFieldValue("penanggungJawab2"),
+      ];
+
+      if (
+        secondStepProfileQualityIndicatorForm.getFieldValue(
+          "pembuatDokumen"
+        ) === v
+      ) {
+        secondStepProfileQualityIndicatorForm.setFieldsValue({
+          pembuatDokumen: undefined,
+        });
+      }
+
+      if (
+        secondStepProfileQualityIndicatorForm.getFieldValue(
+          "penanggungJawab2"
+        ) === v
+      ) {
+        secondStepProfileQualityIndicatorForm.setFieldsValue({
+          penanggungJawab2: undefined,
+        });
+      }
+
+      let temp = usersMasterOptions.filter((x) => !lists.includes(x.value));
+      setUserOptions(temp);
+      setUserOptions3(temp);
+    } else if (documentFormChoosen === 2) {
+      let lists = [
+        secondStepQualityIndicatorForm.getFieldValue("pembuatDokumen"),
+        v,
+        secondStepQualityIndicatorForm.getFieldValue("penanggungJawab2"),
+      ];
+
+      if (
+        secondStepQualityIndicatorForm.getFieldValue("pembuatDokumen") === v
+      ) {
+        secondStepQualityIndicatorForm.setFieldsValue({
+          pembuatDokumen: undefined,
+        });
+      }
+
+      if (
+        secondStepQualityIndicatorForm.getFieldValue("penanggungJawab2") === v
+      ) {
+        secondStepQualityIndicatorForm.setFieldsValue({
+          penanggungJawab2: undefined,
+        });
+      }
+
+      let temp = usersMasterOptions.filter((x) => !lists.includes(x.value));
+      setUserOptions(temp);
+      setUserOptions3(temp);
+    }
+  };
+
+  const penanggungJawab2Change = (v) => {
+    console.log("penanggungJawab2Change");
+    if (documentFormChoosen === 1) {
+      let lists = [
+        secondStepProfileQualityIndicatorForm.getFieldValue("pembuatDokumen"),
+        secondStepProfileQualityIndicatorForm.getFieldValue("penanggungJawab1"),
+        v,
+      ];
+
+      if (
+        secondStepProfileQualityIndicatorForm.getFieldValue(
+          "pembuatDokumen"
+        ) === v
+      ) {
+        secondStepProfileQualityIndicatorForm.setFieldsValue({
+          pembuatDokumen: undefined,
+        });
+      }
+
+      if (
+        secondStepProfileQualityIndicatorForm.getFieldValue(
+          "penanggungJawab1"
+        ) === v
+      ) {
+        secondStepProfileQualityIndicatorForm.setFieldsValue({
+          penanggungJawab2: undefined,
+        });
+      }
+
+      let temp = usersMasterOptions.filter((x) => !lists.includes(x.value));
+      setUserOptions(temp);
+      setUserOptions2(temp);
+    } else if (documentFormChoosen === 2) {
+      let lists = [
+        secondStepQualityIndicatorForm.getFieldValue("pembuatDokumen"),
+        secondStepQualityIndicatorForm.getFieldValue("penanggungJawab1"),
+        v,
+      ];
+
+      if (
+        secondStepQualityIndicatorForm.getFieldValue("pembuatDokumen") === v
+      ) {
+        secondStepQualityIndicatorForm.setFieldsValue({
+          pembuatDokumen: undefined,
+        });
+      }
+
+      if (
+        secondStepQualityIndicatorForm.getFieldValue("penanggungJawab1") === v
+      ) {
+        secondStepQualityIndicatorForm.setFieldsValue({
+          penanggungJawab2: undefined,
+        });
+      }
+
+      let temp = usersMasterOptions.filter((x) => !lists.includes(x.value));
+      setUserOptions(temp);
+      setUserOptions2(temp);
+    }
   };
 
   const handleSubmitFormProfileQualityIndicator = async (value) => {
@@ -550,6 +751,11 @@ export const Add = () => {
             subProgramMutuOptions={subProgramMutuOptions}
             programMutuChange={handleChangeProgramMutu}
             userOptions={userOptions}
+            userOptions2={userOptions2}
+            userOptions3={userOptions3}
+            pembuatDokumenChange={pembuatDokumenChange}
+            penanggungJawab1Change={penanggungJawab1Change}
+            penanggungJawab2Change={penanggungJawab2Change}
           />
         ) : (
           <QualityIndicatorSecondStep
@@ -560,6 +766,11 @@ export const Add = () => {
             programMutuOptions={programMutuOptions}
             subProgramMutuOptions={subProgramMutuOptions}
             userOptions={userOptions}
+            userOptions2={userOptions2}
+            userOptions3={userOptions3}
+            pembuatDokumenChange={pembuatDokumenChange}
+            penanggungJawab1Change={penanggungJawab1Change}
+            penanggungJawab2Change={penanggungJawab2Change}
           />
         ),
     },
@@ -572,7 +783,9 @@ export const Add = () => {
             programMutuOptions={programMutuOptions}
             subProgramMutuOptions={subProgramMutuOptions}
             onFinish={handleSubmitFormProfileQualityIndicator}
-            userOptions={userOptions}
+            userOptions={usersMasterOptions}
+            userOptions2={usersMasterOptions}
+            userOptions3={usersMasterOptions}
           />
         ) : (
           <QualityIndicatorThirdStep
@@ -581,7 +794,9 @@ export const Add = () => {
             programMutuOptions={programMutuOptions}
             subProgramMutuOptions={subProgramMutuOptions}
             onFinish={handleSubmitFormQualityIndicator}
-            userOptions={userOptions}
+            userOptions={usersMasterOptions}
+            userOptions2={usersMasterOptions}
+            userOptions3={usersMasterOptions}
           />
         ),
     },
