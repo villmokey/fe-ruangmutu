@@ -9,10 +9,10 @@ const PerformanceIndicatorCardview = ({ filter, search }) => {
   return (
     <>
       <Tabs defaultActiveKey="1" destroyInactiveTabPane>
-        <TabPane tab="Indikator Mutu" key="1">
+        <TabPane tab="Indikator Kinerja" key="1">
           <IndicatorView filter={filter} search={search} />
         </TabPane>
-        <TabPane tab="Profil Indikator Mutu" key="2">
+        <TabPane tab="Profil Indikator Kinerja" key="2">
           <ProfileView filter={filter} search={search} />
         </TabPane>
       </Tabs>

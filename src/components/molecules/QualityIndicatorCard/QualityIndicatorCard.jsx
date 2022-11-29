@@ -1,18 +1,32 @@
-import { Image, Tag } from "antd";
+import { Button, Image, Popconfirm, Tag } from "antd";
 import { Card } from "../../atoms/Card/Card";
 
 import "./QualityIndicatorCard.less";
 import Thumbnail from "../../../assets/images/thumbnail.png";
 import { Text } from "../../atoms/Text/Text";
+import { FileExcelOutlined } from "@ant-design/icons";
 
 export const QualityIndicatorCard = ({
   onOpenPreview,
   indicatorData,
   isPerformance = false,
+  onRemove,
 }) => {
   return (
     <>
       <Card className="quality-indicator-card">
+        <div className="delete-quality-button">
+          <Popconfirm
+            title="Anda yakin akan menghapus indikator?"
+            okText="Ya"
+            cancelText="Tidak"
+            onConfirm={onRemove}
+          >
+            <Button type="primary" color="red" style={{ padding: "1px" }}>
+              <FileExcelOutlined style={{ color: "red" }} />
+            </Button>
+          </Popconfirm>
+        </div>
         <div className="thumbnail">
           <Image src={Thumbnail} preview={false} onClick={onOpenPreview} />
         </div>
@@ -26,9 +40,11 @@ export const QualityIndicatorCard = ({
         <div className="content">
           <span title={indicatorData.title}>
             <Text className="title" style={{ lineHeight: "10px" }}>
-              {indicatorData.title && indicatorData.title.length > 35
+              {indicatorData &&
+              indicatorData.title &&
+              indicatorData.title.length > 35
                 ? indicatorData.title.substr(0, 35) + "..."
-                : indicatorData.title}
+                : indicatorData.title ?? ""}
             </Text>
           </span>
           {indicatorData.month && (

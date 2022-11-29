@@ -41,11 +41,11 @@ export const Calender = () => {
   const [selectedDocuments, setSelectedDocuments] = React.useState([]);
   const [payload, setPayload] = useState({
     id: "",
-    name: "",
-    start_date: "",
-    end_date: "",
-    program_id: "",
-    related_program: "",
+    name: undefined,
+    start_date: undefined,
+    end_date: undefined,
+    program_id: undefined,
+    related_program: undefined,
   });
   const [description, setDescription] = useState("");
 
@@ -56,6 +56,19 @@ export const Calender = () => {
     from: 0,
     to: 0,
   });
+
+  const cleanForms = () => {
+    setSelectedDocuments([]);
+    setDescription("");
+    setPayload({
+      id: "",
+      name: undefined,
+      start_date: undefined,
+      end_date: undefined,
+      program_id: undefined,
+      related_program: undefined,
+    });
+  };
 
   const handleRealize = (id) => {
     fetchApiPut(`/event/realize/${id}`, accessToken).then((res) => {
@@ -198,6 +211,8 @@ export const Calender = () => {
             <Col>
               <Button
                 onClick={() => {
+                  cleanForms();
+                  setIsCreate(true);
                   setFormOpen(true);
                   window.scrollTo({ behavior: "smooth", top: 0 });
                 }}

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Row, Col, Skeleton, Typography } from "antd";
+import { Row, Col, Skeleton, Typography, message } from "antd";
 import { QualityIndicatorCard } from "../../../../molecules/QualityIndicatorCard/QualityIndicatorCard";
-import { fetchApiGet } from "../../../../../globals/fetchApi";
+import { fetchApiDelete, fetchApiGet } from "../../../../../globals/fetchApi";
 import { useAuthToken } from "../../../../../globals/useAuthToken";
 import { QualityIndicatorPreview } from "../../../../templates/QualityIndicatorTemplates/Preview/QualityIndicatorPreview";
 import { Box, Grid, Pagination } from "@mui/material";
@@ -99,6 +99,17 @@ const ProfileView = ({ filter, search }) => {
     fetchChartData(id);
   };
 
+  const handleRemove = (itemId) => {
+    fetchApiDelete(`/indicator-profile/${itemId}`, accessToken).then((res) => {
+      if (res.success) {
+        fetchIndicator();
+        message.success("Berhasil menghapus profile indikator kinerja");
+      } else {
+        message.error(res.message);
+      }
+    });
+  };
+
   React.useEffect(() => {
     fetchIndicator();
   }, [filter, search, page]); //eslint-disable-line
@@ -125,6 +136,7 @@ const ProfileView = ({ filter, search }) => {
                           is_profile_indicator: true,
                         }}
                         key={index}
+                        onRemove={() => handleRemove(item.id)}
                       />
                     </Col>
                   ))}

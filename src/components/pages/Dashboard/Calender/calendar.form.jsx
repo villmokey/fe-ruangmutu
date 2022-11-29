@@ -78,7 +78,7 @@ const FormCalendar = ({
     start_date: "",
     end_date: "",
     program_id: "",
-    related_program: "",
+    related_program: undefined,
   },
   payloadSetter,
   description = "",
@@ -126,7 +126,7 @@ const FormCalendar = ({
       start_date: "",
       end_date: "",
       program_id: "",
-      related_program: "",
+      related_program: undefined,
     });
   };
 
@@ -524,7 +524,6 @@ const FormCalendar = ({
                   <Select
                     placeholder="Pilih Bulan"
                     onChange={(e) => {
-                      console.log(e);
                       payloadSetter({ ...payload, program_id: e });
                     }}
                     value={payload.program_id}
@@ -608,41 +607,46 @@ const FormCalendar = ({
                 <Typography
                   fontSize={"14px"}
                   fontWeight={"bold"}
-                  margin={"20px 0 0 0"}
+                  margin={isCreate ? "20px 0 10px 0" : "20px 0 0 0"}
                 >
                   UNGGAH DOKUMEN PENDUKUNG KEGIATAN
                 </Typography>
-                <Typography fontSize={"10px"} margin={"0 0 10px 0"}>
-                  Hapus file sebelumnya / unggah dokumen kegiatan baru
-                </Typography>
-                <Collapse
-                  defaultActiveKey={["1"]}
-                  style={{ marginBottom: "10px" }}
-                >
-                  <Collapse.Panel header="File unggahan sebelumnya" key="1">
-                    {oldFiles && oldFiles.length > 0 ? (
-                      <>
-                        {oldFiles.map((x) => (
-                          <Selected>
-                            <Stack
-                              direction={"row"}
-                              justifyContent={"space-between"}
-                              alignItems={"center"}
-                            >
-                              {x.real_name}
-                              <DeleteOutlined
-                                onClick={() => handleDeleteFile(x.id)}
-                                style={{ cursor: "pointer" }}
-                              />
-                            </Stack>
-                          </Selected>
-                        ))}
-                      </>
-                    ) : (
-                      <p>Belum ada file diunggah</p>
-                    )}
-                  </Collapse.Panel>
-                </Collapse>
+                {!isCreate && (
+                  <Typography fontSize={"10px"} margin={"0 0 10px 0"}>
+                    Hapus file sebelumnya / unggah dokumen kegiatan baru
+                  </Typography>
+                )}
+
+                {!isCreate && (
+                  <Collapse
+                    defaultActiveKey={["1"]}
+                    style={{ marginBottom: "10px" }}
+                  >
+                    <Collapse.Panel header="File unggahan sebelumnya" key="1">
+                      {oldFiles && oldFiles.length > 0 ? (
+                        <>
+                          {oldFiles.map((x) => (
+                            <Selected>
+                              <Stack
+                                direction={"row"}
+                                justifyContent={"space-between"}
+                                alignItems={"center"}
+                              >
+                                {x.real_name}
+                                <DeleteOutlined
+                                  onClick={() => handleDeleteFile(x.id)}
+                                  style={{ cursor: "pointer" }}
+                                />
+                              </Stack>
+                            </Selected>
+                          ))}
+                        </>
+                      ) : (
+                        <p>Belum ada file diunggah</p>
+                      )}
+                    </Collapse.Panel>
+                  </Collapse>
+                )}
 
                 <Dragger
                   beforeUpload={() => false}

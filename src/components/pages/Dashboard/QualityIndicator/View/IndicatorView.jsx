@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Row, Col, Skeleton, Typography } from "antd";
+import { Row, Col, Skeleton, Typography, message } from "antd";
 import { QualityIndicatorCard } from "../../../../molecules/QualityIndicatorCard/QualityIndicatorCard";
-import { fetchApiGet } from "../../../../../globals/fetchApi";
+import { fetchApiDelete, fetchApiGet } from "../../../../../globals/fetchApi";
 import { useAuthToken } from "../../../../../globals/useAuthToken";
 import { QualityIndicatorPreview } from "../../../../templates/QualityIndicatorTemplates/Preview/QualityIndicatorPreview";
 import { Box, Grid, Pagination } from "@mui/material";
@@ -99,6 +99,17 @@ const IndicatorView = ({ filter, search }) => {
     fetchChartData(id);
   };
 
+  const handleRemove = (itemId) => {
+    fetchApiDelete(`/indicator/${itemId}`, accessToken).then((res) => {
+      if (res.success) {
+        fetchIndicator();
+        message.success("Berhasil menghapus indikator mutu");
+      } else {
+        message.error(res.message);
+      }
+    });
+  };
+
   React.useEffect(() => {
     fetchIndicator();
   }, [filter, search, page]); //eslint-disable-line
@@ -117,15 +128,16 @@ const IndicatorView = ({ filter, search }) => {
                         previewVisibility={previewVis}
                         onClosePreviewVisibility={() => null}
                         onOpenPreview={() => {
-                          fetchDetail(item.title,item.id, false);
+                          fetchDetail(item.title, item.id, false);
                           setPreviewData(item);
                         }}
                         indicatorData={{
                           ...item,
-                          title: item.profile_indicator.title,
+                          title: item?.profile_indicator?.title ?? "-",
                           is_profile_indicator: false,
                         }}
                         key={index}
+                        onRemove={() => handleRemove(item.id)}
                       />
                     </Col>
                   ))}

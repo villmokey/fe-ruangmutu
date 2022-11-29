@@ -74,7 +74,7 @@ export const QualityCupboard = () => {
     }
 
     fetchApiGet("/document", {
-      per_page: 10,
+      per_page: 36,
       page: page,
       search: search,
       hide_secret: getRole() !== "User",
