@@ -97,7 +97,7 @@ export const QualityCupboard = () => {
   const fetchDocuments = () => {
     setLoading(true);
     fetchApiGet("/document", {
-      per_page: 10,
+      per_page: 36,
       page: page,
       search: search,
       sort: sorting,
