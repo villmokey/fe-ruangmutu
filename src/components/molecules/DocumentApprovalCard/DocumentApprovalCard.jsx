@@ -210,8 +210,6 @@ export const DocumentApprovalCard = ({
   };
 
   const handlePreview = async () => {
-    console.log(type);
-
     if (type === "indicator") {
       await fetchChartData().then(() => {
         fetchIndicatorDetail();

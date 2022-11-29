@@ -183,6 +183,7 @@ export const QualityIndicatorApproval = ({ filter, search }) => {
               generated={item.generated}
               onApprove={handleApprove}
               onReject={handleReject}
+              status={item.status}
               onGenerateSuccess={async () => await handleFetchApproval()}
             />
           ))}

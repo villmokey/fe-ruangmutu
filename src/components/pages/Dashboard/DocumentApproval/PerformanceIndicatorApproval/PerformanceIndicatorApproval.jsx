@@ -182,6 +182,7 @@ export const PerformanceIndicatorApproval = ({ filter, search }) => {
               type={"indicator"}
               onApprove={handleApprove}
               onReject={handleReject}
+              status={item.status}
               generated={item.generated}
               onGenerateSuccess={async () => await handleFetchApproval()}
             />
