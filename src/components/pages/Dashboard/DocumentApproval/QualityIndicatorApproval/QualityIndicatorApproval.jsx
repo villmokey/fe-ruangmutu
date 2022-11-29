@@ -100,7 +100,7 @@ export const QualityIndicatorApproval = ({ filter, search }) => {
         userID,
         month: item.month,
         isApproved: filterSignature.length ? true : false,
-        title: item.profile_indicator.title,
+        title: item?.profile_indicator?.title ?? "-",
         createdBy: item.created_by,
         createdAt: new Date(item.created_at).toLocaleDateString(),
         user1: user1,
