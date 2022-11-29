@@ -71,6 +71,7 @@ export const Calender = () => {
       if (res && res) {
         toast.success("Berhasil menghapus kegiatan");
         getEvents();
+        getPaginatedEvents();
       }
     });
   };
