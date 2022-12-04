@@ -153,7 +153,7 @@ export const ThirdStep = ({
                 disabled
                 maxCount={3}
                 fileList={payload.attachments}
-                accept={"image/*"}
+                accept={"image/*, application/pdf"}
                 beforeUpload={() => false}
               >
                 <Text>Upload lampiran dengan format png/jpg/jpeg</Text>

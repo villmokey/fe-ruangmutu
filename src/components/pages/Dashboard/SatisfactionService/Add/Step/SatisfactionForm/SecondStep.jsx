@@ -162,7 +162,7 @@ export const SecondStep = ({
                 }
                 fileList={payload.attachments}
                 maxCount={3}
-                accept={"image/*"}
+                accept={"image/*, application/pdf"}
                 multiple
                 beforeUpload={() => false}
               >

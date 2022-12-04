@@ -132,10 +132,11 @@ export const DashboardPage = () => {
       if (res && res.success) {
         const temporary = res.data ?? [];
         let results = [];
+        let colors = ['#453C67', '#6D67E4', '#46C2CB', '#F2F7A1', '#FFE15D', '#F49D1A', '#DC3535', '#B01E68']
         let names = temporary.map((item) => {
           return {
             name: item.health_service,
-            color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
+            color: colors[Math.floor(Math.random() * colors.length)],
           };
         });
         setLegends(names);

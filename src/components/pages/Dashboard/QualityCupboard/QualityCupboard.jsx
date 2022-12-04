@@ -19,6 +19,7 @@ import Navigation from "../../../organism/Dashboard/Breadcrumb";
 import { toast, ToastContainer } from "react-toastify";
 import { fetchApiDelete, fetchApiGet } from "../../../../globals/fetchApi";
 import { useAuthToken } from "../../../../globals/useAuthToken";
+import { checkPermission } from "../../../../helper/global";
 
 const { Content } = Layout;
 
@@ -77,7 +78,7 @@ export const QualityCupboard = () => {
       per_page: 36,
       page: page,
       search: search,
-      hide_secret: getRole() !== "User",
+      hide_secret: getRole() === "User" || getRole() === "Admin",
       sort: sorting,
       sort_by: sortBy,
       ...params,
@@ -100,6 +101,7 @@ export const QualityCupboard = () => {
       per_page: 36,
       page: page,
       search: search,
+      hide_secret: getRole() === "User" || getRole() === "Admin",
       sort: sorting,
       sort_by: sortBy,
     })
@@ -132,7 +134,6 @@ export const QualityCupboard = () => {
   };
 
   const handleRemove = (docId) => {
-    console.log(docId);
     fetchApiDelete(`/document/${docId}`, accessToken).then((res) => {
       if (res.success) {
         message.success("Berhasil menghapus dokumen");
@@ -221,7 +222,6 @@ export const QualityCupboard = () => {
             <InputSearch
               size="large"
               allowClear
-              onReset={(e) => console.log("RESET", e)}
               onSearch={(e) => {
                 setPage(1);
                 setSearch(e);
@@ -229,13 +229,15 @@ export const QualityCupboard = () => {
             />
           </Col>
           <Col>
-            <Button
-              type="primary"
-              icon={<PlusOutlined />}
-              size="large"
-              style={{ borderRadius: 8 }}
-              onClick={() => setFormOpen(true)}
-            />
+            {checkPermission(["Super Admin", "Admin"], getRole()) && (
+              <Button
+                type="primary"
+                icon={<PlusOutlined />}
+                size="large"
+                style={{ borderRadius: 8 }}
+                onClick={() => setFormOpen(true)}
+              />
+            )}
           </Col>
         </Row>
         <Row style={{ marginTop: 40, marginBottom: 20 }}>

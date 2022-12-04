@@ -458,7 +458,7 @@ export const PerformanceIndicatorPreview = ({
                         sign.user && sign.user.name ? sign.user.name : ""
                       } Sign`}
                       preview={false}
-                      style={{ width: "77px" }}
+                      style={{ width: "150px", height: "100px" }}
                     />
                   ) : (
                     <div

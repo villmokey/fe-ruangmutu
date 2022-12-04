@@ -5,6 +5,8 @@ import "./QualityIndicatorCard.less";
 import Thumbnail from "../../../assets/images/thumbnail.png";
 import { Text } from "../../atoms/Text/Text";
 import { FileExcelOutlined } from "@ant-design/icons";
+import { checkPermission } from "../../../helper/global";
+import { useAuthToken } from "../../../globals/useAuthToken";
 
 export const QualityIndicatorCard = ({
   onOpenPreview,
@@ -12,21 +14,24 @@ export const QualityIndicatorCard = ({
   isPerformance = false,
   onRemove,
 }) => {
+  const { getRole } = useAuthToken();
   return (
     <>
       <Card className="quality-indicator-card">
-        <div className="delete-quality-button">
-          <Popconfirm
-            title="Anda yakin akan menghapus indikator?"
-            okText="Ya"
-            cancelText="Tidak"
-            onConfirm={onRemove}
-          >
-            <Button type="primary" color="red" style={{ padding: "1px" }}>
-              <FileExcelOutlined style={{ color: "red" }} />
-            </Button>
-          </Popconfirm>
-        </div>
+        {checkPermission(["Super Admin"], getRole()) && (
+          <div className="delete-quality-button">
+            <Popconfirm
+              title="Anda yakin akan menghapus indikator?"
+              okText="Ya"
+              cancelText="Tidak"
+              onConfirm={onRemove}
+            >
+              <Button type="primary" color="red" style={{ padding: "1px" }}>
+                <FileExcelOutlined style={{ color: "red" }} />
+              </Button>
+            </Popconfirm>
+          </div>
+        )}
         <div className="thumbnail">
           <Image src={Thumbnail} preview={false} onClick={onOpenPreview} />
         </div>

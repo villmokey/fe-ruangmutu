@@ -1,16 +1,33 @@
-import { Image, Tag, Typography } from "antd";
+import { Button, Image, Popconfirm, Tag, Typography } from "antd";
 import { Card } from "../../../atoms/Card/Card";
 
 import "./SatisficationServiceCard.less";
 import Thumbnail from "../../../../assets/images/keluhan_pelanggan.png";
 import { Text } from "../../../atoms/Text/Text";
 import moment from "moment";
-import { LockOutlined } from "@ant-design/icons";
+import { FileExcelOutlined, LockOutlined } from "@ant-design/icons";
+import { checkPermission } from "../../../../helper/global";
+import { useAuthToken } from "../../../../globals/useAuthToken";
 
-export const SatisficationServiceCard = ({ onOpenPreview, cardData }) => {
+export const SatisficationServiceCard = ({ onOpenPreview, cardData, onRemove }) => {
+  const { getRole } = useAuthToken();
   return (
     <>
       <Card className="quality-indicator-card">
+        {checkPermission(["Super Admin"], getRole()) && (
+          <div className="delete-quality-button">
+            <Popconfirm
+              title="Anda yakin akan menghapus keluhan pelanggan?"
+              okText="Ya"
+              cancelText="Tidak"
+              onConfirm={onRemove}
+            >
+              <Button type="primary" color="red" style={{ padding: "1px" }}>
+                <FileExcelOutlined style={{ color: "red" }} />
+              </Button>
+            </Popconfirm>
+          </div>
+        )}
         <div className="thumbnail">
           <Image
             src={Thumbnail}

@@ -20,6 +20,7 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import EventLoader from "./Loader/event.shimmer";
 import Navigation from "../../../organism/Dashboard/Breadcrumb";
+import { checkPermission } from "../../../../helper/global";
 const { Content } = Layout;
 
 export const Calender = () => {
@@ -28,7 +29,7 @@ export const Calender = () => {
     month: undefined,
     program_id: undefined,
   });
-  const { getAccessToken } = useAuthToken();
+  const { getAccessToken, getRole } = useAuthToken();
   const accessToken = getAccessToken();
   const [formOpen, setFormOpen] = useState(false);
   const [isCreate, setIsCreate] = useState(true);
@@ -209,18 +210,20 @@ export const Calender = () => {
               <InputSearch size="large" onSearch={(e) => setSearch(e)} />
             </Col>
             <Col>
-              <Button
-                onClick={() => {
-                  cleanForms();
-                  setIsCreate(true);
-                  setFormOpen(true);
-                  window.scrollTo({ behavior: "smooth", top: 0 });
-                }}
-                type="primary"
-                icon={<PlusOutlined />}
-                size="large"
-                style={{ borderRadius: 8 }}
-              />
+              {checkPermission(["Super Admin", "Admin"], getRole()) && (
+                <Button
+                  onClick={() => {
+                    cleanForms();
+                    setIsCreate(true);
+                    setFormOpen(true);
+                    window.scrollTo({ behavior: "smooth", top: 0 });
+                  }}
+                  type="primary"
+                  icon={<PlusOutlined />}
+                  size="large"
+                  style={{ borderRadius: 8 }}
+                />
+              )}
             </Col>
           </Row>
         </Row>

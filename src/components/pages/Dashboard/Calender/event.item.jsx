@@ -10,6 +10,7 @@ import { Stack, Box, Typography, Grid } from "@mui/material";
 import moment from "moment";
 import "moment/locale/id";
 import { useAuthToken } from "../../../../globals/useAuthToken";
+import { checkPermission } from "../../../../helper/global";
 
 const EventItem = ({
   title,
@@ -32,24 +33,31 @@ const EventItem = ({
   const { getRole } = useAuthToken();
   return (
     <EventContainer>
-      {getRole() === "Super Admin" && (
-        <Dropdown
-          overlay={
-            <Box sx={{ background: "white" }}>
-              <Stack direction={"column"}>
-                {!realized && (
-                  <Popconfirm
-                    title="Anda yakin akan mengubah status kegiatan menjadi terealisasi?"
-                    okText="Ya"
-                    cancelText="Tidak"
-                    onConfirm={onRealized}
-                  >
-                    <Button style={{ border: "none" }}>Realisasi</Button>
-                  </Popconfirm>
-                )}
+      <Dropdown
+        overlay={
+          <Box sx={{ background: "white" }}>
+            <Stack direction={"column"}>
+              {checkPermission(["Super Admin"], getRole()) && (
+                <>
+                  {!realized && (
+                    <Popconfirm
+                      title="Anda yakin akan mengubah status kegiatan menjadi terealisasi?"
+                      okText="Ya"
+                      cancelText="Tidak"
+                      onConfirm={onRealized}
+                    >
+                      <Button style={{ border: "none" }}>Realisasi</Button>
+                    </Popconfirm>
+                  )}
+                </>
+              )}
+              {checkPermission(["Super Admin", "Admin"], getRole()) && (
                 <Button onClick={onEdit} style={{ border: "none" }}>
                   Ubah
                 </Button>
+              )}
+
+              {checkPermission(["Super Admin"], getRole()) && (
                 <Popconfirm
                   title="Anda yakin akan menghapus kegiatan ini?"
                   okText="Ya"
@@ -58,13 +66,13 @@ const EventItem = ({
                 >
                   <Button style={{ border: "none" }}>Hapus</Button>
                 </Popconfirm>
-              </Stack>
-            </Box>
-          }
-        >
-          <Icon src={SettingIcon} alt={"ic_setting"} />
-        </Dropdown>
-      )}
+              )}
+            </Stack>
+          </Box>
+        }
+      >
+        <Icon src={SettingIcon} alt={"ic_setting"} />
+      </Dropdown>
       <Box width={"100%"}>
         <Grid container justifyContent={"space-between"} alignItems={"center"}>
           <Grid item xs={12} sm={12} md={6}>

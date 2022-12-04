@@ -27,6 +27,8 @@ import {
   LogoSOTK,
 } from "../../../../assets/images/docs_logo";
 import { paths } from "../../../../routing/paths";
+import { checkPermission } from "../../../../helper/global";
+import { useAuthToken } from "../../../../globals/useAuthToken";
 
 export const documentTypeLogos = [
   {
@@ -101,22 +103,25 @@ const FileItem = ({
   secret,
   handleRemove,
 }) => {
+  const { getRole } = useAuthToken();
   return (
     <div style={{ position: "relative" }}>
-      <AbsoluteBox>
-        <Popconfirm
-          title="Anda yakin akan menghapus dokumen?"
-          okText="Ya"
-          cancelText="Tidak"
-          onConfirm={() => {
-            return handleRemove(docId);
-          }}
-        >
-          <Button type="primary" color="red" style={{ padding: "1px" }}>
-            <FileExcelOutlined style={{ color: "red" }} />
-          </Button>
-        </Popconfirm>
-      </AbsoluteBox>
+      {checkPermission(["Super Admin"], getRole()) && (
+        <AbsoluteBox>
+          <Popconfirm
+            title="Anda yakin akan menghapus dokumen?"
+            okText="Ya"
+            cancelText="Tidak"
+            onConfirm={() => {
+              return handleRemove(docId);
+            }}
+          >
+            <Button type="primary" color="red" style={{ padding: "1px" }}>
+              <FileExcelOutlined style={{ color: "red" }} />
+            </Button>
+          </Popconfirm>
+        </AbsoluteBox>
+      )}
       <Link to={`${docId}/${paths.VIEW}`}>
         <Container>
           <ExtensionLogo src={thumbnail} alt={"icon"} />

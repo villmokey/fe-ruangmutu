@@ -30,6 +30,8 @@ import { SatisfactionServiceListView } from "./View/ListView";
 import { monthAcronymID } from "../../../../globals/monthLabel";
 import { HomeFilled } from "@ant-design/icons";
 import { Box, Pagination, Grid } from "@mui/material";
+import ComplaintChart from "../../../molecules/DashboardChart/Chart/ComplaintChart";
+import moment from "moment";
 
 const { Content } = Layout;
 
@@ -40,6 +42,7 @@ export const SatisfactionService = () => {
   const [programs, setPrograms] = useState([]);
   const [chartData, setChartData] = useState([]);
   const [complaints, setComplaints] = useState([]);
+  const [complaintChart, setComplaintChart] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
@@ -62,6 +65,32 @@ export const SatisfactionService = () => {
   const {
     data: { list },
   } = useSelector(qualityIndicatorSelector);
+
+  const fetchComplaintChart = async () => {
+    fetchApiGet(
+      "/dashboard/recap/complaint",
+      { year: undefined },
+      accessToken
+    ).then((res) => {
+      if (res && res.success) {
+        const temporary = res.data.results;
+        const results = [];
+        monthAcronymID.forEach((month, index) => {
+          let finder = temporary.find((x) => x.month === index + 1);
+          if (finder) {
+            results.push({ ...finder, month: month });
+          } else {
+            results.push({
+              done: 0,
+              month: month,
+              pending: 0,
+            });
+          }
+        });
+        setComplaintChart(results);
+      }
+    });
+  };
 
   const fetchComplaints = () => {
     setLoading(true);
@@ -167,6 +196,7 @@ export const SatisfactionService = () => {
 
   useEffect(() => {
     fetchInformation();
+    fetchComplaintChart();
     fetchPrograms();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -225,6 +255,18 @@ export const SatisfactionService = () => {
                 />
               </Col>
             ))}
+          <Col span={24}>
+            <Card>
+              <Title level={5}>Keluhan Pelanggan</Title>
+              <p
+                className="ant-typography"
+                style={{ marginBottom: "7px", fontStyle: "italic" }}
+              >
+                Tahun Mutu {moment().format("YYYY")}
+              </p>
+              <ComplaintChart chartData={complaintChart ?? []} />
+            </Card>
+          </Col>
         </Row>
         <Row justify="end" style={{ marginTop: 40 }} gutter={[8]}>
           <Col>
