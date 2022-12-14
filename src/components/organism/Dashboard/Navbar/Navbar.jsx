@@ -20,7 +20,7 @@ export const Navbar = ({ onLogout, showMenu = true }) => {
       key: "submenu_document",
       title: "DOKUMEN",
       url: paths.DASHBOARD,
-      permission: ["Super Admin"],
+      permission: ["Super Admin", "Admin", "User"],
       children: [
         {
           key: "performance_indicator",

@@ -11,7 +11,7 @@ export const FirstStep = ({ onChangeForm }) => {
       <Title level={4}>PILIH JENIS DOKUMEN</Title>
       <Radio.Group onChange={onChangeForm}>
         <Space direction="vertical" size="large">
-          {checkPermission(["Super Admin", "Admin", getRole()]) && (
+          {checkPermission(["Super Admin", "Admin"], getRole()) && (
             <Radio value={1}>
               <Title level={3}>INPUT TINGKAT KEPUASAN LAYANAN</Title>
               <Text>

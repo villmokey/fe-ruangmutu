@@ -132,7 +132,16 @@ export const DashboardPage = () => {
       if (res && res.success) {
         const temporary = res.data ?? [];
         let results = [];
-        let colors = ['#453C67', '#6D67E4', '#46C2CB', '#F2F7A1', '#FFE15D', '#F49D1A', '#DC3535', '#B01E68']
+        let colors = [
+          "#453C67",
+          "#6D67E4",
+          "#46C2CB",
+          "#F2F7A1",
+          "#FFE15D",
+          "#F49D1A",
+          "#DC3535",
+          "#B01E68",
+        ];
         let names = temporary.map((item) => {
           return {
             name: item.health_service,
@@ -164,7 +173,11 @@ export const DashboardPage = () => {
   };
 
   const fetchEvents = () => {
-    fetchApiGet("/dashboard/event/information", {}, accessToken).then((res) => {
+    fetchApiGet(
+      "/dashboard/event/information",
+      { year: filter.year },
+      accessToken
+    ).then((res) => {
       if (res) {
         if (res && res.success) {
           setRealised(res.data.realized);
@@ -175,27 +188,26 @@ export const DashboardPage = () => {
   };
 
   const fetchDocumentInfo = () => {
-    fetchApiGet("/dashboard/document/information", {}, accessToken).then(
-      (res) => {
-        if (res) {
-          if (res && res.success) {
-            setDocumentInfo({
-              this_year: res.data.this_year,
-              total: res.data.total,
-            });
-          }
+    fetchApiGet(
+      "/dashboard/document/information",
+      { year: filter.year },
+      accessToken
+    ).then((res) => {
+      if (res) {
+        if (res && res.success) {
+          setDocumentInfo({
+            this_year: res.data.this_year,
+            total: res.data.total,
+          });
         }
       }
-    );
+    });
   };
-
-  useEffect(() => {
-    fetchEvents();
-    fetchDocumentInfo();
-  }, []); //eslint-disable-line
 
   const fetchAll = async () => {
     setLoading(true);
+    fetchEvents();
+    fetchDocumentInfo();
     await fetchIndicator();
     await fetchPerformance();
     await fetchComplaint();

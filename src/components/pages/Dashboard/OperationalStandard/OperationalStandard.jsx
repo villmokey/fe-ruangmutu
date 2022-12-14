@@ -80,7 +80,7 @@ export const OperationalStandard = () => {
                   console.log(res);
                   if (res.success) {
                     message.success("Berhasil Menambahkan SOP");
-                    window.location.reload();
+                    // window.location.reload();
                   } else {
                     message.error("Error: " + res.message);
                   }

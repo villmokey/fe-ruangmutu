@@ -104,12 +104,13 @@ export const Calender = () => {
             ? res.data.related_program.map((x) => x.program_id)
             : [],
         });
-        console.log("res.data.other_files", res.data.other_files);
         setOldFiles(res.data.other_files);
         setSelectedDocuments(
-          res.data.related_file.map((x) => {
-            return { id: x.related.id, name: x.related.name };
-          })
+          res.data.related_file
+            .filter((f) => f.related)
+            .map((x) => {
+              return { id: x.related.id, name: x.related.name };
+            })
         );
         setDescription(res.data.description);
         setFormOpen(true);
@@ -195,7 +196,13 @@ export const Calender = () => {
             window.scrollTo({ behavior: "smooth", top: 1200 });
           }}
         />
-        <EventCalendar events={events} loading={loading} />
+        <EventCalendar
+          events={events}
+          loading={loading}
+          handleEdit={handleEdit}
+          handleRealize={handleRealize}
+          handleRemove={handleRemove}
+        />
         <Row
           justify="space-between"
           align="middle"
