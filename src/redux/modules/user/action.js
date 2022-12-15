@@ -78,7 +78,7 @@ export const getAllUser = (bodyData) => {
 	return {
 		type: 'API',
 		payload: {
-			url: `${URL_CONFIG.USER_BASE_URL}?pagination=false`,
+			url: `${URL_CONFIG.USER_BASE_URL}?paginate=false`,
 			requestParams: {
 				method: apiMethod.GET,
 				// data: bodyData.param ?? {},
