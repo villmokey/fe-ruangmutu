@@ -439,6 +439,7 @@ export const SecondStep = ({
               <Select
                 placeholder="Pilih pembuat dokumen"
                 onChange={pembuatDokumenChange}
+                showSearch
                 filterOption={(input, option) =>
                   (option?.children?.toLowerCase() ?? "").includes(
                     input.toLowerCase()
@@ -466,6 +467,7 @@ export const SecondStep = ({
               <Select
                 placeholder="Pilih penanggung jawab 1"
                 onChange={penanggungJawab1Change}
+                showSearch
                 filterOption={(input, option) =>
                   (option?.children?.toLowerCase() ?? "").includes(
                     input.toLowerCase()
@@ -484,6 +486,7 @@ export const SecondStep = ({
               <Select
                 placeholder="Pilih penanggung jawab 2"
                 onChange={penanggungJawab2Change}
+                showSearch
                 filterOption={(input, option) =>
                   (option?.children?.toLowerCase() ?? "").includes(
                     input.toLowerCase()

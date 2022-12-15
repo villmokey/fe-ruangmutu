@@ -138,7 +138,6 @@ export const Add = () => {
       dibuatOleh: getName(),
       pembuatDokumen: getUserId(),
     });
-
     const fetch = userList.map((item, index) => {
       return {
         ...item,

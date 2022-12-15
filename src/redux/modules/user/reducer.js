@@ -40,7 +40,7 @@ export const userReducer = (state = initialState, action) => {
 
 		case userActionType.SET_ALL_USER:
 			state.called = true;
-			state.data.list = action.payload.data.data;
+			state.data.list = action.payload.data;
 			state.data.total = parseInt(action.payload.data.total);
 			return { ...state };
 
