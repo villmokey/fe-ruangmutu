@@ -22,7 +22,7 @@ export const DocumentApprovalSider = ({
   return (
     <AntdSider className="sider">
       <div className="sider-content">
-        <Title level={2}>DOKUMEN APPROVAL</Title>
+        <Title level={2}>PENGESAHAN DOKUMEN</Title>
         <Text>{moment().format("dddd, DD MMMM YYYY")}</Text>
       </div>
 

@@ -63,7 +63,7 @@ export const DocumentApproval = () => {
             <span>Home</span>
           </Breadcrumb.Item>
           <Breadcrumb.Item className="breadcrumb__item breadcrumb__item--active">
-            Dokumen Approval
+            Pengesahan Dokumen
           </Breadcrumb.Item>
         </Breadcrumb>
         <Row justify="center" align="middle" gutter={[24, 16]}>

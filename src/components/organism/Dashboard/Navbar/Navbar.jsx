@@ -48,7 +48,7 @@ export const Navbar = ({ onLogout, showMenu = true }) => {
         },
         {
           key: "approval_document",
-          title: "DOKUMEN APPROVAL",
+          title: "PENGESAHAN DOKUMEN",
           url: paths.APPROVAL_DOCUMENT,
           permission: ["Super Admin", "Admin"],
         },
