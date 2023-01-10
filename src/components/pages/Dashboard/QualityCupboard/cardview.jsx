@@ -15,6 +15,7 @@ const CardView = ({
   paginationProps = { from: 0, to: 0, total: 1 },
   loading,
   handleRemove,
+  handleUpdate,
 }) => {
   return !loading ? (
     <Box width={"100%"}>
@@ -43,6 +44,9 @@ const CardView = ({
               <FileItem
                 handleRemove={(f) => {
                   return handleRemove(f);
+                }}
+                handleUpdate={(f) => {
+                  return handleUpdate(f);
                 }}
                 docId={doc.id}
                 name={doc.name}

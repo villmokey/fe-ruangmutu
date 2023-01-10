@@ -1,15 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import { Button, Input, Modal, Select, Checkbox, Space } from "antd";
+import { Button, Input, Modal, Select, Checkbox, Space, message } from "antd";
 import { InputText } from "../../../atoms/InputText/InputText";
 import { Form } from "../../../molecules/Form/Form";
-import {
-  Grid,
-  Typography,
-  Stack,
-  Autocomplete,
-  TextField,
-} from "@mui/material";
+import { Grid, Typography, Stack } from "@mui/material";
 import { Upload } from "antd";
 import moment from "moment";
 import "moment/locale/id";
@@ -19,18 +13,43 @@ import {
   FileOutlined,
   DeleteOutlined,
   CheckCircleOutlined,
+  LinkOutlined,
 } from "@ant-design/icons";
 import { DocumentIcon } from "../../../../assets/icons";
 import "./QualityCupboard.less";
-import { fetchApiGet, fetchApiPost } from "../../../../globals/fetchApi";
+import {
+  fetchApiGet,
+  fetchApiPost,
+  fetchApiPut,
+} from "../../../../globals/fetchApi";
 import { toast, ToastContainer } from "react-toastify";
 import { useAuthToken } from "../../../../globals/useAuthToken";
 import { useDebounce } from "../../../../hooks";
+import { DefaultThumbnail } from "../../../../assets/images";
 
 const { Option } = Select;
 const { Dragger } = Upload;
 
-const QualityCupboardForm = ({ open, onClose, onSuccessSubmit }) => {
+const QualityCupboardForm = ({
+  open,
+  onClose,
+  onSuccessSubmit,
+  actionType = "create",
+  updateData = {
+    id: "",
+    name: "",
+    publish_date: "",
+    created_at: "",
+    document_number: "",
+    program_related: [],
+    document_related: [],
+    document_type_id: "",
+  },
+  updatePreview = {
+    file: {},
+    thumbnail: null,
+  },
+}) => {
   const { getAccessToken } = useAuthToken();
   const accessToken = getAccessToken();
   const [openModal, setOpenModal] = React.useState(false);
@@ -64,7 +83,7 @@ const QualityCupboardForm = ({ open, onClose, onSuccessSubmit }) => {
         }
       })
       .catch((err) => {
-        setLoading(false)
+        setLoading(false);
         console.log("FILE UPLOAD ERR:", err);
       });
 
@@ -80,15 +99,15 @@ const QualityCupboardForm = ({ open, onClose, onSuccessSubmit }) => {
         });
       }
 
-      if (payload && payload.program_related.length > 0) {
-        payload.program_related = payload.program_related.map((item) => {
-          if (item.id) {
-            return item.id;
-          } else {
-            return item;
-          }
-        });
-      }
+      // if (payload && payload.program_related.length > 0) {
+      //   payload.program_related = payload.program_related.map((item) => {
+      //     if (item.id) {
+      //       return item.id;
+      //     } else {
+      //       return item;
+      //     }
+      //   });
+      // }
 
       if (files && files.length > 0) {
         await uploadFile(files[0])
@@ -98,6 +117,7 @@ const QualityCupboardForm = ({ open, onClose, onSuccessSubmit }) => {
               fetchApiPost("/document", accessToken, payload)
                 .then((res) => {
                   if (res && res.success) {
+                    message.success("Berhasil menambahkan dokumen");
                     onSuccessSubmit();
                   } else {
                     if (res.response) {
@@ -119,6 +139,39 @@ const QualityCupboardForm = ({ open, onClose, onSuccessSubmit }) => {
       setLoading(false);
       toast.error("Terjadi kesalahan, silahkan coba lagi");
     }
+  };
+
+  const handleUpdate = () => {
+    setLoading(true);
+    if (selected && selected.length > 0) {
+      payload.document_related = selected.map((item) => {
+        return item.id;
+      });
+    }
+
+    let feeder = {
+      name: payload.name,
+      document_number: payload.document_number,
+      publish_date: payload.publish_date,
+      document_type_id: payload.document_type_id,
+      is_credential: payload.is_confidential,
+      program_related: payload.program_related,
+      document_related: payload.document_related,
+    };
+
+    fetchApiPut(`/document/${payload.id}`, accessToken, feeder)
+      .then((res) => {
+        if (res && res.success) {
+          message.success("Berhasil mengubah data dokumen");
+          onSuccessSubmit();
+        } else {
+          message.error(res.message);
+        }
+      })
+      .catch((e) => {
+        message.error(e.getMessage());
+      })
+      .finally(() => setLoading(false));
   };
 
   const requestPrograms = () => {
@@ -187,6 +240,13 @@ const QualityCupboardForm = ({ open, onClose, onSuccessSubmit }) => {
     });
   }, []); //eslint-disable-line
 
+  React.useEffect(() => {
+    if (actionType === "update") {
+      setSelected(updateData.document_related);
+      setPayload(updateData);
+    }
+  }, [updateData, actionType]);
+
   return (
     open && (
       <div className="form-event">
@@ -249,7 +309,7 @@ const QualityCupboardForm = ({ open, onClose, onSuccessSubmit }) => {
           justifyContent={"space-between"}
         >
           <Typography fontWeight={"bold"} color={"#5DC8BD"}>
-            TAMBAH DOKUMEN
+            {actionType === "create" ? "TAMBAH" : "UBAH DATA"} DOKUMEN
           </Typography>
           <Stack direction={"row"} alignItems={"center"} spacing={1}>
             <Button
@@ -257,9 +317,19 @@ const QualityCupboardForm = ({ open, onClose, onSuccessSubmit }) => {
               type={loading ? "ghost" : "primary"}
               size="large"
               style={{ borderRadius: 8 }}
-              onClick={async () => (loading ? null : await handleSubmit())}
+              onClick={async () =>
+                loading
+                  ? null
+                  : actionType === "create"
+                  ? await handleSubmit()
+                  : handleUpdate()
+              }
             >
-              {loading ? "MOHON TUNGGU" : "TAMBAHKAN"}
+              {loading
+                ? "MOHON TUNGGU"
+                : actionType === "create"
+                ? "SIMPAN "
+                : "SIMPAN PERUBAHAN"}
             </Button>
             <Button
               onClick={onClose}
@@ -272,7 +342,23 @@ const QualityCupboardForm = ({ open, onClose, onSuccessSubmit }) => {
         </Stack>
         <ToastContainer />
         <Container>
-          <Form layout={"vertical"}>
+          <Form
+            layout={"vertical"}
+            fields={[
+              {
+                name: "name",
+                value: payload.name,
+              },
+              {
+                name: "document_number",
+                value: payload.document_number,
+              },
+              {
+                name: "publish_date",
+                value: payload.publish_date,
+              },
+            ]}
+          >
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6} md={5} xl={4}>
                 <InputText
@@ -290,9 +376,12 @@ const QualityCupboardForm = ({ open, onClose, onSuccessSubmit }) => {
                 />
                 <InputText
                   label="NO DOKUMEN"
-                  name="no_dokumen"
+                  name="document_number"
                   onChange={(e) =>
-                    setPayload({ ...payload, document_number: e.target.value })
+                    setPayload({
+                      ...payload,
+                      document_number: e.target.value,
+                    })
                   }
                   rules={[
                     {
@@ -309,11 +398,11 @@ const QualityCupboardForm = ({ open, onClose, onSuccessSubmit }) => {
                   color={"#5A5A5A"}
                   marginBottom={"20px"}
                 >
-                  {moment().format("dddd, DD MMMM YYYY")}
+                  {moment(payload.created_at).format("dddd, DD MMMM YYYY")}
                 </Typography>
                 <InputText
                   label="TANGGAL TERBIT DOKUMEN"
-                  name="end_date"
+                  name="publish_date"
                   type={"date"}
                   onChange={(e) =>
                     setPayload({ ...payload, publish_date: e.target.value })
@@ -328,12 +417,37 @@ const QualityCupboardForm = ({ open, onClose, onSuccessSubmit }) => {
                 <Typography
                   fontSize={"14px"}
                   fontWeight={"bold"}
-                  margin={"20px 0 -10px 0"}
+                  margin={"20px 0 10px 0"}
                 >
                   UNIT/PROGRAM TERKAIT
                 </Typography>
 
-                <Autocomplete
+                <Select
+                  placeholder="Pilih program/unit"
+                  onChange={(v) =>
+                    setPayload({ ...payload, program_related: v })
+                  }
+                  allowClear
+                  value={payload.program_related}
+                  showSearch
+                  filterOption={(input, option) =>
+                    (option?.children?.toLowerCase() ?? "").includes(
+                      input.toLowerCase()
+                    )
+                  }
+                  mode={"multiple"}
+                  style={{ width: "100%" }}
+                >
+                  {programUnits &&
+                    programUnits.map((item, index) => {
+                      return (
+                        <Option value={item.id} key={index}>
+                          {item.name}
+                        </Option>
+                      );
+                    })}
+                </Select>
+                {/* <Autocomplete
                   id="combo-box-demo"
                   multiple
                   options={programUnits ?? []}
@@ -350,7 +464,7 @@ const QualityCupboardForm = ({ open, onClose, onSuccessSubmit }) => {
                       placeholder="Pilih unit layanan"
                     />
                   )}
-                />
+                /> */}
                 <Typography
                   fontSize={"14px"}
                   margin={"20px 0 0 0"}
@@ -397,6 +511,7 @@ const QualityCupboardForm = ({ open, onClose, onSuccessSubmit }) => {
                   PILIH TIPE DOKUMEN
                 </Typography>
                 <Select
+                  value={payload.document_type_id}
                   placeholder="Pilih"
                   onChange={(e) =>
                     setPayload({ ...payload, document_type_id: e })
@@ -413,35 +528,40 @@ const QualityCupboardForm = ({ open, onClose, onSuccessSubmit }) => {
                       );
                     })}
                 </Select>
-                <Typography
-                  fontSize={"14px"}
-                  fontWeight={"bold"}
-                  margin={"10px 0 10px 0"}
-                >
-                  UNGGAH DOKUMEN
-                </Typography>
-                <Dragger
-                  beforeUpload={() => false}
-                  accept="application/pdf"
-                  onChange={({ fileList }) => {
-                    setFiles(fileList);
-                  }}
-                  style={{
-                    height: "200px !important",
-                    background: "transparent",
-                    border: "1px dashed #000000",
-                  }}
-                >
-                  <img src={DocumentIcon} alt={"ic_document"} />
-                  <Typography fontSize={"12px"} color={"#416072"}>
-                    Seret dan lepas pilih file untuk mengunggah file anda.
-                  </Typography>
-                  <Typography fontSize={"12px"} color={"#416072"}>
-                    format yang didukung pdf
-                  </Typography>
-                </Dragger>
+                {actionType === "create" && (
+                  <>
+                    <Typography
+                      fontSize={"14px"}
+                      fontWeight={"bold"}
+                      margin={"10px 0 10px 0"}
+                    >
+                      UNGGAH DOKUMEN
+                    </Typography>
+                    <Dragger
+                      beforeUpload={() => false}
+                      accept="application/pdf"
+                      onChange={({ fileList }) => {
+                        setFiles(fileList);
+                      }}
+                      style={{
+                        height: "200px !important",
+                        background: "transparent",
+                        border: "1px dashed #000000",
+                      }}
+                    >
+                      <img src={DocumentIcon} alt={"ic_document"} />
+                      <Typography fontSize={"12px"} color={"#416072"}>
+                        Seret dan lepas pilih file untuk mengunggah file anda.
+                      </Typography>
+                      <Typography fontSize={"12px"} color={"#416072"}>
+                        format yang didukung pdf
+                      </Typography>
+                    </Dragger>
+                  </>
+                )}
                 <Space direction="horizontal">
                   <Checkbox
+                    checked={payload.is_confidential}
                     onChange={(e) =>
                       setPayload({
                         ...payload,
@@ -457,6 +577,33 @@ const QualityCupboardForm = ({ open, onClose, onSuccessSubmit }) => {
                     Dokumen Rahasia
                   </Typography>
                 </Space>
+                {actionType === "update" && (
+                  <div style={{ textAlign: "center", margin: "10px 0" }}>
+                    <img
+                      src={updatePreview.thumbnail ?? DefaultThumbnail}
+                      style={{ width: "150px", height: "190px" }}
+                      alt="document thumnail"
+                    />
+                    <div>
+                      <a
+                        href={updatePreview.file.file_link}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        <Space direction="horizontal">
+                          <Typography
+                            fontSize={"12px"}
+                            color="black"
+                            fontWeight={"bold"}
+                          >
+                            {payload.name}
+                          </Typography>
+                          <LinkOutlined />
+                        </Space>
+                      </a>
+                    </div>
+                  </div>
+                )}
               </Grid>
             </Grid>
           </Form>

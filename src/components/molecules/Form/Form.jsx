@@ -1,13 +1,13 @@
-import { Form as AntdForm } from 'antd';
-import PropTypes from 'prop-types';
+import { Form as AntdForm } from "antd";
+import PropTypes from "prop-types";
 
 const propTypes = {
   labelCol: PropTypes.object,
   wrapperCol: PropTypes.object,
   initialValues: PropTypes.object,
   className: PropTypes.string,
-  onFinish: PropTypes.func
-}
+  onFinish: PropTypes.func,
+};
 
 export const Form = ({
   labelCol,
@@ -20,9 +20,9 @@ export const Form = ({
   children,
   layout,
   requiredMark,
-  size
+  size,
+  fields,
 }) => {
-
   return (
     <AntdForm
       labelCol={labelCol}
@@ -32,13 +32,14 @@ export const Form = ({
       onFinish={onFinish}
       form={form}
       style={style}
+      fields={fields}
       layout={layout}
       requiredMark={requiredMark}
       size={size}
     >
-      { children }
+      {children}
     </AntdForm>
-  )
-}
+  );
+};
 
 Form.propTypes = propTypes;

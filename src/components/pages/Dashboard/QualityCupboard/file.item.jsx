@@ -7,6 +7,7 @@ import {
   CheckCircleOutlined,
   LockOutlined,
   FileExcelOutlined,
+  EditOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
 import "moment/locale/id";
@@ -102,6 +103,7 @@ const FileItem = ({
   docId,
   secret,
   handleRemove,
+  handleUpdate,
 }) => {
   const { getRole } = useAuthToken();
   return (
@@ -116,8 +118,20 @@ const FileItem = ({
               return handleRemove(docId);
             }}
           >
-            <Button type="primary" color="red" style={{ padding: "1px" }}>
-              <FileExcelOutlined style={{ color: "red" }} />
+            <Button title="Hapus Dokumen" type="text" color="red" style={{ padding: "1px" }}>
+              <FileExcelOutlined style={{ color: "#cf2f2f" }} />
+            </Button>
+          </Popconfirm>
+          <Popconfirm
+            title="Anda yakin akan mengubah data dokumen?"
+            okText="Ya"
+            cancelText="Tidak"
+            onConfirm={() => {
+              return handleUpdate(docId);
+            }}
+          >
+            <Button title="Ubah Dokumen" type="text" color="red" style={{ padding: "1px" }}>
+              <EditOutlined style={{ color: "#412dd3" }} />
             </Button>
           </Popconfirm>
         </AbsoluteBox>
@@ -223,7 +237,7 @@ const DetailContainer = styled.div`
 
 const AbsoluteBox = styled.div`
   position: absolute;
-  top: 5px;
+  bottom: 5px;
   right: 3px;
   z-index: 5;
 `;

@@ -1,5 +1,5 @@
-import { Form, Input } from 'antd';
-import PropTypes from 'prop-types';
+import { Form, Input } from "antd";
+import PropTypes from "prop-types";
 
 const { Item } = Form;
 
@@ -7,8 +7,8 @@ const propTypes = {
   label: PropTypes.string,
   name: PropTypes.string,
   rules: PropTypes.array,
-  className: PropTypes.string
-}
+  className: PropTypes.string,
+};
 
 export const InputText = ({
   label,
@@ -25,19 +25,22 @@ export const InputText = ({
   className,
   style,
   inputMode,
+  defaultValue,
 }) => {
   return (
     <Item
-    label={label}
-    name={name}
-    rules={rules}
-    wrapperCol={wrapperCol}
-    labelCol={labelCol}
+      label={label}
+      name={name}
+      initialValue={value}
+      rules={rules}
+      wrapperCol={wrapperCol}
+      labelCol={labelCol}
     >
-      <Input 
+      <Input
+        defaultValue={defaultValue}
         inputMode={inputMode}
         placeholder={placeholder}
-        disabled={disabled} 
+        disabled={disabled}
         prefix={prefix}
         value={value}
         onChange={onChange}
@@ -46,7 +49,7 @@ export const InputText = ({
         style={style}
       />
     </Item>
-  )
-}
+  );
+};
 
 InputText.propTypes = propTypes;

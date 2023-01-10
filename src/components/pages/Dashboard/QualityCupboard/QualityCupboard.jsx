@@ -16,7 +16,7 @@ import CardView from "./cardview";
 import ListView from "./listview";
 import QualityCupboardForm from "./cupboard.form";
 import Navigation from "../../../organism/Dashboard/Breadcrumb";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { fetchApiDelete, fetchApiGet } from "../../../../globals/fetchApi";
 import { useAuthToken } from "../../../../globals/useAuthToken";
 import { checkPermission } from "../../../../helper/global";
@@ -46,6 +46,19 @@ export const QualityCupboard = () => {
   const [totalPage, setTotalPage] = useState(0);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
+  const [actionType, setActionType] = useState("create");
+  const [detailData, setDetailData] = useState({
+    id: "",
+    name: "",
+    publish_date: "",
+    created_at: "",
+    document_number: "",
+    program_related: [],
+    document_related: [],
+    document_type_id: "",
+    file: {},
+    thumbnail: {},
+  });
   const [sorting, setSorting] = useState("DESC");
   const [sortBy, setSortBy] = useState("created_at");
   const [documents, setDocuments] = useState([]);
@@ -146,6 +159,44 @@ export const QualityCupboard = () => {
     });
   };
 
+  const handleUpdate = (docId) => {
+    setActionType("update");
+    fetchApiGet(`/document/${docId}`, {}, accessToken).then((res) => {
+      if (res.success) {
+        console.log(res.data);
+        let response = res.data;
+        let pay = {
+          id: response.id,
+          name: response.name,
+          publish_date: response.publish_date,
+          created_at: response.created_at,
+          document_number: response.document_number,
+          program_related: response.related_program
+            ? response.related_program.map((x) => x.program_id)
+            : [],
+          document_related: response.related_file
+            ? response.related_file.map((x) => ({
+                id: x.related_document_id,
+                name: x.related?.name ?? "-",
+              }))
+            : [],
+          document_type_id: response.document_type_id,
+          is_confidential: response.is_credential,
+          file: response.file,
+          thumbnail: response.document_type?.thumbnail?.file_link ?? null,
+        };
+
+        setDetailData(pay);
+        setFormOpen(true);
+        message.success("Berhasil ambil data detail");
+      } else {
+        message.warning(
+          "Gagal menghapus dokumen, silahkan coba lagi beberapa saat!"
+        );
+      }
+    });
+  };
+
   React.useEffect(() => {
     fetchPrograms();
   }, []); //eslint-disable-line
@@ -210,11 +261,16 @@ export const QualityCupboard = () => {
         {/* Form */}
         <QualityCupboardForm
           open={formOpen}
+          updateData={detailData}
+          actionType={actionType}
+          updatePreview={{
+            file: detailData.file,
+            thumbnail: detailData.thumbnail,
+          }}
           onClose={() => setFormOpen(false)}
           onSuccessSubmit={() => {
             setFormOpen(false);
             fetchDocuments();
-            toast.success("Berhasil menambahkan dokumen");
           }}
         />
         <Row justify="end" style={{ marginTop: 40 }} gutter={[8]}>
@@ -235,7 +291,10 @@ export const QualityCupboard = () => {
                 icon={<PlusOutlined />}
                 size="large"
                 style={{ borderRadius: 8 }}
-                onClick={() => setFormOpen(true)}
+                onClick={() => {
+                  setActionType("create");
+                  setFormOpen(true);
+                }}
               />
             )}
           </Col>
@@ -273,6 +332,7 @@ export const QualityCupboard = () => {
           <CardView
             documents={documents}
             handleRemove={handleRemove}
+            handleUpdate={handleUpdate}
             pages={totalPage}
             activePage={page}
             onPageChange={(p) => setPage(p)}
