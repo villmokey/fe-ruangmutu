@@ -1,6 +1,15 @@
 import React from "react";
 import styled from "styled-components";
-import { Button, Input, Modal, Select, Checkbox, Space, message } from "antd";
+import {
+  Button,
+  Input,
+  Modal,
+  Select,
+  Checkbox,
+  Space,
+  message,
+  Alert,
+} from "antd";
 import { InputText } from "../../../atoms/InputText/InputText";
 import { Form } from "../../../molecules/Form/Form";
 import { Grid, Typography, Stack } from "@mui/material";
@@ -25,7 +34,6 @@ import {
 import { toast, ToastContainer } from "react-toastify";
 import { useAuthToken } from "../../../../globals/useAuthToken";
 import { useDebounce } from "../../../../hooks";
-import { DefaultThumbnail } from "../../../../assets/images";
 
 const { Option } = Select;
 const { Dragger } = Upload;
@@ -141,12 +149,24 @@ const QualityCupboardForm = ({
     }
   };
 
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
     setLoading(true);
     if (selected && selected.length > 0) {
       payload.document_related = selected.map((item) => {
         return item.id;
       });
+    }
+
+    if (files && files.length > 0) {
+      await uploadFile(files[0])
+        .then((callback) => {
+          if (callback) {
+            payload.file_id = callback;
+          }
+        })
+        .catch(() => {
+          setLoading(false);
+        });
     }
 
     let feeder = {
@@ -156,7 +176,8 @@ const QualityCupboardForm = ({
       document_type_id: payload.document_type_id,
       is_credential: payload.is_confidential,
       program_related: payload.program_related,
-      document_related: payload.document_related,
+      document_related: selected.map((x) => x.id),
+      file_id: payload.file_id ?? null,
     };
 
     fetchApiPut(`/document/${payload.id}`, accessToken, feeder)
@@ -528,37 +549,65 @@ const QualityCupboardForm = ({
                       );
                     })}
                 </Select>
-                {actionType === "create" && (
+                {actionType === "update" && (
                   <>
-                    <Typography
-                      fontSize={"14px"}
-                      fontWeight={"bold"}
-                      margin={"10px 0 10px 0"}
-                    >
-                      UNGGAH DOKUMEN
-                    </Typography>
-                    <Dragger
-                      beforeUpload={() => false}
-                      accept="application/pdf"
-                      onChange={({ fileList }) => {
-                        setFiles(fileList);
-                      }}
-                      style={{
-                        height: "200px !important",
-                        background: "transparent",
-                        border: "1px dashed #000000",
-                      }}
-                    >
-                      <img src={DocumentIcon} alt={"ic_document"} />
-                      <Typography fontSize={"12px"} color={"#416072"}>
-                        Seret dan lepas pilih file untuk mengunggah file anda.
-                      </Typography>
-                      <Typography fontSize={"12px"} color={"#416072"}>
-                        format yang didukung pdf
-                      </Typography>
-                    </Dragger>
+                    <Alert
+                      style={{ marginTop: "20px" }}
+                      message="Unggah file dibawah ini, jika anda ingin mengubah file sebelumnya!"
+                      type="info"
+                    />
+                    <div style={{ margin: "10px 0" }}>
+                      <div>
+                        File Sebelumnya:
+                        <a
+                          href={updatePreview.file.file_link}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          <Space direction="horizontal">
+                            <Typography
+                              fontSize={"12px"}
+                              color="black"
+                              fontWeight={"bold"}
+                            >
+                              {payload.name}
+                            </Typography>
+                            <LinkOutlined />
+                          </Space>
+                        </a>
+                      </div>
+                    </div>
                   </>
                 )}
+                <>
+                  <Typography
+                    fontSize={"14px"}
+                    fontWeight={"bold"}
+                    margin={"10px 0 10px 0"}
+                  >
+                    UNGGAH DOKUMEN
+                  </Typography>
+                  <Dragger
+                    beforeUpload={() => false}
+                    accept="application/pdf"
+                    onChange={({ fileList }) => {
+                      setFiles(fileList);
+                    }}
+                    style={{
+                      height: "200px !important",
+                      background: "transparent",
+                      border: "1px dashed #000000",
+                    }}
+                  >
+                    <img src={DocumentIcon} alt={"ic_document"} />
+                    <Typography fontSize={"12px"} color={"#416072"}>
+                      Seret dan lepas pilih file untuk mengunggah file anda.
+                    </Typography>
+                    <Typography fontSize={"12px"} color={"#416072"}>
+                      format yang didukung pdf
+                    </Typography>
+                  </Dragger>
+                </>
                 <Space direction="horizontal">
                   <Checkbox
                     checked={payload.is_confidential}
@@ -577,33 +626,6 @@ const QualityCupboardForm = ({
                     Dokumen Rahasia
                   </Typography>
                 </Space>
-                {actionType === "update" && (
-                  <div style={{ textAlign: "center", margin: "10px 0" }}>
-                    <img
-                      src={updatePreview.thumbnail ?? DefaultThumbnail}
-                      style={{ width: "150px", height: "190px" }}
-                      alt="document thumnail"
-                    />
-                    <div>
-                      <a
-                        href={updatePreview.file.file_link}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        <Space direction="horizontal">
-                          <Typography
-                            fontSize={"12px"}
-                            color="black"
-                            fontWeight={"bold"}
-                          >
-                            {payload.name}
-                          </Typography>
-                          <LinkOutlined />
-                        </Space>
-                      </a>
-                    </div>
-                  </div>
-                )}
               </Grid>
             </Grid>
           </Form>

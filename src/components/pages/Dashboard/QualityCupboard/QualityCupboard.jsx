@@ -188,7 +188,6 @@ export const QualityCupboard = () => {
 
         setDetailData(pay);
         setFormOpen(true);
-        message.success("Berhasil ambil data detail");
       } else {
         message.warning(
           "Gagal menghapus dokumen, silahkan coba lagi beberapa saat!"
