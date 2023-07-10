@@ -12,6 +12,9 @@ export async function fetchApiGet(url, params, accessToken = "") {
       config = {
         headers: {
           Authorization: "Bearer " + accessToken,
+          "Access-Control-Allow-Origin": "*",
+          "Accept": "application/json",
+          "content-type": "application/json"
         },
       };
     }
