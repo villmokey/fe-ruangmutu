@@ -11,11 +11,7 @@ export async function fetchApiGet(url, params, accessToken = "") {
     if (accessToken) {
       config = {
         headers: {
-          Authorization: "Bearer " + accessToken,
-          "Access-Control-Allow-Origin": "*",
-          "Accept": "application/json",
-          "content-type": "application/json"
-        },
+          Authorization: "Bearer " + accessToken,        },
       };
     }
     const request = await axios.get(
