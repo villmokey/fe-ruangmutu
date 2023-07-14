@@ -56,9 +56,6 @@ export const Login = () => {
   }, [called, isAuth]);
 
   useEffect(() => {
-    fetch("https://api-ruangmutupkcgambir.jakarta.go.id/api/v1/document").then((res) => {
-      console.log("res.json",res.json)
-    })
     if (!(called && error)) return;
     message.error("Username atau password salah!");
   }, [called, error]);

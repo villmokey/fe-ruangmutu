@@ -11,7 +11,8 @@ export async function fetchApiGet(url, params, accessToken = "") {
     if (accessToken) {
       config = {
         headers: {
-          Authorization: "Bearer " + accessToken,        },
+          Authorization: "Bearer " + accessToken
+        },
       };
     }
     const request = await axios.get(
